@@ -1,0 +1,28 @@
+{
+  "protocolVersion": "2025-11-25",
+  "serverInfo": {
+    "name": "Fodda",
+    "version": "1.0.0"
+  },
+  "description": "Expert-curated knowledge graphs for AI agents — retail, beauty, fashion, sports, and 100+ specialist domains via Model Context Protocol.",
+  "transport": {
+    "type": "streamable-http",
+    "endpoint": "https://mcp.fodda.ai/mcp"
+  },
+  "capabilities": {
+    "tools": true,
+    "resources": true
+  },
+  "authentication": {
+    "required": true,
+    "type": "api_key",
+    "parameter": "api_key",
+    "in": "query"
+  },
+  "documentationUrl": "https://www.fodda.ai/api",
+  "signup_url": "https://app.fodda.ai",
+  "extensions": {
+    "vscode": "https://marketplace.visualstudio.com/items?itemName=fodda.fodda",
+    "openvsx": "https://open-vsx.org/extension/fodda/fodda"
+  }
+}

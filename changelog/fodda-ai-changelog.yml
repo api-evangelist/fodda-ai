@@ -1,0 +1,108 @@
+generated: '2026-09-19'
+method: searched
+source: https://github.com/piers-fawkes/fodda-mcp/blob/main/CHANGELOG.md (raw fetched 2026-09-19)
+checked: '2026-09-19'
+summary: 'Fodda keeps a dated, machine-readable changelog for its MCP server in the public fodda-mcp repository
+  — Keep a Changelog 1.0.0 format, Semantic Versioning, one entry per release with Added/Changed/Fixed sections
+  and named tools, endpoints and files. It is the only changelog: fodda.ai has no /changelog page (404) and the
+  REST API has no release notes; REST-side changes appear only where the MCP entries reference them (e.g. new /v1/human-agents/consult).
+  The npm build of the same server (1.46.31, 2026-08-23) trails the changelog head by 48 releases.'
+scope: MCP server (fodda-mcp) — hosted at mcp.fodda.ai and published to npm
+scheme:
+  format: Keep a Changelog 1.0.0
+  versioning: Semantic Versioning 2.0.0
+  cadence: multiple releases per day in September 2026
+current_version:
+  changelog_head: 1.46.79
+  date: '2026-09-18'
+  hosted_server: 1.46.79 (mcp.fodda.ai landing page, agent card version)
+  npm_latest: 1.46.31 (2026-08-23)
+  mcp_registry: 1.46.31 (2026-08-23)
+  rest_spec_info_version: 1.7.0
+feeds:
+  rss: null
+  atom: null
+  json: null
+  raw: https://raw.githubusercontent.com/piers-fawkes/fodda-mcp/main/CHANGELOG.md
+  probed:
+  - url: https://www.fodda.ai/changelog
+    status: 404
+  - url: https://www.fodda.ai/blog/rss.xml
+    status: 200
+    body: HTML page, not a feed
+entries:
+- version: 1.46.79
+  date: '2026-09-18'
+  breaking: false
+  type: additions
+  highlights:
+  - Offering-scoped MCP surface grok-brand-context (8-tool allowlist) with /.well-known/grok-brand-context.json
+    discovery and /grok-brand-context transport
+  - Five Fodda analyst bot templates published on xAI Grok Bot
+  - Automated verification suite asserting the 401 + RFC 9728 WWW-Authenticate challenge
+  - User-facing docs purged of Clerk/token/SPT plumbing terms
+- version: 1.46.78
+  date: '2026-09-18'
+  breaking: false
+  type: additions
+  highlights:
+  - New verify_claim tool (readOnlyHint) backed by Human Agents via POST /v1/human-agents/consult
+  - tools-manifest.json regenerated with 53 tools; Cost Silence guard passed
+- version: 1.46.77
+  date: '2026-09-17'
+  breaking: false
+  type: changes
+  highlights:
+  - Tool descriptions name the 7 live verticals (travel & hospitality, retail, tech, beauty, fashion, sports, food
+    & beverage) and the layer each search tool returns
+  - Brand/company queries routed to brand_tracker as the entry point
+  - Legacy token wording removed from offering rows
+earlier_entries_in_window:
+- version: 1.46.76
+  date: '2026-09-16'
+- version: 1.46.75
+  date: '2026-09-15'
+- version: 1.46.74
+  date: '2026-09-15'
+- version: 1.46.73
+  date: '2026-09-15'
+- version: 1.46.72
+  date: '2026-09-15'
+- version: 1.46.71
+  date: '2026-09-15'
+- version: 1.46.70
+  date: '2026-09-15'
+- version: 1.46.69
+  date: '2026-09-14'
+- version: 1.46.68
+  date: '2026-09-14'
+- version: 1.46.67
+  date: '2026-09-14'
+- version: 1.46.66
+  date: '2026-09-12'
+- version: 1.46.65
+  date: '2026-09-10'
+- version: 1.46.64
+  date: '2026-09-10'
+- version: 1.46.63
+  date: '2026-09-09'
+- version: 1.46.62
+  date: '2026-09-08'
+- version: 1.46.61
+  date: '2026-09-08'
+- version: 1.46.60
+  date: '2026-09-08'
+- version: 1.46.59
+  date: '2026-09-08'
+- version: 1.46.58
+  date: '2026-09-06'
+- version: 1.46.57
+  date: '2026-09-06'
+- version: 1.46.56
+  date: '2026-09-06'
+entries_in_file: 134
+gap:
+  what: A REST API changelog and a feed.
+  who_fixes_it: the provider
+  how: Publish release notes for api.fodda.ai (info.version moves without notes) at a stable URL or feed; the MCP
+    CHANGELOG already has the right shape.

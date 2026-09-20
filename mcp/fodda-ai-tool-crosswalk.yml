@@ -1,0 +1,715 @@
+generated: '2026-09-19'
+method: derived
+source: Derived by aligning the provider-published MCP tool manifest (mcp/fodda-ai-tools-manifest.json, 53 tools;
+  live tools/list is OAuth-gated) with the provider-published OpenAPI 3.1 at https://api.fodda.ai/openapi.json (openapi/fodda-ai-openapi.yml,
+  157 operations). Bindings are by name and documented semantics (llms-full.txt tool descriptions, the agent-skills
+  references/fodda-api.md endpoint map, and the fodda-mcp CHANGELOG); confidence recorded per row.
+purpose: 'Make each MCP tool a first-class discovery unit bound to the REST operation(s) that back it, so a bound
+  tool inherits that operation''s parameters/requestBody as its real input contract, and so MCP-only and REST-only
+  capabilities are recorded instead of silently dropped. The two surfaces are overlapping-but-non-identical projections
+  of one data core: 24 tools bind to 41 REST operations, 29 tools have no public REST contract, and 116 REST operations
+  (108 of them per-source supplemental snapshots) have no tool.'
+surfaces:
+  rest_openapi: openapi/fodda-ai-openapi.yml (source verbatim at openapi/_original/fodda-ai-openapi.json; 157 operations,
+    2 component schemas)
+  rest_openapi_subset: openapi/fodda-ai-context-delivery-openapi.yml (10-operation Context Delivery spec served
+    from www.fodda.ai/openapi.json)
+  mcp: 'https://mcp.fodda.ai/mcp (streamable-http; tools/list gated: 401 + RFC 9728 challenge)'
+  mcp_copilot: https://mcp.fodda.ai/copilot (17 curated tools; gated)
+  a2a: https://mcp.fodda.ai/a2a (JSONRPC; skills declared in a2a/fodda-ai-agent-card.json)
+  graphql: null
+crosswalk:
+- tool: search_graph
+  category: Search
+  rest:
+  - search_knowledge_graph
+  binding: rest
+  confidence: high
+- tool: search_statistics
+  category: Search
+  rest:
+  - search_statistics
+  - quantitative_statistics__copilot_
+  binding: rest
+  confidence: high
+- tool: search_insights
+  category: Search
+  rest:
+  - strategic_insight_retrieval__copilot_
+  binding: rest
+  confidence: medium
+  note: Bound to the Copilot adapter endpoint; the default-profile REST surface has no standalone insights op (search_knowledge_graph
+    + get_evidence cover the same layer).
+- tool: get_evidence
+  category: Graph
+  rest:
+  - get_evidence
+  - evidence_backed_grounding__copilot_
+  binding: rest
+  confidence: high
+- tool: get_node
+  category: Graph
+  rest:
+  - get_node_properties
+  binding: rest
+  confidence: high
+- tool: get_neighbors
+  category: Graph
+  rest:
+  - traverse_neighbors
+  binding: rest
+  confidence: high
+- tool: get_label_values
+  category: Graph
+  rest:
+  - list_label_category_values
+  binding: rest
+  confidence: high
+- tool: list_graphs
+  category: Account
+  rest:
+  - list_available_context_graphs
+  - graph_registry_catalog
+  - get_active_graphs_list
+  binding: rest
+  confidence: high
+- tool: discover_adjacent_trends
+  category: Ideation
+  rest:
+  - discover_adjacent_trends
+  binding: rest
+  confidence: high
+- tool: brand_tracker
+  category: Brand
+  rest:
+  - get_brand_intelligence_profile
+  binding: rest
+  confidence: high
+- tool: get_domain_intelligence
+  category: Intelligence
+  rest:
+  - domain_intelligence_parallel_search
+  binding: rest
+  confidence: high
+- tool: get_expert_intelligence
+  category: Intelligence
+  rest:
+  - expert_intelligence_parallel_search
+  binding: rest
+  confidence: high
+- tool: get_report_intelligence
+  category: Intelligence
+  rest:
+  - report_intelligence_parallel_search
+  binding: rest
+  confidence: high
+- tool: deep_research_topic
+  category: Research
+  rest:
+  - launch_autonomous_research_deep_dive
+  binding: rest
+  confidence: high
+- tool: check_research_status
+  category: Status
+  rest:
+  - check_deep_research_status
+  binding: rest
+  confidence: high
+- tool: read_url
+  category: Web
+  rest:
+  - url_context_extraction
+  binding: rest
+  confidence: high
+- tool: get_supplemental_context
+  category: Supplemental
+  rest:
+  - unified_supplemental_context
+  binding: rest
+  confidence: high
+  note: The MCP tool is async (poll check_supplemental_status); the REST op is documented as a single request.
+- tool: get_earnings_intelligence
+  category: Financial
+  rest:
+  - earnings_call_snapshot_intelligence
+  - get_earnings_top_analyst_concerns
+  - get_earnings_q_a_question_themes
+  - get_management_presentation_themes
+  binding: rest
+  confidence: medium
+  note: Cross-company themes; the tool composes several snapshot endpoints server-side.
+- tool: get_earnings_divergence
+  category: Financial
+  rest:
+  - get_earnings_concerns_divergence
+  binding: rest
+  confidence: high
+- tool: list_analysts
+  category: Expert
+  rest:
+  - list_synthetic_expert_analysts
+  - list_covered_analyst_brands
+  binding: rest
+  confidence: high
+- tool: consult_analyst
+  category: Expert
+  rest:
+  - consult_analyst_turn
+  binding: rest
+  confidence: high
+- tool: manage_scheduled_reports
+  category: Account
+  rest:
+  - create_scheduled_briefing
+  - list_scheduled_briefings
+  - cancel_scheduled_briefing
+  - modify_scheduled_briefing
+  - get_scheduled_briefing_runs
+  binding: rest
+  confidence: high
+- tool: toggle_graph_preference
+  category: Account
+  rest:
+  - toggle_user_preference_setting
+  binding: rest
+  confidence: high
+- tool: update_user_profile
+  category: Account
+  rest:
+  - set_user_research_context_profile
+  binding: rest
+  confidence: medium
+  note: Profile/context update; the REST op sets the research context profile.
+mcp_only:
+- tool: get_specialist_intelligence
+  category: Intelligence
+  reason: Maintained in the MCP server TypeScript only (no Airtable offering row, per CHANGELOG 1.46.77); no public
+    REST operation.
+- tool: check_supplemental_status
+  category: Status
+  reason: Async status poll for get_supplemental_context; the published OpenAPI has no supplemental status operation.
+- tool: get_company_earnings
+  category: Financial
+  reason: The skills reference names /v1/earnings/company/{ticker}, which is absent from the published OpenAPI (only
+    /v1/supplemental/earnings/* is declared).
+- tool: get_validated_trends
+  category: Financial
+  reason: Per-ticker validated trends; /v1/earnings/* paths are absent from the published OpenAPI.
+- tool: consult_human_agent
+  category: Expert
+  reason: CHANGELOG 1.46.78 names POST /v1/human-agents/consult; not in the published OpenAPI.
+- tool: verify_claim
+  category: Expert
+  reason: Backed by POST /v1/human-agents/consult (CHANGELOG 1.46.78); not in the published OpenAPI.
+- tool: find_expert
+  category: Expert
+  reason: Expert routing; no public REST operation.
+- tool: request_deliverable
+  category: Expert
+  reason: The skills reference names /v1/analysts/{id}/deliver; absent from the published OpenAPI. Account credits
+    only, no SPT.
+- tool: check_deliverable_status
+  category: Status
+  reason: Deliverable job poll; no public REST operation.
+- tool: get_my_account
+  category: Account
+  reason: Account status / balance; no public REST operation (GET /v1/graphs/mine returns only the active graph
+    list).
+- tool: get_capabilities
+  category: Other
+  reason: Capability discovery for the connected profile; no public REST operation.
+- tool: sign_up_free_account
+  category: Account
+  reason: /agents page names POST /api/account/b2b-provision for autonomous key provisioning; absent from the published
+    OpenAPI.
+- tool: send_feedback
+  category: Account
+  reason: Offering cards name https://mcp.fodda.ai/v1/feedback; absent from the published OpenAPI.
+- tool: brainstorm_topic
+  category: Ideation
+  reason: Billing key "brainstorm" exists in /v1/research/pricing but no REST operation is declared.
+- tool: draft_linkedin_post
+  category: Content
+  reason: Content composition tool; no REST operation.
+- tool: draft_linkedin_article
+  category: Content
+  reason: Content composition tool; no REST operation.
+- tool: generate_visual
+  category: Visual
+  reason: Visual asset generation; no REST operation.
+- tool: confirm_themes
+  category: Onboarding
+  reason: Upload-and-compare theme confirmation; billing key "upload_compare" exists but no REST operation is declared.
+- tool: get_detected_themes
+  category: Onboarding
+  reason: Upload-and-compare theme detection; no REST operation.
+- tool: begin_expert_onboarding
+  category: Onboarding
+  reason: Expert (Human Agent) onboarding / revenue-share flow exposed only through MCP; no public REST operation.
+- tool: expert_onboarding_research
+  category: Onboarding
+  reason: Expert (Human Agent) onboarding / revenue-share flow exposed only through MCP; no public REST operation.
+- tool: finalize_byo_mcp_onboarding
+  category: Onboarding
+  reason: Expert (Human Agent) onboarding / revenue-share flow exposed only through MCP; no public REST operation.
+- tool: get_onboarding_status
+  category: Onboarding
+  reason: Expert (Human Agent) onboarding / revenue-share flow exposed only through MCP; no public REST operation.
+- tool: submit_basic_info
+  category: Onboarding
+  reason: Expert (Human Agent) onboarding / revenue-share flow exposed only through MCP; no public REST operation.
+- tool: submit_expertise_analysis
+  category: Onboarding
+  reason: Expert (Human Agent) onboarding / revenue-share flow exposed only through MCP; no public REST operation.
+- tool: submit_mcp_source
+  category: Onboarding
+  reason: Expert (Human Agent) onboarding / revenue-share flow exposed only through MCP; no public REST operation.
+- tool: schedule_interview
+  category: Onboarding
+  reason: Expert (Human Agent) onboarding / revenue-share flow exposed only through MCP; no public REST operation.
+- tool: request_expert_intro
+  category: Expert
+  reason: Expert (Human Agent) onboarding / revenue-share flow exposed only through MCP; no public REST operation.
+- tool: get_my_earnings
+  category: Other
+  reason: Expert (Human Agent) onboarding / revenue-share flow exposed only through MCP; no public REST operation.
+rest_only:
+- operationId: v1_api_health_check
+  method: GET
+  path: /v1/health
+  summary: V1 API health check
+- operationId: validate_spt
+  method: GET
+  path: /v1/spt/validate
+  summary: Validate SPT
+- operationId: list_offerings_catalog
+  method: GET
+  path: /v1/offerings
+  summary: List offerings catalog
+- operationId: get_pricing_map
+  method: GET
+  path: /v1/research/pricing
+  summary: Get Pricing map
+- operationId: get_research_offerings_catalog
+  method: GET
+  path: /v1/research/offerings
+  summary: Get research offerings catalog
+- operationId: research_chat_turn
+  method: POST
+  path: /v1/research/chat
+  summary: Research chat turn
+- operationId: streaming_research_search
+  method: GET
+  path: /v1/research/stream
+  summary: Streaming research search
+- operationId: graph_slice_json_ld
+  method: GET
+  path: /v1/graph-slice
+  summary: Graph slice JSON-LD
+- operationId: log_search_question
+  method: POST
+  path: /v1/log/question
+  summary: Log search question
+- operationId: upgrade_account_status
+  method: POST
+  path: /v1/accounts/trial-upgrade
+  summary: Upgrade account status
+- operationId: bulk_export_query_and_usage_history
+  method: GET
+  path: /v1/user/usage/export
+  summary: Bulk export query and usage history
+- operationId: bulk_export_consolidated_invoices_and_billing_summary
+  method: GET
+  path: /v1/user/invoices/export
+  summary: Bulk export consolidated invoices and billing summary
+- operationId: bulk_export_research_briefings_and_deliverables
+  method: GET
+  path: /v1/user/briefings/export
+  summary: Bulk export research briefings and deliverables
+- operationId: get_source_chunk_content
+  method: GET
+  path: /v1/sources/chunks/{chunk_id}
+  summary: Get source chunk content
+- operationId: filtered_semantic_search
+  method: POST
+  path: /v1/search/filtered
+  summary: Filtered semantic search
+- operationId: list_search_filters_keys
+  method: GET
+  path: /v1/search/filters
+  summary: List search filters keys
+- operationId: force_registry_invalidation
+  method: POST
+  path: /v1/admin/invalidate-registry-cache
+  summary: Force registry invalidation
+- operationId: list_supplemental_sources
+  method: GET
+  path: /v1/supplemental/sources
+  summary: List supplemental sources
+- operationId: supplemental__suggest
+  method: GET
+  path: /v1/supplemental/suggest
+  summary: 'Supplemental: suggest'
+- operationId: supplemental__retail_snapshot
+  method: GET
+  path: /v1/supplemental/census/retail-snapshot
+  summary: 'Supplemental: retail-snapshot'
+- operationId: supplemental__demographics_snapshot
+  method: GET
+  path: /v1/supplemental/census/demographics-snapshot
+  summary: 'Supplemental: demographics-snapshot'
+- operationId: supplemental__economic_snapshot
+  method: GET
+  path: /v1/supplemental/fred/economic-snapshot
+  summary: 'Supplemental: economic-snapshot'
+- operationId: supplemental__pageviews
+  method: GET
+  path: /v1/supplemental/wikipedia/pageviews
+  summary: 'Supplemental: pageviews'
+- operationId: supplemental__global_snapshot
+  method: GET
+  path: /v1/supplemental/worldbank/global-snapshot
+  summary: 'Supplemental: global-snapshot'
+- operationId: supplemental__ingredient_safety
+  method: GET
+  path: /v1/supplemental/fda/ingredient-safety
+  summary: 'Supplemental: ingredient-safety'
+- operationId: supplemental__recalls
+  method: GET
+  path: /v1/supplemental/fda/recalls
+  summary: 'Supplemental: recalls'
+- operationId: supplemental__search
+  method: GET
+  path: /v1/supplemental/clinical-trials/search
+  summary: 'Supplemental: search'
+- operationId: supplemental__spending_snapshot
+  method: GET
+  path: /v1/supplemental/bea/spending-snapshot
+  summary: 'Supplemental: spending-snapshot'
+- operationId: supplemental__uk_snapshot
+  method: GET
+  path: /v1/supplemental/ons/uk-snapshot
+  summary: 'Supplemental: uk-snapshot'
+- operationId: supplemental__nl_snapshot
+  method: GET
+  path: /v1/supplemental/cbs/nl-snapshot
+  summary: 'Supplemental: nl-snapshot'
+- operationId: supplemental__pt_snapshot
+  method: GET
+  path: /v1/supplemental/ptdata/pt-snapshot
+  summary: 'Supplemental: pt-snapshot'
+- operationId: supplemental__br_snapshot
+  method: GET
+  path: /v1/supplemental/bcb/br-snapshot
+  summary: 'Supplemental: br-snapshot'
+- operationId: supplemental__pe_snapshot
+  method: GET
+  path: /v1/supplemental/bcrp/pe-snapshot
+  summary: 'Supplemental: pe-snapshot'
+- operationId: supplemental__ar_snapshot
+  method: GET
+  path: /v1/supplemental/arg/ar-snapshot
+  summary: 'Supplemental: ar-snapshot'
+- operationId: supplemental__mx_snapshot
+  method: GET
+  path: /v1/supplemental/banxico/mx-snapshot
+  summary: 'Supplemental: mx-snapshot'
+- operationId: supplemental__hn_snapshot
+  method: GET
+  path: /v1/supplemental/bch/hn-snapshot
+  summary: 'Supplemental: hn-snapshot'
+- operationId: supplemental__au_snapshot
+  method: GET
+  path: /v1/supplemental/abs/au-snapshot
+  summary: 'Supplemental: au-snapshot'
+- operationId: supplemental__eu_snapshot
+  method: GET
+  path: /v1/supplemental/eurostat/eu-snapshot
+  summary: 'Supplemental: eu-snapshot'
+- operationId: supplemental__ea_snapshot
+  method: GET
+  path: /v1/supplemental/ecb/ea-snapshot
+  summary: 'Supplemental: ea-snapshot'
+- operationId: supplemental__euro_snapshot
+  method: GET
+  path: /v1/supplemental/ecb/euro-snapshot
+  summary: 'Supplemental: euro-snapshot'
+- operationId: supplemental__region_snapshot
+  method: GET
+  path: /v1/supplemental/nordic/region-snapshot
+  summary: 'Supplemental: region-snapshot'
+- operationId: supplemental__snapshot
+  method: GET
+  path: /v1/supplemental/nordic/snapshot
+  summary: 'Supplemental: snapshot'
+- operationId: supplemental__au_rates
+  method: GET
+  path: /v1/supplemental/rba/au-rates
+  summary: 'Supplemental: au-rates'
+- operationId: supplemental__de_snapshot
+  method: GET
+  path: /v1/supplemental/bundesbank/de-snapshot
+  summary: 'Supplemental: de-snapshot'
+- operationId: supplemental__es_snapshot
+  method: GET
+  path: /v1/supplemental/ine/es-snapshot
+  summary: 'Supplemental: es-snapshot'
+- operationId: supplemental__fr_snapshot
+  method: GET
+  path: /v1/supplemental/insee/fr-snapshot
+  summary: 'Supplemental: fr-snapshot'
+- operationId: supplemental__ch_snapshot
+  method: GET
+  path: /v1/supplemental/snb/ch-snapshot
+  summary: 'Supplemental: ch-snapshot'
+- operationId: supplemental__swiss_snapshot
+  method: GET
+  path: /v1/supplemental/snb/swiss-snapshot
+  summary: 'Supplemental: swiss-snapshot'
+- operationId: supplemental__pacific_snapshot
+  method: GET
+  path: /v1/supplemental/pdh/pacific-snapshot
+  summary: 'Supplemental: pacific-snapshot'
+- operationId: supplemental__qa_snapshot
+  method: GET
+  path: /v1/supplemental/qatar/qa-snapshot
+  summary: 'Supplemental: qa-snapshot'
+- operationId: supplemental__bh_snapshot
+  method: GET
+  path: /v1/supplemental/bahrain/bh-snapshot
+  summary: 'Supplemental: bh-snapshot'
+- operationId: supplemental__il_snapshot
+  method: GET
+  path: /v1/supplemental/boi/il-snapshot
+  summary: 'Supplemental: il-snapshot'
+- operationId: supplemental__in_snapshot
+  method: GET
+  path: /v1/supplemental/india/in-snapshot
+  summary: 'Supplemental: in-snapshot'
+- operationId: supplemental__za_snapshot
+  method: GET
+  path: /v1/supplemental/sarb/za-snapshot
+  summary: 'Supplemental: za-snapshot'
+- operationId: supplemental__my_snapshot
+  method: GET
+  path: /v1/supplemental/bnm/my-snapshot
+  summary: 'Supplemental: my-snapshot'
+- operationId: supplemental__hk_snapshot
+  method: GET
+  path: /v1/supplemental/hkma/hk-snapshot
+  summary: 'Supplemental: hk-snapshot'
+- operationId: supplemental__jp_snapshot
+  method: GET
+  path: /v1/supplemental/estat/jp-snapshot
+  summary: 'Supplemental: jp-snapshot'
+- operationId: supplemental__kr_snapshot
+  method: GET
+  path: /v1/supplemental/bok/kr-snapshot
+  summary: 'Supplemental: kr-snapshot'
+- operationId: supplemental__th_snapshot
+  method: GET
+  path: /v1/supplemental/bot/th-snapshot
+  summary: 'Supplemental: th-snapshot'
+- operationId: supplemental__ca_snapshot
+  method: GET
+  path: /v1/supplemental/boc/ca-snapshot
+  summary: 'Supplemental: ca-snapshot'
+- operationId: supplemental__id_snapshot
+  method: GET
+  path: /v1/supplemental/bps/id-snapshot
+  summary: 'Supplemental: id-snapshot'
+- operationId: supplemental__ph_snapshot
+  method: GET
+  path: /v1/supplemental/psa/ph-snapshot
+  summary: 'Supplemental: ph-snapshot'
+- operationId: supplemental__sg_snapshot
+  method: GET
+  path: /v1/supplemental/sg/sg-snapshot
+  summary: 'Supplemental: sg-snapshot'
+- operationId: supplemental__cl_snapshot
+  method: GET
+  path: /v1/supplemental/bcch/cl-snapshot
+  summary: 'Supplemental: cl-snapshot'
+- operationId: supplemental__cn_snapshot
+  method: GET
+  path: /v1/supplemental/cn/cn-snapshot
+  summary: 'Supplemental: cn-snapshot'
+- operationId: supplemental__us_snapshot
+  method: GET
+  path: /v1/supplemental/socrata/us-snapshot
+  summary: 'Supplemental: us-snapshot'
+- operationId: supplemental___citykey_
+  method: GET
+  path: /v1/supplemental/socrata/city/{cityKey}
+  summary: 'Supplemental: {cityKey}'
+- operationId: supplemental__portals
+  method: GET
+  path: /v1/supplemental/socrata/portals
+  summary: 'Supplemental: portals'
+- operationId: supplemental__health_data
+  method: GET
+  path: /v1/supplemental/cdc/health-data
+  summary: 'Supplemental: health-data'
+- operationId: supplemental__research_trends
+  method: GET
+  path: /v1/supplemental/pubmed/research-trends
+  summary: 'Supplemental: research-trends'
+- operationId: supplemental__trade_snapshot
+  method: GET
+  path: /v1/supplemental/wto/trade-snapshot
+  summary: 'Supplemental: trade-snapshot'
+- operationId: supplemental__openfoodfacts
+  method: GET
+  path: /v1/supplemental/openfoodfacts
+  summary: 'Supplemental: openfoodfacts'
+- operationId: supplemental__ridb
+  method: GET
+  path: /v1/supplemental/ridb
+  summary: 'Supplemental: ridb'
+- operationId: supplemental__osm
+  method: GET
+  path: /v1/supplemental/osm
+  summary: 'Supplemental: osm'
+- operationId: supplemental__google_trends
+  method: GET
+  path: /v1/supplemental/google-trends
+  summary: 'Supplemental: google-trends'
+- operationId: supplemental__amazon
+  method: GET
+  path: /v1/supplemental/amazon
+  summary: 'Supplemental: amazon'
+- operationId: supplemental__ers_snapshot
+  method: GET
+  path: /v1/supplemental/usda/ers-snapshot
+  summary: 'Supplemental: ers-snapshot'
+- operationId: supplemental__nass_snapshot
+  method: GET
+  path: /v1/supplemental/usda/nass-snapshot
+  summary: 'Supplemental: nass-snapshot'
+- operationId: supplemental__fdc_search
+  method: GET
+  path: /v1/supplemental/usda/fdc-search
+  summary: 'Supplemental: fdc-search'
+- operationId: supplemental__ams_snapshot
+  method: GET
+  path: /v1/supplemental/usda/ams-snapshot
+  summary: 'Supplemental: ams-snapshot'
+- operationId: supplemental__bestbuy
+  method: GET
+  path: /v1/supplemental/bestbuy
+  summary: 'Supplemental: bestbuy'
+- operationId: supplemental__brand_intelligence
+  method: GET
+  path: /v1/supplemental/tripadvisor/brand-intelligence
+  summary: 'Supplemental: brand-intelligence'
+- operationId: supplemental__hygiene
+  method: GET
+  path: /v1/supplemental/fsa/hygiene
+  summary: 'Supplemental: hygiene'
+- operationId: supplemental__profile
+  method: GET
+  path: /v1/supplemental/companies-house/profile
+  summary: 'Supplemental: profile'
+- operationId: supplemental__survey_data
+  method: GET
+  path: /v1/supplemental/pew/survey-data
+  summary: 'Supplemental: survey-data'
+- operationId: supplemental__attitudes_snapshot
+  method: GET
+  path: /v1/supplemental/pew/attitudes-snapshot
+  summary: 'Supplemental: attitudes-snapshot'
+- operationId: supplemental__research_influence
+  method: GET
+  path: /v1/supplemental/semantic-scholar/research-influence
+  summary: 'Supplemental: research-influence'
+- operationId: supplemental__context
+  method: POST
+  path: /v1/supplemental/sports/context
+  summary: 'Supplemental: context'
+- operationId: supplemental__nl_buurt
+  method: GET
+  path: /v1/supplemental/cbs/nl-buurt
+  summary: 'Supplemental: nl-buurt'
+- operationId: supplemental__bag_snapshot
+  method: GET
+  path: /v1/supplemental/pdok/bag-snapshot
+  summary: 'Supplemental: bag-snapshot'
+- operationId: supplemental__nl_crime
+  method: GET
+  path: /v1/supplemental/cbs/nl-crime
+  summary: 'Supplemental: nl-crime'
+- operationId: supplemental__tract_snapshot
+  method: GET
+  path: /v1/supplemental/acs/tract-snapshot
+  summary: 'Supplemental: tract-snapshot'
+- operationId: supplemental__eonet
+  method: GET
+  path: /v1/supplemental/nasa/eonet
+  summary: 'Supplemental: eonet'
+- operationId: supplemental__power
+  method: GET
+  path: /v1/supplemental/nasa/power
+  summary: 'Supplemental: power'
+- operationId: supplemental__techtransfer
+  method: GET
+  path: /v1/supplemental/nasa/techtransfer
+  summary: 'Supplemental: techtransfer'
+- operationId: supplemental__crime_snapshot
+  method: GET
+  path: /v1/supplemental/fbi/crime-snapshot
+  summary: 'Supplemental: crime-snapshot'
+- operationId: supplemental__census_snapshot
+  method: GET
+  path: /v1/supplemental/statcan/census-snapshot
+  summary: 'Supplemental: census-snapshot'
+- operationId: supplemental__neighbourhood_snapshot
+  method: GET
+  path: /v1/supplemental/ons/neighbourhood-snapshot
+  summary: 'Supplemental: neighbourhood-snapshot'
+- operationId: supplemental__aqhi_snapshot
+  method: GET
+  path: /v1/supplemental/msc/aqhi-snapshot
+  summary: 'Supplemental: aqhi-snapshot'
+- operationId: supplemental__market_snapshot
+  method: POST
+  path: /v1/supplemental/finance/market-snapshot
+  summary: 'Supplemental: market-snapshot'
+- operationId: supplemental__probe
+  method: POST
+  path: /v1/supplemental/admin/probe
+  summary: 'Supplemental: probe'
+a2a_skills_to_tools:
+- skill: brand-intelligence
+  tools:
+  - brand_tracker
+- skill: trend-search
+  tools:
+  - search_graph
+- skill: deep-research
+  tools:
+  - deep_research_topic
+  - check_research_status
+- skill: earnings-intelligence
+  tools:
+  - get_earnings_intelligence
+  - get_earnings_divergence
+- skill: per-ticker-earnings
+  tools:
+  - get_company_earnings
+  - get_validated_trends
+- skill: expert-consult
+  tools:
+  - consult_analyst
+  - consult_human_agent
+- skill: commissioned-deliverable
+  tools:
+  - request_deliverable
+  - check_deliverable_status
+coverage:
+  mcp_tools: 53
+  tools_bound_to_rest: 24
+  tools_mcp_only: 29
+  rest_operations: 137
+  rest_operations_bound: 36
+  rest_operations_unbound: 101
+  rest_unbound_supplemental_snapshots: 84

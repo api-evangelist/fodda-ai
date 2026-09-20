@@ -1,0 +1,288 @@
+generated: '2026-09-19'
+method: probed
+source: live probes of the closed /.well-known/ path list on every host this record knows (fodda.ai, www.fodda.ai,
+  api.fodda.ai, mcp.fodda.ai, clerk.fodda.ai, app.fodda.ai), 2026-09-19
+summary: A rich, real well-known surface across three hosts. www.fodda.ai serves an RFC 9727 api-catalog linkset
+  (at /.well-known/api-catalog.json — the extensionless /.well-known/api-catalog 404s), an RFC 9728 protected-resource
+  document for the MCP resource, a non-standard MCP discovery document (mcp.json), the canonical A2A agent card
+  and a second, older agent document at the legacy path. mcp.fodda.ai serves RFC 9728 protected-resource metadata
+  at the root path and at the /mcp and /copilot resource-suffixed paths (all naming clerk.fodda.ai as the authorization
+  server), the agent card at both paths, and four MCP offering cards. clerk.fodda.ai — the delegated authorization
+  server — serves OIDC discovery, RFC 8414 authorization-server metadata (with a dynamic client registration endpoint)
+  and a JWKS. No host serves security.txt, ai-plugin.json, ucp/acp/AAuth documents or an apis.json.
+pointer_basis: WellKnown pointer emitted on the strength of the api-catalog linkset, three RFC 9728 documents, the
+  RFC 8414/OIDC documents and the agent card. SecurityTxt pointer NOT emitted — RFC 9116 is unimplemented on every
+  host. APICatalog pointer emitted to the provider-hosted linkset.
+false_positive_watch: app.fodda.ai answers HTTP 200 with the same 12,230-byte application shell for EVERY /.well-known/*
+  path, including the negative-control path that cannot exist; every 200 from that host is recorded below as a miss
+  (hit_count 0, path_echo_control failed). fodda.ai (apex) 301s every path to www.fodda.ai, so its rows are the
+  www rows.
+hosts:
+- host: https://www.fodda.ai
+  path_echo_control: passed
+  negative_control:
+    path: /.well-known/fodda-ai-negative-control-9c2e41b7.json
+    status: 404
+  documents:
+  - path: /.well-known/api-catalog.json
+    status: 200
+    file: fodda-ai-api-catalog.json
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: fodda-ai-www-oauth-protected-resource.json
+  - path: /.well-known/mcp.json
+    status: 200
+    file: fodda-ai-mcp-discovery.json
+  - path: /.well-known/agent-card.json
+    status: 200
+    file: ../a2a/fodda-ai-agent-card.json
+  - path: /.well-known/agent.json
+    status: 200
+    file: ../a2a/fodda-ai-agent-legacy.json
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/ucp.json
+    status: 404
+  - path: /.well-known/acp.json
+    status: 404
+  - path: /.well-known/aauth-resource.json
+    status: 404
+  - path: /.well-known/apis.json
+    status: 404
+  - path: /apis.json
+    status: 404
+  - path: /apis.yml
+    status: 404
+  notes:
+  - /.well-known/agent.json serves a DIFFERENT document from agent-card.json (name "Fodda", protocolVersion 1.0.0,
+    supportedInterfaces[]); see a2a/fodda-ai-a2a.yml.
+  - /apis.json and /apis.yml return the site's 404 HTML page (9,12x bytes), not an index.
+  - /llms.txt, /llms-full.txt, /agents.txt and /openapi.json are also served from this host (see llms/ and openapi/).
+- host: https://fodda.ai
+  documents: []
+  notes:
+  - Apex 301s every path to https://www.fodda.ai/; probed with redirects followed, results identical to the www
+    host above.
+- host: https://mcp.fodda.ai
+  path_echo_control: passed
+  negative_control:
+    path: /.well-known/fodda-ai-negative-control-9c2e41b7.json
+    status: 404
+  documents:
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: fodda-ai-mcp-oauth-protected-resource.json
+  - path: /.well-known/oauth-protected-resource/mcp
+    status: 200
+    file: fodda-ai-mcp-oauth-protected-resource-mcp.json
+  - path: /.well-known/oauth-protected-resource/copilot
+    status: 200
+    file: fodda-ai-mcp-oauth-protected-resource-copilot.json
+  - path: /.well-known/agent-card.json
+    status: 200
+    file: ../a2a/fodda-ai-agent-card.json
+  - path: /.well-known/agent.json
+    status: 200
+    file: ../a2a/fodda-ai-agent-card.json
+  - path: /.well-known/grok-brand-context.json
+    status: 200
+    file: fodda-ai-mcp-offering-grok-brand-context.json
+  - path: /.well-known/expert-consult.json
+    status: 200
+    file: fodda-ai-mcp-offering-expert-consult.json
+  - path: /.well-known/brand-intelligence.json
+    status: 200
+    file: fodda-ai-mcp-offering-brand-intelligence.json
+  - path: /.well-known/deep-research.json
+    status: 200
+    file: fodda-ai-mcp-offering-deep-research.json
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/api-catalog.json
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/mcp.json
+    status: 404
+  - path: /.well-known/ucp.json
+    status: 404
+  - path: /.well-known/acp.json
+    status: 404
+  - path: /.well-known/aauth-resource.json
+    status: 404
+  - path: /.well-known/apis.json
+    status: 404
+  - path: /apis.json
+    status: 404
+  - path: /apis.yml
+    status: 404
+  notes:
+  - Both agent paths on this host return the byte-identical canonical card served at www.fodda.ai/.well-known/agent-card.json.
+  - The /mcp-suffixed protected-resource document is the one the live 401 WWW-Authenticate challenge points at (RFC
+    9728 resource_metadata).
+  - The four offering cards are MCP server.schema.json (2025-12-11) documents describing offering-scoped endpoints
+    — provider-specific, recorded as served documents.
+- host: https://clerk.fodda.ai
+  path_echo_control: passed
+  negative_control:
+    path: /.well-known/fodda-ai-negative-control-9c2e41b7.json
+    status: 404
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: fodda-ai-clerk-openid-configuration.json
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: fodda-ai-clerk-oauth-authorization-server.json
+  - path: /.well-known/jwks.json
+    status: 200
+    file: fodda-ai-clerk-jwks.json
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/api-catalog.json
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/ucp.json
+    status: 404
+  - path: /.well-known/acp.json
+    status: 404
+  - path: /.well-known/aauth-resource.json
+    status: 404
+  - path: /.well-known/apis.json
+    status: 404
+  - path: /apis.json
+    status: 404
+  - path: /apis.yml
+    status: 404
+  notes:
+  - Named as the authorization server by every RFC 9728 document on mcp.fodda.ai. Issuer https://clerk.fodda.ai;
+    a Clerk-hosted (clerk.com) authorization server on Fodda's own subdomain — op_tos_uri and service_documentation
+    point at clerk.com.
+- host: https://api.fodda.ai
+  path_echo_control: passed
+  negative_control:
+    path: /.well-known/fodda-ai-negative-control-9c2e41b7.json
+    status: 404
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/api-catalog.json
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/ucp.json
+    status: 404
+  - path: /.well-known/acp.json
+    status: 404
+  - path: /.well-known/aauth-resource.json
+    status: 404
+  - path: /.well-known/apis.json
+    status: 404
+  - path: /apis.json
+    status: 404
+  - path: /apis.yml
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/mcp.json
+    status: 404
+  notes:
+  - Every /.well-known/ path returns {"error":{"code":"NOT_FOUND",...}} JSON. The host serves /openapi.json, /openapi.yaml,
+    /v1/openapi.json and /v1/openapi.yaml (200) — see openapi/.
+- host: https://app.fodda.ai
+  path_echo_control: failed
+  hit_count: 0
+  negative_control:
+    path: /.well-known/fodda-ai-negative-control-9c2e41b7.json
+    status: 200
+    bytes: 12230
+    body: application HTML shell
+  soft_404_control:
+    path: /.well-known/fodda-ai-negative-control-9c2e41b7.json
+    status: 200
+    bytes: 12230
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    body: SPA shell (text/html, 12,230 bytes) — NOT a document, recorded as a miss
+  - path: /.well-known/openid-configuration
+    status: 200
+    body: SPA shell (text/html, 12,230 bytes) — NOT a document, recorded as a miss
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    body: SPA shell (text/html, 12,230 bytes) — NOT a document, recorded as a miss
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    body: SPA shell (text/html, 12,230 bytes) — NOT a document, recorded as a miss
+  - path: /.well-known/api-catalog
+    status: 200
+    body: SPA shell (text/html, 12,230 bytes) — NOT a document, recorded as a miss
+  - path: /.well-known/api-catalog.json
+    status: 200
+    body: SPA shell (text/html, 12,230 bytes) — NOT a document, recorded as a miss
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    body: SPA shell (text/html, 12,230 bytes) — NOT a document, recorded as a miss
+  - path: /.well-known/ucp.json
+    status: 200
+    body: SPA shell (text/html, 12,230 bytes) — NOT a document, recorded as a miss
+  - path: /.well-known/acp.json
+    status: 200
+    body: SPA shell (text/html, 12,230 bytes) — NOT a document, recorded as a miss
+  - path: /.well-known/aauth-resource.json
+    status: 200
+    body: SPA shell (text/html, 12,230 bytes) — NOT a document, recorded as a miss
+  - path: /.well-known/apis.json
+    status: 200
+    body: SPA shell (text/html, 12,230 bytes) — NOT a document, recorded as a miss
+  - path: /apis.json
+    status: 200
+    body: SPA shell (text/html, 12,230 bytes) — NOT a document, recorded as a miss
+  - path: /apis.yml
+    status: 200
+    body: SPA shell (text/html, 12,230 bytes) — NOT a document, recorded as a miss
+  - path: /.well-known/agent-card.json
+    status: 200
+    body: SPA shell (text/html, 12,230 bytes) — NOT a document, recorded as a miss
+  - path: /.well-known/agent.json
+    status: 200
+    body: SPA shell (text/html, 12,230 bytes) — NOT a document, recorded as a miss
+  - path: /.well-known/mcp.json
+    status: 200
+    body: SPA shell (text/html, 12,230 bytes) — NOT a document, recorded as a miss
+  notes:
+  - 'Catch-all single-page application: every path, including one that cannot exist, returns the same 12,230-byte
+    HTML shell with 200. No document is served here and nothing from this host counts.'

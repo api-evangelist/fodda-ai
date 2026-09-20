@@ -1,0 +1,99 @@
+generated: '2026-09-19'
+method: probed
+source: https://www.fodda.ai/.well-known/agent-card.json
+discovery:
+  path: /.well-known/agent-card.json
+  canonical: true
+  host: www.fodda.ai
+  also_served_at:
+  - https://fodda.ai/.well-known/agent-card.json (301 to www)
+  - https://mcp.fodda.ai/.well-known/agent-card.json (byte-identical)
+  - https://mcp.fodda.ai/.well-known/agent.json (byte-identical to the canonical card)
+  note: 'Ownership is not in question: the card''s provider.organization is "Fodda (PSFK)" with provider.url https://www.fodda.ai,
+    its url points at the same mcp.fodda.ai host that serves Fodda''s MCP server and RFC 9728 metadata, Fodda''s
+    own llms.txt and agents.txt name this exact URL as the A2A Agent Card, and the a2a-registry harvest that surfaced
+    this company recorded the same URL.'
+conformance:
+  spec: A2A 1.0.0
+  grade: conformant
+  protocol_version: 0.3.0
+  preferred_transport: JSONRPC
+  checks:
+    capabilities_is_object: true
+    protocolVersion_present: true
+    skills_is_array: true
+    preferredTransport_present: true
+    defaultInputModes_present: true
+    defaultOutputModes_present: true
+  deviations: []
+  observations:
+  - No securitySchemes/security declared on the card although the deep-research skill description says "API key
+    required; SPT support coming" — an agent cannot learn the auth requirement from the card alone.
+  - No additionalInterfaces; JSONRPC only.
+  - capabilities.streaming is false on this card but true on the legacy document at /.well-known/agent.json.
+card:
+  name: Fodda Research Agent
+  url: https://mcp.fodda.ai/a2a
+  version: 1.46.79
+  protocolVersion: 0.3.0
+  provider:
+    organization: Fodda (PSFK)
+    url: https://www.fodda.ai
+  documentationUrl: https://www.fodda.ai/llms.txt
+  supportContact: support@fodda.ai
+  skills: 7
+  skill_ids:
+  - brand-intelligence
+  - trend-search
+  - deep-research
+  - earnings-intelligence
+  - per-ticker-earnings
+  - expert-consult
+  - commissioned-deliverable
+  file: fodda-ai-agent-card.json
+legacy_document:
+  path: /.well-known/agent.json
+  host: www.fodda.ai
+  file: fodda-ai-agent-legacy.json
+  http_status: 200
+  content_type: application/json
+  grade: flavored
+  deviations:
+  - supportedInterfaces-instead-of-additionalInterfaces
+  - no-preferredTransport
+  - securitySchemes-as-array-of-descriptions
+  note: 'A DIFFERENT document from the canonical card: name "Fodda", version 1.0.0, protocolVersion "1.0.0", capabilities.streaming
+    true, six skill ids (search_graph, consult_analyst, brand_tracker, get_domain_intelligence, get_earnings_intelligence,
+    deep_research_topic) that mirror MCP tool names, and a supportedInterfaces[] naming both the A2A endpoint and
+    the MCP endpoint (https://mcp.fodda.ai/mcp, protocolVersion 2025-11-25). Recorded for evidence; the canonical
+    path is graded.'
+x-evidence:
+  fetched: '2026-09-19'
+  url: https://www.fodda.ai/.well-known/agent-card.json
+  http_status: 200
+  content_type: application/json
+  body_bytes: 3984
+  body_parses_as: JSON object with AgentCard shape (name, url, version, protocolVersion, capabilities object, skills
+    array of 7)
+  corroborating_probes:
+  - url: https://mcp.fodda.ai/.well-known/agent-card.json
+    http_status: 200
+    note: byte-identical
+  - url: https://mcp.fodda.ai/.well-known/agent.json
+    http_status: 200
+    note: byte-identical to the canonical card
+  - url: https://www.fodda.ai/.well-known/agent.json
+    http_status: 200
+    note: different legacy document, 5,368 bytes
+  - url: https://api.fodda.ai/.well-known/agent-card.json
+    http_status: 404
+  - url: https://clerk.fodda.ai/.well-known/agent-card.json
+    http_status: 404
+  - url: https://mcp.fodda.ai/a2a
+    method: POST tasks/get
+    http_status: 200
+    note: 'JSON-RPC response {"error":{"code":-32602,"message":"Task not found: probe"}} — a live A2A JSON-RPC endpoint,
+      not a documentation page; GET returns 404.'
+registry_listing:
+  a2aregistry.org: Listed as "Fodda Research Agent" (harvest of 415 agents, 2026-09-19); agent-ready.dev is named
+    in llms.txt as the card validator.

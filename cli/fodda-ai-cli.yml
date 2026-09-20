@@ -1,0 +1,45 @@
+generated: '2026-09-19'
+method: searched
+source: https://registry.npmjs.org/fodda-cli (README) + https://raw.githubusercontent.com/piers-fawkes/homebrew-fodda/main/README.md
+  + https://www.fodda.ai/api
+description: 'fodda-cli is an onboarding CLI, not an API client: it detects installed MCP-capable tools and writes
+  the Fodda MCP server configuration into them. The package is catalogued in packages/fodda-ai-packages.yml; this
+  artifact is its command surface.'
+binary: fodda
+version: 1.0.1
+published: '2026-06-03'
+license: MIT
+install:
+  npm: npm install -g fodda-cli
+  npx: npx fodda-cli init
+  homebrew: brew tap piers-fawkes/fodda && brew install fodda-cli
+  note: The README documents "npx @fodda/cli init" and "npm install -g @fodda/cli"; the @fodda/cli name is not published
+    on npm (404 on 2026-09-19) — the working name is fodda-cli.
+supported_clients:
+- client: Claude Desktop
+  transport: stdio (npx wrapper)
+- client: Cursor
+  transport: SSE cloud transport (global and project-specific)
+- client: Windsurf
+  transport: SSE cloud transport
+- client: Claude Code
+  transport: stdio (global user settings)
+commands:
+  onboarding:
+  - name: init
+    description: 'Interactive wizard: prompts for the Fodda API key and email (from app.fodda.ai) and writes the
+      MCP config into every detected tool''s global settings.'
+  - name: init --local
+    description: Write project-specific configs (.cursor/mcp.json and .mcp.json) in the current directory.
+  meta:
+  - name: --help
+    description: Usage.
+  - name: --version
+    description: Print the CLI version.
+key_flows:
+- 'Zero-to-connected: npx fodda-cli init -> paste API key -> Claude Desktop / Cursor / Windsurf / Claude Code are
+  configured against mcp.fodda.ai or the fodda-mcp stdio package.'
+related:
+  mcp_server_package: fodda-mcp (npx -y fodda-mcp) — see mcp/fodda-ai-mcp.yml
+  claude_code_one_liner: 'claude mcp add --transport sse fodda https://mcp.fodda.ai/sse --header "Authorization:
+    Bearer YOUR_API_KEY" (from the fodda-mcp README)'

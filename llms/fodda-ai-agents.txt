@@ -1,0 +1,40 @@
+# agents.txt for Fodda (https://www.fodda.ai)
+# Plain-text discovery manifest for AI agents, crawlers, and agentic browsers.
+
+User-agent: *
+Allow: /
+
+# Core Manifests & Machine Discovery
+LLMs-Manifest: https://www.fodda.ai/llms.txt
+LLMs-Full-Manifest: https://www.fodda.ai/llms-full.txt
+A2A-Agent-Card: https://www.fodda.ai/.well-known/agent-card.json
+OpenAPI-Spec: https://www.fodda.ai/openapi.json
+OKF-Catalog: https://api.fodda.ai/v1/catalog.okf
+Sitemap: https://www.fodda.ai/sitemap.xml
+
+# Primary Interfaces
+MCP-Server: https://mcp.fodda.ai/mcp
+MCP-Copilot-Server: https://mcp.fodda.ai/copilot
+REST-API-Base: https://api.fodda.ai/v1
+A2A-Endpoint: https://mcp.fodda.ai/a2a
+
+# Authentication & Billing Methods
+Auth-Header: X-API-Key (100 free API calls/month upon signup; 50c per API call renewing)
+Auth-SPT: Authorization: Bearer spt_* (Shared Payment Token via MPP HTTP 402 challenge)
+Auth-SSO: Authorization: Bearer <jwt> (Enterprise Clerk OIDC SSO)
+
+# Capabilities Summary
+- Autonomous Research: Multi-step research deep dives, evidence synthesis, and scheduled monitors.
+- Knowledge Graphs: 250+ expert-curated graphs across retail, beauty, sports, fashion, CE, food, and corporate strategy.
+- Human Agents: Voice-studied digital twins of recognized industry strategists (Piers Fawkes, Ben Dietz, Anu Lingala, and others).
+- Signals & Institutional Data: 100+ live institutional feeds (FRED, BEA, BLS, Census, ONS, OECD, Bundesbank).
+- Earnings Intelligence: Executive quotes, analyst deflect/pressure signals, and transcript analysis across 500+ companies.
+
+# Documentation & Setup Guides
+Setup-Guide: https://www.fodda.ai/connect
+For-Agent-Developers: https://www.fodda.ai/agents
+API-Documentation: https://www.fodda.ai/api
+Agent-Skills-Repo: https://github.com/fodda-ai/agent-skills
+
+# Contact
+Contact: hello@fodda.ai

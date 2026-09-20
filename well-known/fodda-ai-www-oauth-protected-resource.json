@@ -1,0 +1,7 @@
+{
+  "resource": "https://mcp.fodda.ai/mcp",
+  "bearer_methods_supported": ["header"],
+  "scopes_supported": ["read"],
+  "authorization_servers": [],
+  "resource_documentation": "https://www.fodda.ai/api"
+}

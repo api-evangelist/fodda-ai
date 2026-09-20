@@ -1,0 +1,126 @@
+generated: '2026-09-19'
+method: searched
+source: registry.npmjs.org (fodda-mcp, fodda-cli, @fodda/agent-swarm-test metadata + name search), pypi.org (fodda,
+  fodda-mcp, fodda-sdk, fodda-ai — all 404), crates.io / rubygems.org / proxy.golang.org (404), NuGet search (0
+  hits), open-vsx.org/api/fodda/fodda, marketplace.visualstudio.com (fodda.fodda), registry.modelcontextprotocol.io
+  (ai.fodda/mcp-server), github.com/piers-fawkes/homebrew-fodda, https://www.fodda.ai/api and /agents, 2026-09-19
+summary:
+  first_party_sdk_count: 0
+  first_party_package_count: 6
+  third_party_package_count: 0
+  note: 'Fodda publishes no client library / SDK in any registry: its first-party packages are an MCP server (fodda-mcp),
+    an onboarding CLI that writes MCP client configs (fodda-cli, also via a Homebrew tap), a swarm benchmarking
+    tool, and an IDE extension. Because none of these is a client library wrapping the REST API, this repo emits
+    Packages and CLI pointers but NO SDKs pointer — sdk_count must read a genuine zero. All packages are published
+    under the npm/GitHub account of Fodda''s founder (piers-fawkes), which is how the company ships code; the fodda-ai
+    GitHub organization holds only the agent-skills repo.'
+github_organization:
+  found: true
+  url: https://github.com/fodda-ai
+  repositories:
+  - agent-skills
+  note: Product code (fodda-mcp, fodda-cli, homebrew-fodda, fodda-bootstrap, fodda-demo) lives under https://github.com/piers-fawkes,
+    the founder's personal account, not the organization.
+packages:
+- language: javascript
+  registry: npm
+  name: fodda-mcp
+  kind: mcp-server (stdio)
+  url: https://www.npmjs.com/package/fodda-mcp
+  install: npx -y fodda-mcp
+  official: true
+  version: 1.46.31
+  published: '2026-08-23'
+  first_published: '2026-02-16'
+  versions_published: 10
+  license: 'Proprietary (SEE LICENSE IN LICENSE; repo LICENSE: "Copyright (c) 2026 Fodda / PSFK. All rights reserved.
+    PROPRIETARY SOFTWARE LICENSE")'
+  repository: https://github.com/piers-fawkes/fodda-mcp
+  bin: fodda-mcp
+  maintainer: piers-fawkes
+  source: https://registry.npmjs.org/fodda-mcp
+  note: The stdio MCP server. The GitHub repo's package.json reads 1.46.79 (CHANGELOG 2026-09-18) and the hosted
+    server reports v1.46.79, so the npm release is 48 patch versions behind the hosted surface — the package still
+    works but is not the current server.
+- language: javascript
+  registry: npm
+  name: fodda-cli
+  kind: cli
+  url: https://www.npmjs.com/package/fodda-cli
+  install: npm install -g fodda-cli
+  official: true
+  version: 1.0.1
+  published: '2026-06-03'
+  first_published: '2026-05-21'
+  license: MIT
+  bin: fodda
+  maintainer: piers-fawkes
+  source: https://registry.npmjs.org/fodda-cli
+  note: Agent onboarding CLI that writes Fodda MCP config into Claude Desktop, Claude Code, Cursor and Windsurf.
+    Its README says "npx @fodda/cli init" but @fodda/cli does not exist on npm (404) — the published name is fodda-cli.
+    See cli/fodda-ai-cli.yml.
+- language: javascript
+  registry: homebrew
+  name: piers-fawkes/fodda/fodda-cli
+  kind: cli
+  url: https://github.com/piers-fawkes/homebrew-fodda
+  install: brew tap piers-fawkes/fodda && brew install fodda-cli
+  official: true
+  version: null
+  published: null
+  source: https://raw.githubusercontent.com/piers-fawkes/homebrew-fodda/main/README.md
+  note: Homebrew tap README documents the install and a publishing flow that wraps the npm tarball; the formula
+    file it names (Formula/fodda-cli.rb) was not retrievable at Formula/fodda.rb (404) and the tap repo lists only
+    README.md, so no pinned version could be read — recorded as null, not guessed.
+- language: javascript
+  registry: npm
+  name: '@fodda/agent-swarm-test'
+  kind: benchmark-tool
+  url: https://www.npmjs.com/package/@fodda/agent-swarm-test
+  install: npx @fodda/agent-swarm-test
+  official: true
+  version: 1.0.0
+  published: '2026-08-06'
+  license: MIT
+  bin:
+  - agent-swarm-test
+  - fodda-swarm-test
+  repository: https://github.com/piers-fawkes/fodda-mcp
+  maintainer: piers-fawkes
+  source: https://registry.npmjs.org/@fodda/agent-swarm-test
+  note: Zero-dependency CLI for benchmarking parallel agent swarms against the Fodda API and Stripe SPT settlement.
+- language: typescript
+  registry: vscode-marketplace
+  name: fodda.fodda
+  kind: ide-extension
+  url: https://marketplace.visualstudio.com/items?itemName=fodda.fodda
+  install: code --install-extension fodda.fodda
+  official: true
+  version: 0.1.8
+  published: '2026-08-04'
+  source: https://marketplace.visualstudio.com/items?itemName=fodda.fodda
+  note: Version and lastUpdated read from the marketplace page metadata (Tue, 04 Aug 2026).
+- language: typescript
+  registry: open-vsx
+  name: fodda/fodda
+  kind: ide-extension
+  url: https://open-vsx.org/extension/fodda/fodda
+  install: 'Open VSX: fodda.fodda'
+  official: true
+  version: 0.1.7
+  published: '2026-05-21'
+  license: SEE LICENSE IN LICENSE
+  downloads: 2424
+  source: https://open-vsx.org/api/fodda/fodda
+  note: Open VSX lags the VS Code Marketplace by one release.
+registry_listings:
+- registry: MCP Registry
+  name: ai.fodda/mcp-server
+  version: 1.46.31
+  published: '2026-08-23'
+  url: https://registry.modelcontextprotocol.io/v0.1/servers?search=ai.fodda/mcp-server
+  remotes:
+  - https://mcp.fodda.ai/mcp (streamable-http)
+  - https://mcp.fodda.ai/sse (sse)
+  package: npm fodda-mcp 1.46.31 (stdio)
+third_party_packages: []

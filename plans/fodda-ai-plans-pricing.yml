@@ -1,0 +1,788 @@
+generated: '2026-09-19'
+method: searched
+source: https://www.fodda.ai/pricing
+machine_readable_source: https://api.fodda.ai/v1/research/pricing (probed 2026-09-19, public, no key) + https://api.fodda.ai/v1/offerings
+corroboration: https://www.fodda.ai/llms.txt (Authentication & Billing + Dynamic Offering Pricing block) and https://www.fodda.ai/terms
+  (billing terms)
+checked: '2026-09-19'
+summary: 'Fodda publishes prices. Every rail meters the same unit — one API call = $0.50 — and the pricing page
+  names four access options: a free Base tier (100 calls / $50 of calls per month with a card on file, then 50 cents
+  per call), team Monthly Plans at $2,500–$4,600 per month for 5,000 or 9,200 calls with unlimited seats and 10%
+  overage forgiveness, Pay As They Go for agents at 50 cents per call with no account via Stripe Shared Payment
+  Tokens, and Enterprise with custom volume pricing and a dedicated SLA. Per-request prices are machine-readable:
+  GET /v1/research/pricing returns 42 billing keys with call counts and USD SPT prices, GET /v1/offerings returns
+  84 priced offerings, every OpenAPI operation carries x-fodda-price-usd, and an unauthenticated call answers 402
+  with the exact price in cents.'
+plan_count: 4
+prices_published: true
+currency: USD
+unit: API call
+price_per_call_usd: 0.5
+spt_rate_usd: 0.5
+public_signup_pricing: true
+plans:
+- name: Base
+  audience: For you
+  price: 0
+  currency: USD
+  billing_period: monthly
+  included_quota: $50 of API calls free every month (100 calls) with a card on file
+  overage: $0.50 per API call
+  limits: Designed for one user
+  notes: 'Works in Claude, ChatGPT and any MCP client. Full evidence and source tracing. llms.txt: "Add a card to
+    keep it renewing — then 50¢ per API call."'
+  cta: Sign up at app.fodda.ai
+- name: Monthly Plan
+  audience: For your team
+  price: 2500-4600
+  currency: USD
+  billing_period: monthly
+  included_quota: 5,000 or 9,200 API calls at 50¢ a call
+  overage: '10% overage forgiveness; Terms: "Overages are handled on a case-by-case basis."'
+  limits: Infinity seats, one shared pool of calls
+  notes: 'Terms: "Paid plans are billed monthly. Usage is tracked by API call consumption against your plan''s monthly
+    API call limit."'
+- name: Pay As They Go
+  audience: For your agent
+  price: 0.5
+  currency: USD
+  billing_period: per request
+  included_quota: null
+  overage: null
+  limits: No account, no card, no subscription
+  notes: 'Agent pays each request via Stripe Shared Payment Tokens (MPP): request without credentials -> HTTP 402
+    with the exact price -> retry with Authorization: Bearer spt_xxx. Price = API-call count x $0.50; a request
+    may consume 5–30 calls. Direct REST API only.'
+- name: Enterprise
+  audience: For your organisation
+  price: null
+  currency: null
+  billing_period: null
+  included_quota: null
+  overage: null
+  limits: Custom volume pricing and dedicated SLA; private graphs, multi-team workspace, governance; on-premise
+    / air-gapped deployments advertised on /enterprises
+  cta: Contact hello@fodda.ai
+offering_prices_verbatim_llms_txt:
+- offering: Brand Intelligence
+  price_usd: 30
+  api_calls: 60
+  url: https://www.fodda.ai/brand-intelligence
+- offering: Deep Research
+  price_usd: 100
+  api_calls: 200
+  url: https://www.fodda.ai/deep-research
+- offering: Topic Research
+  price_usd: 20
+  api_calls: 40
+  url: https://www.fodda.ai/topic-research
+- offering: Earnings Intelligence
+  price_usd: 30
+  api_calls: 60
+  url: https://www.fodda.ai/earnings-intelligence
+- offering: Expert Consult
+  price_usd: 15
+  api_calls: 30
+  unit: per turn
+  url: https://www.fodda.ai/expert-consult
+machine_readable_pricing:
+  endpoint: https://api.fodda.ai/v1/research/pricing
+  status: 200
+  billing_keys: 42
+  note: 'Each value in "offerings" reflects measured typical API calls from the Airtable guide (last audit: 2026-09-04).
+    Standard price is $0.50 per API call. SPT price = calls × spt_rate_usd. 0 = free.'
+  spt_prices_usd:
+    search: 0.5
+    url_context: 0.5
+    deep_dive_fast: 2.5
+    deep_dive_comprehensive: 5
+    expert_agent: 0.5
+    human_agent_consult: 0.5
+    expert_graph_read: 0.5
+    research_stream: 0.5
+    research_chat: 0.5
+    topic_research: 0.5
+    brand_intelligence: 2
+    weekly_tracker: 2
+    deep_research_light: 2.5
+    deep_research_heavy: 5
+    brainstorm: 2
+    url_as_prompt: 0.5
+    upload_compare: 2
+    earnings_intelligence: 0.5
+    earnings_company: 0.5
+    earnings_history: 0.5
+    earnings_qa: 0.5
+    earnings_compare: 1
+    earnings_divergence: 0.5
+    earnings_validated_trends: 0.5
+    trend_briefing: 2
+    earnings_guidance: 1.5
+    marketing_plan: 2.5
+    deck_review: 2.5
+    standalone_supplemental: 0.5
+    standalone_evidence: 0.5
+    standalone_statistics: 0.5
+    standalone_insights: 0.5
+    domain_intelligence: 0.5
+    expert_intelligence: 0.5
+    report_intelligence: 0.5
+    adjacent_trends: 0.5
+    visual: 0
+    linkedin_article: 2.5
+    linkedin_post: 1.5
+    skill_deliverable: 0
+    weekly_digest: 0
+    admin: 0
+  calls_per_billing_key:
+    search: 1
+    url_context: 1
+    deep_dive_fast: 5
+    deep_dive_comprehensive: 10
+    expert_agent: 1
+    human_agent_consult: 1
+    expert_graph_read: 1
+    research_stream: 1
+    research_chat: 1
+    topic_research: 1
+    brand_intelligence: 4
+    weekly_tracker: 4
+    deep_research_light: 5
+    deep_research_heavy: 10
+    brainstorm: 4
+    url_as_prompt: 1
+    upload_compare: 4
+    earnings_intelligence: 1
+    earnings_company: 1
+    earnings_history: 1
+    earnings_qa: 1
+    earnings_compare: 2
+    earnings_divergence: 1
+    earnings_validated_trends: 1
+    trend_briefing: 4
+    earnings_guidance: 3
+    marketing_plan: 5
+    deck_review: 5
+    standalone_supplemental: 1
+    standalone_evidence: 1
+    standalone_statistics: 1
+    standalone_insights: 1
+    domain_intelligence: 1
+    expert_intelligence: 1
+    report_intelligence: 1
+    adjacent_trends: 1
+    visual: 0
+    linkedin_article: 5
+    linkedin_post: 3
+    skill_deliverable: 0
+    weekly_digest: 0
+    admin: 0
+offerings_catalog:
+  endpoint: https://api.fodda.ai/v1/offerings
+  status: 200
+  count: 84
+  kinds:
+    offering: 37
+    tool: 36
+    use_case_skill: 10
+    capability: 1
+  entries:
+  - key: weekly_digest
+    name: Weekly Personalized Digest
+    published_price_usd: 0
+    typical_calls: 0
+    category: Tracking
+    kind: offering
+    status: live
+  - key: adjacent_trends
+    name: Adjacent Trends
+    published_price_usd: 15
+    typical_calls: 30
+    category: Ideation
+    kind: offering
+    status: live
+  - key: check_supplemental_status
+    name: Check Supplemental Status
+    published_price_usd: 0
+    typical_calls: 0
+    category: Status
+    kind: tool
+    status: live
+  - key: earnings_company
+    name: Company Earnings Snapshot
+    published_price_usd: 20
+    typical_calls: 40
+    category: Financial
+    kind: offering
+    status: live
+  - key: sign_up_free_account
+    name: Sign Up Free Account
+    published_price_usd: 0
+    typical_calls: 0
+    category: Account
+    kind: tool
+    status: live
+  - key: search_statistics
+    name: Search Statistics
+    published_price_usd: 0.5
+    typical_calls: 1
+    category: Search
+    kind: tool
+    status: live
+  - key: upload_compare
+    name: Upload & Compare
+    published_price_usd: 40
+    typical_calls: 80
+    category: Utility
+    kind: offering
+    status: live
+  - key: update_user_profile
+    name: Update User Profile
+    published_price_usd: 0
+    typical_calls: 0
+    category: Account
+    kind: tool
+    status: live
+  - key: list_analysts
+    name: List Analysts
+    published_price_usd: 0
+    typical_calls: 0
+    category: Expert
+    kind: tool
+    status: live
+  - key: get_report_intelligence
+    name: Get Report Intelligence
+    published_price_usd: 55
+    typical_calls: 110
+    category: Intelligence
+    kind: tool
+    status: live
+  - key: linkedin_article
+    name: LinkedIn Article
+    published_price_usd: 2.5
+    typical_calls: 5
+    category: null
+    kind: offering
+    status: live
+  - key: get_earnings_divergence
+    name: Get Earnings Divergence
+    published_price_usd: 20
+    typical_calls: 40
+    category: Financial
+    kind: tool
+    status: live
+  - key: deep_research_light
+    name: Deep Research (Light)
+    published_price_usd: 55
+    typical_calls: 110
+    category: Research
+    kind: offering
+    status: live
+  - key: standalone_insights
+    name: Standalone Insights
+    published_price_usd: 0.5
+    typical_calls: 1
+    category: Search
+    kind: offering
+    status: live
+  - key: earnings_intelligence
+    name: Earnings Intelligence
+    published_price_usd: 30
+    typical_calls: 60
+    category: Financial
+    kind: offering
+    status: live
+  - key: search
+    name: Graph Search
+    published_price_usd: 0.5
+    typical_calls: 1
+    category: Search
+    kind: offering
+    status: live
+  - key: earnings_qa
+    name: Analyst Q&A
+    published_price_usd: 10
+    typical_calls: 20
+    category: Financial
+    kind: offering
+    status: live
+  - key: search_graph
+    name: Search Graph
+    published_price_usd: 20
+    typical_calls: 40
+    category: Search
+    kind: tool
+    status: live
+  - key: get_domain_intelligence
+    name: Get Domain Intelligence
+    published_price_usd: 35
+    typical_calls: 70
+    category: Intelligence
+    kind: tool
+    status: live
+  - key: research_stream
+    name: Research Stream
+    published_price_usd: 0.5
+    typical_calls: 1
+    category: Research
+    kind: offering
+    status: live
+  - key: draft_linkedin_article
+    name: Draft Linkedin Article
+    published_price_usd: 2.5
+    typical_calls: 5
+    category: Content
+    kind: tool
+    status: live
+  - key: read_url
+    name: Read Url
+    published_price_usd: 20
+    typical_calls: 40
+    category: Web
+    kind: tool
+    status: live
+  - key: report_intelligence
+    name: Report Intelligence
+    published_price_usd: 55
+    typical_calls: 110
+    category: Intelligence
+    kind: offering
+    status: live
+  - key: standalone_evidence
+    name: Standalone Evidence
+    published_price_usd: 0.5
+    typical_calls: 1
+    category: Graph
+    kind: offering
+    status: live
+  - key: get_company_earnings
+    name: Get Company Earnings
+    published_price_usd: 20
+    typical_calls: 40
+    category: Financial
+    kind: tool
+    status: live
+  - key: trend_briefing
+    name: Trend Briefing
+    published_price_usd: 40
+    typical_calls: 80
+    category: Deliverable
+    kind: offering
+    status: live
+  - key: manage_scheduled_reports
+    name: Manage Scheduled Reports
+    published_price_usd: 0
+    typical_calls: 0
+    category: Account
+    kind: tool
+    status: live
+  - key: send_feedback
+    name: Send Feedback
+    published_price_usd: 0
+    typical_calls: 0
+    category: Account
+    kind: tool
+    status: live
+  - key: earnings_divergence
+    name: Earnings Divergence Deflection Scan
+    published_price_usd: 20
+    typical_calls: 40
+    category: Financial
+    kind: offering
+    status: live
+  - key: get_my_account
+    name: Get My Account
+    published_price_usd: 0
+    typical_calls: 0
+    category: Account
+    kind: tool
+    status: live
+  - key: deep_research_topic
+    name: Deep Research Topic
+    published_price_usd: 100
+    typical_calls: 200
+    category: Research
+    kind: tool
+    status: live
+  - key: check_research_status
+    name: Check Research Status
+    published_price_usd: 0
+    typical_calls: 0
+    category: Status
+    kind: tool
+    status: live
+  - key: topic_research
+    name: Topic Research
+    published_price_usd: 20
+    typical_calls: 40
+    category: Research
+    kind: offering
+    status: live
+  - key: check_deliverable_status
+    name: Check Deliverable Status
+    published_price_usd: 0
+    typical_calls: 0
+    category: Status
+    kind: tool
+    status: live
+  - key: toggle_graph_preference
+    name: Toggle Graph Preference
+    published_price_usd: 0
+    typical_calls: 0
+    category: Account
+    kind: tool
+    status: live
+  - key: get_earnings_intelligence
+    name: Get Earnings Intelligence
+    published_price_usd: 30
+    typical_calls: 60
+    category: Financial
+    kind: tool
+    status: live
+  - key: marketing_plan
+    name: Marketing Plan
+    published_price_usd: 60
+    typical_calls: 120
+    category: Deliverable
+    kind: offering
+    status: live
+  - key: domain_intelligence
+    name: Domain Intelligence
+    published_price_usd: 35
+    typical_calls: 70
+    category: Intelligence
+    kind: offering
+    status: live
+  - key: list_graphs
+    name: List Graphs
+    published_price_usd: 0
+    typical_calls: 0
+    category: Account
+    kind: tool
+    status: live
+  - key: deep_dive_comprehensive
+    name: Deep Dive (Comprehensive)
+    published_price_usd: 100
+    typical_calls: 200
+    category: Research
+    kind: offering
+    status: live
+  - key: deck_review
+    name: Deck Review
+    published_price_usd: 50
+    typical_calls: 100
+    category: Deliverable
+    kind: offering
+    status: live
+  - key: standalone_supplemental
+    name: Standalone Supplemental
+    published_price_usd: 45
+    typical_calls: 90
+    category: Supplemental
+    kind: offering
+    status: live
+  - key: linkedin_post
+    name: LinkedIn Post
+    published_price_usd: 1.5
+    typical_calls: 3
+    category: null
+    kind: offering
+    status: live
+  - key: get_label_values
+    name: Get Label Values
+    published_price_usd: 0
+    typical_calls: 0
+    category: Graph
+    kind: tool
+    status: live
+  - key: earnings_validated_trends
+    name: Earnings Validated Trends
+    published_price_usd: 25
+    typical_calls: 50
+    category: Financial
+    kind: offering
+    status: live
+  - key: deep_dive_fast
+    name: Deep Dive (Fast)
+    published_price_usd: 55
+    typical_calls: 110
+    category: Research
+    kind: offering
+    status: live
+  - key: research_chat
+    name: Research Chat
+    published_price_usd: 0.5
+    typical_calls: 1
+    category: Research
+    kind: offering
+    status: live
+  - key: draft_linkedin_post
+    name: Draft Linkedin Post
+    published_price_usd: 1.5
+    typical_calls: 3
+    category: Content
+    kind: tool
+    status: live
+  - key: brainstorm
+    name: Brainstorm
+    published_price_usd: 35
+    typical_calls: 70
+    category: Creative
+    kind: offering
+    status: live
+  - key: get_expert_intelligence
+    name: Get Expert Intelligence
+    published_price_usd: 45
+    typical_calls: 90
+    category: Expert
+    kind: tool
+    status: live
+  - key: earnings_history
+    name: Company Earnings History
+    published_price_usd: 15
+    typical_calls: 30
+    category: Financial
+    kind: offering
+    status: live
+  - key: expert_intelligence
+    name: Expert Intelligence Search (multi-strategist sweep)
+    published_price_usd: 45
+    typical_calls: 90
+    category: Expert
+    kind: offering
+    status: live
+  - key: standalone_statistics
+    name: Standalone Statistics
+    published_price_usd: 0.5
+    typical_calls: 1
+    category: Search
+    kind: offering
+    status: live
+  - key: discover_adjacent_trends
+    name: Discover Adjacent Trends
+    published_price_usd: 15
+    typical_calls: 30
+    category: Ideation
+    kind: tool
+    status: live
+  - key: get_capabilities
+    name: Get Capabilities
+    published_price_usd: 0
+    typical_calls: 0
+    category: Account
+    kind: tool
+    status: live
+  - key: brand_intelligence
+    name: Brand Intelligence
+    published_price_usd: 30
+    typical_calls: 60
+    category: Brand
+    kind: offering
+    status: live
+  - key: expert_agent
+    name: Expert Consultation (1-on-1)
+    published_price_usd: 15
+    typical_calls: 30
+    category: Expert
+    kind: offering
+    status: live
+  - key: get_node
+    name: Get Node
+    published_price_usd: 0
+    typical_calls: 0
+    category: Graph
+    kind: tool
+    status: live
+  - key: url_as_prompt
+    name: URL as Prompt
+    published_price_usd: 20
+    typical_calls: 40
+    category: Utility
+    kind: offering
+    status: live
+  - key: brainstorm_topic
+    name: Brainstorm Topic
+    published_price_usd: 35
+    typical_calls: 70
+    category: Ideation
+    kind: tool
+    status: live
+  - key: deep_research_heavy
+    name: Deep Research (Heavy)
+    published_price_usd: 100
+    typical_calls: 200
+    category: Research
+    kind: offering
+    status: live
+  - key: request_deliverable
+    name: Request Deliverable
+    published_price_usd: 0
+    typical_calls: 0
+    category: Expert
+    kind: tool
+    status: live
+  - key: get_evidence
+    name: Get Evidence
+    published_price_usd: 0.5
+    typical_calls: 1
+    category: Graph
+    kind: tool
+    status: live
+  - key: weekly_tracker
+    name: Weekly Tracker
+    published_price_usd: 30
+    typical_calls: 60
+    category: Tracking
+    kind: offering
+    status: live
+  - key: brand_tracker
+    name: Brand Tracker
+    published_price_usd: 30
+    typical_calls: 60
+    category: Brand
+    kind: tool
+    status: live
+  - key: generate_visual
+    name: Generate Visual
+    published_price_usd: 0
+    typical_calls: 0
+    category: Visual
+    kind: tool
+    status: live
+  - key: earnings_compare
+    name: Earnings Compare
+    published_price_usd: 30
+    typical_calls: 60
+    category: Financial
+    kind: offering
+    status: live
+  - key: get_supplemental_context
+    name: Get Supplemental Context
+    published_price_usd: 10
+    typical_calls: 20
+    category: Supplemental
+    kind: tool
+    status: live
+  - key: url_context
+    name: URL Context
+    published_price_usd: 20
+    typical_calls: 40
+    category: Utility
+    kind: offering
+    status: live
+  - key: earnings_guidance
+    name: Earnings Guidance
+    published_price_usd: 1.5
+    typical_calls: 3
+    category: null
+    kind: offering
+    status: live
+  - key: get_neighbors
+    name: Get Neighbors
+    published_price_usd: 0
+    typical_calls: 0
+    category: Graph
+    kind: tool
+    status: live
+  - key: consult_analyst
+    name: Consult Analyst
+    published_price_usd: 15
+    typical_calls: 30
+    category: Expert
+    kind: tool
+    status: live
+  - key: search_insights
+    name: Search Insights
+    published_price_usd: 0.5
+    typical_calls: 1
+    category: Search
+    kind: tool
+    status: live
+  - key: skill.deep_research
+    name: Deep Research
+    published_price_usd: $55-$100
+    typical_calls: 110 or 200
+    category: null
+    kind: use_case_skill
+    status: live
+  - key: skill.brand_intelligence
+    name: Brand Intelligence
+    published_price_usd: 30
+    typical_calls: 60
+    category: null
+    kind: use_case_skill
+    status: live
+  - key: skill.earnings_divergence
+    name: Earnings Divergence
+    published_price_usd: 20
+    typical_calls: 40
+    category: null
+    kind: use_case_skill
+    status: live
+  - key: skill.expert_consult
+    name: Expert Consult
+    published_price_usd: 15
+    typical_calls: 30
+    category: null
+    kind: use_case_skill
+    status: live
+  - key: skill.topic_brief
+    name: Topic Brief
+    published_price_usd: 20
+    typical_calls: 40
+    category: null
+    kind: use_case_skill
+    status: live
+  - key: cap.adjacent_trends
+    name: Adjacent Trends
+    published_price_usd: 15
+    typical_calls: 30
+    category: null
+    kind: capability
+    status: live
+  - key: skill.competitive_landscape
+    name: Competitive Landscape
+    published_price_usd: 175
+    typical_calls: 350
+    category: null
+    kind: use_case_skill
+    status: live
+  - key: skill.pitch_prep
+    name: Pitch Prep
+    published_price_usd: 35
+    typical_calls: 70
+    category: null
+    kind: use_case_skill
+    status: live
+  - key: skill.trend_watch
+    name: Trend Watch
+    published_price_usd: 35
+    typical_calls: 70
+    category: null
+    kind: use_case_skill
+    status: live
+  - key: skill.fit_discovery
+    name: Fit Discovery
+    published_price_usd: 0
+    typical_calls: 0
+    category: null
+    kind: use_case_skill
+    status: live
+  - key: skill.commission_expert_deliverable
+    name: Commission Expert Deliverable
+    published_price_usd: variable
+    typical_calls: 30
+    category: null
+    kind: use_case_skill
+    status: live
+discrepancies:
+- 'The Base tier is described as "$50 of API calls free every month (100 calls)" on /pricing and llms.txt, while
+  the legacy agent.json says "Free tier: 100 calls/month" and the fodda-mcp README elsewhere says $50; the two agree
+  at $0.50/call.'
+- The agent-skills references/fodda-api.md table lists older call counts (e.g. Brand Intelligence 20 calls / $10)
+  than the live pricing map (60 calls / $30); the provider's own guidance is to trust the 402 body over any table.
+- 'Free-tier call refill wording differs: "renewing" requires a card on file.'
+terms:
+  cancellation: You may cancel at any time; cancellation takes effect at the end of the current billing period.
+  refunds: Refunds are provided at Fodda's discretion.
+  source: 'https://www.fodda.ai/terms (Last updated: April 26, 2026)'

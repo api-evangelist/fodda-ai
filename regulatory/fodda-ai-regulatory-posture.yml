@@ -1,0 +1,168 @@
+generated: '2026-09-19'
+method: searched
+probe: true
+source: https://www.fodda.ai/privacy (Last updated June 16, 2026) + https://www.fodda.ai/iso-42001-compliance +
+  https://www.fodda.ai/compliance-dossier + https://www.fodda.ai/agent-outreach-policy + a2a/fodda-ai-agent-legacy.json
+  + openapi/_original/fodda-ai-openapi.json + live probes of conventional paths 2026-09-19
+note: HARVEST ONLY — this records evidence the provider publishes; which regimes reach Fodda is decided by the Kin
+  Score regime map, not here. Three signals carry substance; everything else probed was absent and is listed under
+  probed_absent with the status each URL returned. All www.fodda.ai 404s below are real 404 status codes (a 9,12x-byte
+  404 page), not soft-404s.
+signals:
+  ai_transparency:
+    url: https://www.fodda.ai/iso-42001-compliance
+    section: 'Responsible AI & Enterprise Governance: ISO/IEC 42001 Alignment — Annex A Control Mapping; Threat
+      Controls & Mitigations'
+    last_updated: 2026-08-27 (per llms.txt)
+    evidence:
+    - source: https://www.fodda.ai/iso-42001-compliance
+      http_status: 200
+      fetched: '2026-09-19'
+      quote: Fodda separates non-deterministic model synthesis (Narrator) from deterministic data retrieval (Calculator)
+        to provide governed, evidence-grounded outputs while avoiding hallucinations. ... A.6 Data for AI Systems
+        — Strict usage logging ledger, zero model training on client queries, and contract privacy options. A.7
+        Information for Interested Parties — Full provenance & evidence chain links. A.8 Responsible Use of AI —
+        Evaluated via automated behavioral test checks. ... Active mitigations govern hallucination controls, input
+        prompt validation, and PII protection.
+    - source: https://www.fodda.ai/compliance-dossier
+      http_status: 200
+      fetched: '2026-09-19'
+      quote: Fixed, versioned tool catalog with no dynamic loading, code execution, or filesystem access. Read-only
+        graph tools are separated from account-scoped write operations. ... Query text retained in internal usage
+        ledger for 12 months for billing and telemetry, then purged; result text is not retained. Zero model training
+        on client data.
+    - source: https://www.fodda.ai/.well-known/agent.json
+      http_status: 200
+      fetched: '2026-09-19'
+      quote: Provides expert-curated knowledge graphs and synthetic analyst personas ... Have a structured conversation
+        with an expert synthetic analyst (e.g., Piers Fawkes for trends and innovation, Ben Dietz for luxury and
+        SIC) trained on years of editorial intelligence.
+    - source: https://www.fodda.ai/llms.txt
+      http_status: 200
+      fetched: '2026-09-19'
+      quote: 'Human Agents: Named experts'' agents that research autonomously, cite itemized sources, decline questions
+        outside their lane ... Expert Consult: Consult a named Human Agent — a real expert''s digital twin that
+        answers in their voice (agent card skill description).'
+    note: A published AI-governance disclosure with control-level substance (how model output is separated from
+      retrieval, what is logged and for how long, that client data is not used for training, what mitigations run)
+      plus explicit labelling that the "analysts" and "Human Agents" a user converses with are synthetic personas
+      / digital twins of named people. Framework alignment is claimed, not certified — see security/fodda-ai-trust-center.yml.
+      /ai and /ai/transparency both 404; the substance lives on the ISO 42001 and dossier pages.
+  data_subject_request:
+    url: https://www.fodda.ai/privacy
+    section: Data retention / your rights
+    channel: privacy@fodda.ai
+    stated_sla: null
+    rights_named:
+    - deletion of account and associated data
+    evidence:
+    - source: https://www.fodda.ai/privacy
+      http_status: 200
+      fetched: '2026-09-19'
+      quote: We retain account information for as long as your account is active. Query logs are retained for billing
+        and analytics purposes. You may request deletion of your account and associated data by contacting us.
+    - source: https://www.fodda.ai/compliance-dossier
+      http_status: 200
+      fetched: '2026-09-19'
+      quote: Zero-retention query logging (in-memory execution), pseudonymous identifiers, and 30-day termination
+        purge available as standard/negotiated contract options.
+    note: A documented deletion-request channel (the privacy page names privacy@fodda.ai as its contact) without
+      a response period, a form, or an API; /privacy/requests 404s. Thin but real — recorded because the process,
+      channel and retention rule are stated on the provider's own policy page (Last updated June 16, 2026).
+  exit_assistance:
+    url: https://api.fodda.ai/openapi.json
+    section: GET /v1/user/usage/export, GET /v1/user/invoices/export, GET /v1/user/briefings/export
+    formats:
+    - CSV
+    - JSON
+    api: https://api.fodda.ai/v1/user/usage/export
+    evidence:
+    - source: https://api.fodda.ai/openapi.json
+      http_status: 200
+      fetched: '2026-09-19'
+      quote: 'bulk_export_query_and_usage_history — "Export customer query usage history as CSV or JSON for accounting,
+        finance, and agentic workflows." (params format, startDate, endDate; Price: Free); bulk_export_consolidated_invoices_and_billing_summary;
+        bulk_export_research_briefings_and_deliverables.'
+    note: Documented, free, machine-callable export endpoints for the customer's own usage history, invoices and
+      research deliverables — portability of what the customer produced and paid for. The graph content itself is
+      expressly NOT exportable ("The agent MUST NOT permit bulk exports of graph data", llms-full.txt), which is
+      a licensing boundary rather than an exit gap; no /docs/export or switching-assistance page exists.
+probed_absent:
+- signal: sbom
+  urls:
+  - url: https://www.fodda.ai/security/sbom
+    status: 404
+  - url: https://www.fodda.ai/security/sbom.json
+    status: 404
+  note: No bill of materials published anywhere reachable (also absent from the fodda-mcp repo root). Never derived
+    — search only.
+- signal: support_lifetime
+  urls:
+  - url: https://www.fodda.ai/changelog
+    status: 404
+  - url: https://www.fodda.ai/sla
+    status: 404
+  note: No stated support period for API versions or the stdio package; see lifecycle/.
+- signal: accessibility_conformance
+  urls:
+  - url: https://www.fodda.ai/accessibility
+    status: 404
+  - url: https://www.fodda.ai/accessibility/vpat
+    status: 404
+- signal: training_data_summary
+  urls:
+  - url: https://www.fodda.ai/ai
+    status: 404
+  - url: https://www.fodda.ai/ai/transparency
+    status: 404
+  note: '"Zero model training on client data" is a negative statement about client data, not a training-data summary
+    for the models Fodda uses. Not recorded.'
+- signal: global_privacy_control
+  urls:
+  - url: https://www.fodda.ai/privacy
+    status: 200
+  note: No GPC / universal opt-out statement on the privacy page. Not tested by header, per contract.
+- signal: subprocessors
+  urls:
+  - url: https://www.fodda.ai/legal/subprocessors
+    status: 404
+  - url: https://www.fodda.ai/subprocessors
+    status: 404
+  note: The dossier names Clerk (identity), the blog names Google Cloud (hosting) and llms.txt names Stripe (payments),
+    but no dated subprocessor table exists — vendor mentions do not meet the substance bar.
+- signal: data_residency
+  urls:
+  - url: https://www.fodda.ai/docs/data-residency
+    status: 404
+  note: /enterprises advertises "Air-Gapped Sovereign AI — fully local, on-premise deployments" and the security
+    summary describes a customer-project MCP proxy (Model B); neither names regions or a residency commitment.
+- signal: incident_notification
+  urls:
+  - url: https://www.fodda.ai/legal/dpa
+    status: 404
+  - url: https://www.fodda.ai/dpa
+    status: 404
+  note: No DPA or breach-notification SLA published; the terms (2026-04-26) only promise notice of material changes
+    to the terms.
+- signal: age_assurance
+  urls:
+  - url: https://www.fodda.ai/terms
+    status: 200
+  note: No age signal or minimum-age clause found in the terms text captured.
+- signal: notice_and_action
+  urls:
+  - url: https://www.fodda.ai/legal/report-content
+    status: 404
+  note: The Agent Outreach & Communication Policy page (https://www.fodda.ai/agent-outreach-policy, 200) promises
+    "Opt-out and disclosure" guidelines but the captured page carries only its heading and description — no reporting
+    mechanism was readable.
+- signal: transparency_report
+  urls:
+  - url: https://www.fodda.ai/transparency
+    status: 404
+  - url: https://www.fodda.ai/trust
+    status: 404
+pointers_emitted:
+- AITransparency
+- DataSubjectRequest
+- ExitAssistance

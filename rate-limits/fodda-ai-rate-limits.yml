@@ -1,0 +1,73 @@
+generated: '2026-09-19'
+method: probed
+source: Live unauthenticated responses from https://api.fodda.ai/v1/health and https://api.fodda.ai/v1/graph-slice?graph_id=retail
+  on 2026-09-19
+docs: https://www.fodda.ai/llms-full.txt (section 2, API Reference)
+checked: '2026-09-19'
+summary: 'api.fodda.ai emits the IETF RateLimit header family (draft-ietf-httpapi-ratelimit-headers) on every public-tier
+  response — RateLimit-Policy 60;w=60, RateLimit-Limit 60, RateLimit-Remaining, RateLimit-Reset — plus a provider
+  header X-Fodda-RateLimit-Tier: public. The provider''s own llms-full.txt documents the public endpoints (POST
+  /v1/psfk/overview, GET /v1/graph-slice) as "10 req/min per IP"; the observed policy window is 60 per 60 seconds,
+  so the documentation understates the live allowance. No 429 was provoked and no Retry-After was observed. Authenticated
+  tiers and the MCP server publish no limits; the metering unit everywhere is the paid API call (see plans/).'
+limit_count: 2
+scopes:
+- scope: per-IP
+  tier: public
+  surface: REST (api.fodda.ai) — public-tier endpoints (health, pricing, offerings, graph catalog, JSON-LD graph
+    slice)
+  window: 60 seconds
+  limit: 60
+  unit: requests
+  burst: null
+  status_on_exhaustion: not observed (429 expected; not provoked)
+  method: probed
+  headers:
+  - name: RateLimit-Policy
+    observed_value: 60;w=60
+    meaning: 'Quota policy: 60 requests per 60-second window (IETF draft syntax).'
+  - name: RateLimit-Limit
+    observed_value: '60'
+  - name: RateLimit-Remaining
+    observed_value: 58 (health), 50 (graph-slice, same window)
+  - name: RateLimit-Reset
+    observed_value: 45 / 14 / 5 (seconds until the window resets)
+  - name: X-Fodda-RateLimit-Tier
+    observed_value: public
+  - name: X-Request-Id
+    observed_value: 8149a1d1d0125b6f6bd1544d
+    meaning: Per-request id to quote to support; also echoed as requestId in JSON bodies.
+  retry_after: null
+  retry_after_note: No Retry-After header observed on any response; RateLimit-Reset carries the wait in seconds.
+  source: observed headers, 2026-09-19
+- scope: per-IP
+  tier: public
+  surface: POST /v1/psfk/overview and GET /v1/graph-slice
+  window: 1 minute
+  limit: 10
+  unit: requests
+  burst: null
+  status_on_exhaustion: null
+  method: searched
+  headers: []
+  source: 'https://www.fodda.ai/llms-full.txt — "Rate limit: 10 req/min. No auth key required." / "Rate limited
+    to 10 req/min per IP."'
+  note: Documented figure; the live header policy on the same host reads 60;w=60. Recorded separately rather than
+    reconciled — a client should honor the headers.
+quota_signals:
+- signal: monthly API-call quota per plan
+  value: 100 calls/month free (Base, card on file); 5,000 or 9,200 calls/month (Monthly Plan)
+  status_on_exhaustion: not documented as an HTTP status; unauthenticated/unfunded calls answer 402 payment_required
+  source: https://www.fodda.ai/pricing
+caching:
+  observed: 'cache-control: public, max-age=86400, stale-while-revalidate=604800 and an ETag on GET /v1/graph-slice;
+    ETag on every JSON response'
+  documented: 'llms-full.txt: "Caching: 24h browser, 7d stale-while-revalidate, ETag."'
+mcp_surface:
+  endpoint: https://mcp.fodda.ai/mcp
+  limits_published: false
+  note: Anonymous POST returns 401 (RFC 9728 challenge); no RateLimit headers are present on that response and none
+    are documented for MCP.
+a2a_surface:
+  endpoint: https://mcp.fodda.ai/a2a
+  limits_published: false

@@ -1,0 +1,137 @@
+generated: '2026-09-19'
+method: searched
+source: https://github.com/fodda-ai/agent-skills (MIT; raw SKILL.md files fetched verbatim 2026-09-19 from use-case-skills/<skill>/SKILL.md,
+  as listed in https://www.fodda.ai/llms.txt)
+license: MIT (Copyright (c) 2026 Fodda (PSFK))
+summary: Ten provider-published, installable Agent Skills (SKILL.md with RFC-2119 frontmatter) saved verbatim —
+  not generated. Each describes composition and methodology and defers transport/auth/pricing to references/fodda-api.md
+  in the same repo; REST operationIds below are the pipeline's binding of the endpoints the skill names to the published
+  OpenAPI (verified verbatim), and mcp_tools are the tool names the skill calls.
+provider_repo: https://github.com/fodda-ai/agent-skills
+shared_reference: https://raw.githubusercontent.com/fodda-ai/agent-skills/main/references/fodda-api.md
+skills:
+- file: fodda-ai-deep-research.md
+  name: Deep Research Brief
+  description: Commission an autonomous, cited editorial research brief (tier fast/comprehensive); one paid launch,
+    then poll.
+  api: openapi/fodda-ai-openapi.yml
+  operations:
+  - launch_autonomous_research_deep_dive
+  - check_deep_research_status
+  mcp_tools:
+  - deep_research_topic
+  - check_research_status
+  source: https://raw.githubusercontent.com/fodda-ai/agent-skills/main/use-case-skills/deep-research/SKILL.md
+  method: searched
+- file: fodda-ai-brand-intelligence.md
+  name: Brand Intelligence
+  description: 'One-brand complete profile: footprint, ranked co-occurring brands, lifecycle.'
+  api: openapi/fodda-ai-openapi.yml
+  operations:
+  - get_brand_intelligence_profile
+  mcp_tools:
+  - brand_tracker
+  source: https://raw.githubusercontent.com/fodda-ai/agent-skills/main/use-case-skills/brand-intelligence/SKILL.md
+  method: searched
+- file: fodda-ai-topic-brief.md
+  name: Topic Brief
+  description: Quick cited answer from graph search + statistics + insights + evidence (graph-only, no web).
+  api: openapi/fodda-ai-openapi.yml
+  operations:
+  - list_available_context_graphs
+  - search_knowledge_graph
+  - search_statistics
+  - get_evidence
+  mcp_tools:
+  - search_graph
+  - search_statistics
+  - search_insights
+  - get_evidence
+  source: https://raw.githubusercontent.com/fodda-ai/agent-skills/main/use-case-skills/topic-brief/SKILL.md
+  method: searched
+- file: fodda-ai-earnings-divergence-read.md
+  name: Earnings Divergence Read
+  description: Where management deflects vs analyst pressure.
+  api: openapi/fodda-ai-openapi.yml
+  operations:
+  - get_earnings_concerns_divergence
+  mcp_tools:
+  - get_earnings_divergence
+  source: https://raw.githubusercontent.com/fodda-ai/agent-skills/main/use-case-skills/earnings-divergence-read/SKILL.md
+  method: searched
+- file: fodda-ai-synthetic-consultant.md
+  name: Synthetic Consultant
+  description: A named expert persona's attributed opinion with routing/referral.
+  api: openapi/fodda-ai-openapi.yml
+  operations:
+  - list_synthetic_expert_analysts
+  - consult_analyst_turn
+  mcp_tools:
+  - list_analysts
+  - consult_analyst
+  source: https://raw.githubusercontent.com/fodda-ai/agent-skills/main/use-case-skills/synthetic-consultant/SKILL.md
+  method: searched
+- file: fodda-ai-competitive-landscape-brief.md
+  name: Competitive Landscape Brief
+  description: Category landscape composed from deep research + brand + earnings + adjacent trends.
+  api: openapi/fodda-ai-openapi.yml
+  operations:
+  - launch_autonomous_research_deep_dive
+  - get_brand_intelligence_profile
+  - get_earnings_concerns_divergence
+  - discover_adjacent_trends
+  mcp_tools:
+  - deep_research_topic
+  - brand_tracker
+  - get_earnings_divergence
+  - discover_adjacent_trends
+  source: https://raw.githubusercontent.com/fodda-ai/agent-skills/main/use-case-skills/competitive-landscape-brief/SKILL.md
+  method: searched
+- file: fodda-ai-pitch-prep-pressure-test.md
+  name: Pitch Prep and Pressure-Test
+  description: 'Red-team a brief before it ships: read the URL, topic search, evidence, visual.'
+  api: openapi/fodda-ai-openapi.yml
+  operations:
+  - url_context_extraction
+  - search_knowledge_graph
+  - get_evidence
+  mcp_tools:
+  - read_url
+  - search_graph
+  - get_evidence
+  - generate_visual
+  source: https://raw.githubusercontent.com/fodda-ai/agent-skills/main/use-case-skills/pitch-prep-pressure-test/SKILL.md
+  method: searched
+- file: fodda-ai-category-trend-watch.md
+  name: Category / Trend Watch
+  description: Recurring category radar delivered to Slack/email.
+  api: openapi/fodda-ai-openapi.yml
+  operations:
+  - create_scheduled_briefing
+  - search_knowledge_graph
+  - discover_adjacent_trends
+  mcp_tools:
+  - manage_scheduled_reports
+  - search_graph
+  - discover_adjacent_trends
+  source: https://raw.githubusercontent.com/fodda-ai/agent-skills/main/use-case-skills/category-trend-watch/SKILL.md
+  method: searched
+- file: fodda-ai-commission-expert-deliverable.md
+  name: Commission Expert Deliverable
+  description: Commission a named expert's packaged offering (account credits, no SPT).
+  api: openapi/fodda-ai-openapi.yml
+  operations: []
+  mcp_tools:
+  - request_deliverable
+  - check_deliverable_status
+  - list_analysts
+  source: https://raw.githubusercontent.com/fodda-ai/agent-skills/main/use-case-skills/commission-expert-deliverable/SKILL.md
+  method: searched
+- file: fodda-ai-fodda-fit-discovery.md
+  name: Fodda Fit Discovery
+  description: Offline codebase audit for where Fodda fits; no calls, free.
+  api: openapi/fodda-ai-openapi.yml
+  operations: []
+  mcp_tools: []
+  source: https://raw.githubusercontent.com/fodda-ai/agent-skills/main/use-case-skills/fodda-fit-discovery/SKILL.md
+  method: searched

@@ -64,5 +64,11 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Fodda (PSFK) is a company surfaced via the API Evangelist harvest backlog (source: a2a-registry) and added to the network as a stub for full-pipeline profiling.
-- https://fodda.ai/
+Fodda (PSFK) is the agent-native research layer built by trend publisher PSFK: 250+ expert-curated knowledge graphs, named-expert digital twins, earnings-call intelligence and 80+ institutional data sources, reachable as a REST API (api.fodda.ai, OpenAPI 3.1, 157 operations), a hosted MCP server (mcp.fodda.ai, OAuth via Clerk, plus an npm stdio package) and an A2A agent (mcp.fodda.ai/a2a, card at /.well-known/agent-card.json). Metered at $0.50 per API call with a free tier, enterprise OIDC, and a zero-onboarding HTTP 402 / Stripe Shared Payment Token rail.
+
+- Website: https://fodda.ai/
+- API docs: https://www.fodda.ai/api
+- OpenAPI: https://api.fodda.ai/openapi.json
+- MCP: https://mcp.fodda.ai/mcp
+- A2A card: https://www.fodda.ai/.well-known/agent-card.json
+- llms.txt: https://www.fodda.ai/llms.txt

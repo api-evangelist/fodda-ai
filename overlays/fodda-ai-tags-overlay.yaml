@@ -1,0 +1,1619 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist tags + observed-error overlay for the Fodda Context & Research API
+  version: 1.0.0
+extends: openapi/_original/fodda-ai-openapi.json
+x-generated: '2026-09-19'
+x-method: generated
+x-source: openapi/_original/fodda-ai-openapi.json + live probes of api.fodda.ai on 2026-09-19
+x-rationale: 'The provider''s spec declares 157 operations with no tags and only a 200 response each, and nine operationIds
+  are duplicated (supplemental__snapshot, supplemental__context, supplemental__economic_snapshot, supplemental__global_snapshot,
+  supplemental__uk_snapshot, supplemental__br_snapshot, supplemental__ca_snapshot, supplemental__research_trends,
+  supplemental__profile). This overlay groups every operation under a tag derived from its path family and, on every
+  secured operation, declares the 401 and 402 responses that api.fodda.ai actually returns (observed live: 402 payment_required
+  with a WWW-Authenticate: stripe-spt challenge on unauthenticated calls). The original is never mutated; duplicate
+  operationIds are reported, not renamed, because renaming would break the provider''s own tool bindings.'
+x-duplicate-operationIds:
+- supplemental__economic_snapshot
+- supplemental__global_snapshot
+- supplemental__uk_snapshot
+- supplemental__br_snapshot
+- supplemental__snapshot
+- supplemental__ca_snapshot
+- supplemental__research_trends
+- supplemental__profile
+- supplemental__context
+actions:
+- target: $
+  description: Declare the tag set used by the per-operation actions.
+  update:
+    tags:
+    - name: System
+    - name: Billing & Offerings
+    - name: Research
+    - name: Knowledge Graphs
+    - name: Account
+    - name: Brand Intelligence
+    - name: Search
+    - name: Admin
+    - name: Analysts
+    - name: Supplemental Data
+    - name: Earnings Intelligence
+    - name: Copilot
+- target: $.components
+  description: Add reusable 401/402 responses as observed on api.fodda.ai (2026-09-19).
+  update:
+    responses:
+      Unauthorized:
+        description: Authentication required. Observed on mcp.fodda.ai as a JSON-RPC error; on api.fodda.ai an unauthenticated
+          request answers 402 instead (MPP).
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+      PaymentRequired:
+        description: 'Machine Payments Protocol challenge: the exact price for this request in USD and the accepted
+          payment method (Stripe Shared Payment Token). Retry with Authorization: Bearer spt_... or an X-API-Key.'
+        headers:
+          WWW-Authenticate:
+            schema:
+              type: string
+            description: 'Observed value: stripe-spt amount=50 currency=usd (amount in cents).'
+          X-Request-Id:
+            schema:
+              type: string
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - type
+              - price
+              - payment_methods
+              - accept
+              properties:
+                type:
+                  type: string
+                  enum:
+                  - payment_required
+                description:
+                  type: string
+                price:
+                  type: object
+                  properties:
+                    amount:
+                      type: integer
+                      description: cents
+                    currency:
+                      type: string
+                payment_methods:
+                  type: array
+                  items:
+                    type: string
+                payment_methods_detail:
+                  type: array
+                  items:
+                    type: object
+                accept:
+                  type: string
+                endpoints:
+                  type: object
+                requestId:
+                  type: string
+- target: $.paths['/v1/health'].get
+  description: Tag GET /v1/health as "System"
+  update:
+    tags:
+    - System
+- target: $.paths['/v1/spt/validate'].get
+  description: Tag GET /v1/spt/validate as "Billing & Offerings"
+  update:
+    tags:
+    - Billing & Offerings
+- target: $.paths['/v1/offerings'].get
+  description: Tag GET /v1/offerings as "Billing & Offerings"
+  update:
+    tags:
+    - Billing & Offerings
+- target: $.paths['/v1/research/pricing'].get
+  description: Tag GET /v1/research/pricing as "Research"
+  update:
+    tags:
+    - Research
+- target: $.paths['/v1/research/offerings'].get
+  description: Tag GET /v1/research/offerings as "Research"
+  update:
+    tags:
+    - Research
+- target: $.paths['/v1/research/deep-dive'].post
+  description: Tag POST /v1/research/deep-dive as "Research" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Research
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/research/deep-dive/status/{job_id}'].get
+  description: Tag GET /v1/research/deep-dive/status/{job_id} as "Research" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Research
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/research/chat'].post
+  description: Tag POST /v1/research/chat as "Research" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Research
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/research/stream'].get
+  description: Tag GET /v1/research/stream as "Research" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Research
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/research/schedules'].post
+  description: Tag POST /v1/research/schedules as "Research" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Research
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/research/schedules'].get
+  description: Tag GET /v1/research/schedules as "Research"
+  update:
+    tags:
+    - Research
+- target: $.paths['/v1/research/schedules/{schedule_id}'].delete
+  description: Tag DELETE /v1/research/schedules/{schedule_id} as "Research"
+  update:
+    tags:
+    - Research
+- target: $.paths['/v1/research/schedules/{schedule_id}'].patch
+  description: Tag PATCH /v1/research/schedules/{schedule_id} as "Research"
+  update:
+    tags:
+    - Research
+- target: $.paths['/v1/research/schedules/{schedule_id}/runs'].get
+  description: Tag GET /v1/research/schedules/{schedule_id}/runs as "Research"
+  update:
+    tags:
+    - Research
+- target: $.paths['/v1/context'].get
+  description: Tag GET /v1/context as "Billing & Offerings" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Billing & Offerings
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/graph-slice'].get
+  description: Tag GET /v1/graph-slice as "Knowledge Graphs"
+  update:
+    tags:
+    - Knowledge Graphs
+- target: $.paths['/v1/log/question'].post
+  description: Tag POST /v1/log/question as "Account"
+  update:
+    tags:
+    - Account
+- target: $.paths['/v1/accounts/trial-upgrade'].post
+  description: Tag POST /v1/accounts/trial-upgrade as "Account"
+  update:
+    tags:
+    - Account
+- target: $.paths['/v1/user/context'].post
+  description: Tag POST /v1/user/context as "Account" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Account
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/user/usage/export'].get
+  description: Tag GET /v1/user/usage/export as "Account"
+  update:
+    tags:
+    - Account
+- target: $.paths['/v1/user/invoices/export'].get
+  description: Tag GET /v1/user/invoices/export as "Account"
+  update:
+    tags:
+    - Account
+- target: $.paths['/v1/user/briefings/export'].get
+  description: Tag GET /v1/user/briefings/export as "Account"
+  update:
+    tags:
+    - Account
+- target: $.paths['/v1/graphs/catalog'].get
+  description: Tag GET /v1/graphs/catalog as "Knowledge Graphs"
+  update:
+    tags:
+    - Knowledge Graphs
+- target: $.paths['/v1/graphs/mine'].get
+  description: Tag GET /v1/graphs/mine as "Knowledge Graphs"
+  update:
+    tags:
+    - Knowledge Graphs
+- target: $.paths['/v1/graphs'].get
+  description: Tag GET /v1/graphs as "Knowledge Graphs" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Knowledge Graphs
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/graphs/{graph_id}/nodes/{node_id}'].get
+  description: Tag GET /v1/graphs/{graph_id}/nodes/{node_id} as "Knowledge Graphs"
+  update:
+    tags:
+    - Knowledge Graphs
+- target: $.paths['/v1/graphs/{graph_id}/neighbors'].post
+  description: Tag POST /v1/graphs/{graph_id}/neighbors as "Knowledge Graphs"
+  update:
+    tags:
+    - Knowledge Graphs
+- target: $.paths['/v1/graphs/{graph_id}/adjacent'].get
+  description: Tag GET /v1/graphs/{graph_id}/adjacent as "Knowledge Graphs" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Knowledge Graphs
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/graphs/{graph_id}/search'].post
+  description: Tag POST /v1/graphs/{graph_id}/search as "Knowledge Graphs" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Knowledge Graphs
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/graphs/{graph_id}/evidence'].post
+  description: Tag POST /v1/graphs/{graph_id}/evidence as "Knowledge Graphs" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Knowledge Graphs
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/graphs/{graph_id}/labels/{label}/values'].get
+  description: Tag GET /v1/graphs/{graph_id}/labels/{label}/values as "Knowledge Graphs"
+  update:
+    tags:
+    - Knowledge Graphs
+- target: $.paths['/v1/sources/chunks/{chunk_id}'].get
+  description: Tag GET /v1/sources/chunks/{chunk_id} as "Knowledge Graphs" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Knowledge Graphs
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/graphs/{graph_id}/statistics'].get
+  description: Tag GET /v1/graphs/{graph_id}/statistics as "Knowledge Graphs" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Knowledge Graphs
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/brand-intelligence/{brandName}'].post
+  description: Tag POST /v1/brand-intelligence/{brandName} as "Brand Intelligence" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Brand Intelligence
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/search/domain'].post
+  description: Tag POST /v1/search/domain as "Search" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Search
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/search/expert'].post
+  description: Tag POST /v1/search/expert as "Search" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Search
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/search/report'].post
+  description: Tag POST /v1/search/report as "Search" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Search
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/search/filtered'].post
+  description: Tag POST /v1/search/filtered as "Search" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Search
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/search/filters'].get
+  description: Tag GET /v1/search/filters as "Search"
+  update:
+    tags:
+    - Search
+- target: $.paths['/v1/user/preferences/toggle'].post
+  description: Tag POST /v1/user/preferences/toggle as "Account"
+  update:
+    tags:
+    - Account
+- target: $.paths['/v1/admin/invalidate-registry-cache'].post
+  description: Tag POST /v1/admin/invalidate-registry-cache as "Admin"
+  update:
+    tags:
+    - Admin
+- target: $.paths['/v1/analysts'].get
+  description: Tag GET /v1/analysts as "Analysts"
+  update:
+    tags:
+    - Analysts
+- target: $.paths['/v1/analysts/brands'].get
+  description: Tag GET /v1/analysts/brands as "Analysts"
+  update:
+    tags:
+    - Analysts
+- target: $.paths['/v1/analysts/consult'].post
+  description: Tag POST /v1/analysts/consult as "Analysts" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Analysts
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/context'].post
+  description: Tag POST /v1/supplemental/context as "Supplemental Data" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/sources'].get
+  description: Tag GET /v1/supplemental/sources as "Supplemental Data"
+  update:
+    tags:
+    - Supplemental Data
+- target: $.paths['/v1/supplemental/earnings/snapshot'].get
+  description: Tag GET /v1/supplemental/earnings/snapshot as "Earnings Intelligence" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Earnings Intelligence
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/earnings/analyst-concerns'].get
+  description: Tag GET /v1/supplemental/earnings/analyst-concerns as "Earnings Intelligence" and declare the observed
+    401/402 responses
+  update:
+    tags:
+    - Earnings Intelligence
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/earnings/question-themes'].get
+  description: Tag GET /v1/supplemental/earnings/question-themes as "Earnings Intelligence" and declare the observed
+    401/402 responses
+  update:
+    tags:
+    - Earnings Intelligence
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/earnings/management-themes'].get
+  description: Tag GET /v1/supplemental/earnings/management-themes as "Earnings Intelligence" and declare the observed
+    401/402 responses
+  update:
+    tags:
+    - Earnings Intelligence
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/earnings/divergence'].get
+  description: Tag GET /v1/supplemental/earnings/divergence as "Earnings Intelligence" and declare the observed
+    401/402 responses
+  update:
+    tags:
+    - Earnings Intelligence
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/copilot/search_insights'].post
+  description: Tag POST /copilot/search_insights as "Copilot"
+  update:
+    tags:
+    - Copilot
+- target: $.paths['/copilot/get_evidence'].post
+  description: Tag POST /copilot/get_evidence as "Copilot"
+  update:
+    tags:
+    - Copilot
+- target: $.paths['/copilot/get_statistics'].post
+  description: Tag POST /copilot/get_statistics as "Copilot"
+  update:
+    tags:
+    - Copilot
+- target: $.paths['/v1/supplemental/suggest'].get
+  description: Tag GET /v1/supplemental/suggest as "Supplemental Data" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/census/retail-snapshot'].get
+  description: Tag GET /v1/supplemental/census/retail-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/census/demographics-snapshot'].get
+  description: Tag GET /v1/supplemental/census/demographics-snapshot as "Supplemental Data" and declare the observed
+    401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/fred/economic-snapshot'].get
+  description: Tag GET /v1/supplemental/fred/economic-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/wikipedia/pageviews'].get
+  description: Tag GET /v1/supplemental/wikipedia/pageviews as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/worldbank/global-snapshot'].get
+  description: Tag GET /v1/supplemental/worldbank/global-snapshot as "Supplemental Data" and declare the observed
+    401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/fda/ingredient-safety'].get
+  description: Tag GET /v1/supplemental/fda/ingredient-safety as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/fda/recalls'].get
+  description: Tag GET /v1/supplemental/fda/recalls as "Supplemental Data" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/clinical-trials/search'].get
+  description: Tag GET /v1/supplemental/clinical-trials/search as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/bls/economic-snapshot'].get
+  description: Tag GET /v1/supplemental/bls/economic-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/bea/spending-snapshot'].get
+  description: Tag GET /v1/supplemental/bea/spending-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/ons/uk-snapshot'].get
+  description: Tag GET /v1/supplemental/ons/uk-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/cbs/nl-snapshot'].get
+  description: Tag GET /v1/supplemental/cbs/nl-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/ptdata/pt-snapshot'].get
+  description: Tag GET /v1/supplemental/ptdata/pt-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/bcb/br-snapshot'].get
+  description: Tag GET /v1/supplemental/bcb/br-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/ibge/br-snapshot'].get
+  description: Tag GET /v1/supplemental/ibge/br-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/bcrp/pe-snapshot'].get
+  description: Tag GET /v1/supplemental/bcrp/pe-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/arg/ar-snapshot'].get
+  description: Tag GET /v1/supplemental/arg/ar-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/banxico/mx-snapshot'].get
+  description: Tag GET /v1/supplemental/banxico/mx-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/bch/hn-snapshot'].get
+  description: Tag GET /v1/supplemental/bch/hn-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/abs/au-snapshot'].get
+  description: Tag GET /v1/supplemental/abs/au-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/eurostat/eu-snapshot'].get
+  description: Tag GET /v1/supplemental/eurostat/eu-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/ecb/ea-snapshot'].get
+  description: Tag GET /v1/supplemental/ecb/ea-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/ecb/euro-snapshot'].get
+  description: Tag GET /v1/supplemental/ecb/euro-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/boe/uk-snapshot'].get
+  description: Tag GET /v1/supplemental/boe/uk-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/nordic/region-snapshot'].get
+  description: Tag GET /v1/supplemental/nordic/region-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/nordic/snapshot'].get
+  description: Tag GET /v1/supplemental/nordic/snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/rba/au-rates'].get
+  description: Tag GET /v1/supplemental/rba/au-rates as "Supplemental Data" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/bundesbank/de-snapshot'].get
+  description: Tag GET /v1/supplemental/bundesbank/de-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/ine/es-snapshot'].get
+  description: Tag GET /v1/supplemental/ine/es-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/insee/fr-snapshot'].get
+  description: Tag GET /v1/supplemental/insee/fr-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/snb/ch-snapshot'].get
+  description: Tag GET /v1/supplemental/snb/ch-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/snb/swiss-snapshot'].get
+  description: Tag GET /v1/supplemental/snb/swiss-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/bis/global-snapshot'].get
+  description: Tag GET /v1/supplemental/bis/global-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/pdh/pacific-snapshot'].get
+  description: Tag GET /v1/supplemental/pdh/pacific-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/qatar/qa-snapshot'].get
+  description: Tag GET /v1/supplemental/qatar/qa-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/bahrain/bh-snapshot'].get
+  description: Tag GET /v1/supplemental/bahrain/bh-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/boi/il-snapshot'].get
+  description: Tag GET /v1/supplemental/boi/il-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/india/in-snapshot'].get
+  description: Tag GET /v1/supplemental/india/in-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/sarb/za-snapshot'].get
+  description: Tag GET /v1/supplemental/sarb/za-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/bnm/my-snapshot'].get
+  description: Tag GET /v1/supplemental/bnm/my-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/hkma/hk-snapshot'].get
+  description: Tag GET /v1/supplemental/hkma/hk-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/estat/jp-snapshot'].get
+  description: Tag GET /v1/supplemental/estat/jp-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/bok/kr-snapshot'].get
+  description: Tag GET /v1/supplemental/bok/kr-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/bot/th-snapshot'].get
+  description: Tag GET /v1/supplemental/bot/th-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/boc/ca-snapshot'].get
+  description: Tag GET /v1/supplemental/boc/ca-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/statcan/ca-snapshot'].get
+  description: Tag GET /v1/supplemental/statcan/ca-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/bps/id-snapshot'].get
+  description: Tag GET /v1/supplemental/bps/id-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/psa/ph-snapshot'].get
+  description: Tag GET /v1/supplemental/psa/ph-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/sg/sg-snapshot'].get
+  description: Tag GET /v1/supplemental/sg/sg-snapshot as "Supplemental Data" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/bcch/cl-snapshot'].get
+  description: Tag GET /v1/supplemental/bcch/cl-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/cn/cn-snapshot'].get
+  description: Tag GET /v1/supplemental/cn/cn-snapshot as "Supplemental Data" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/usaspending/snapshot'].get
+  description: Tag GET /v1/supplemental/usaspending/snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/dol/snapshot'].get
+  description: Tag GET /v1/supplemental/dol/snapshot as "Supplemental Data" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/socrata/us-snapshot'].get
+  description: Tag GET /v1/supplemental/socrata/us-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/socrata/city/{cityKey}'].get
+  description: Tag GET /v1/supplemental/socrata/city/{cityKey} as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/socrata/portals'].get
+  description: Tag GET /v1/supplemental/socrata/portals as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/cdc/health-data'].get
+  description: Tag GET /v1/supplemental/cdc/health-data as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/pubmed/research-trends'].get
+  description: Tag GET /v1/supplemental/pubmed/research-trends as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/wto/trade-snapshot'].get
+  description: Tag GET /v1/supplemental/wto/trade-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/wto/global-snapshot'].get
+  description: Tag GET /v1/supplemental/wto/global-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/openfoodfacts'].get
+  description: Tag GET /v1/supplemental/openfoodfacts as "Supplemental Data" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/ridb'].get
+  description: Tag GET /v1/supplemental/ridb as "Supplemental Data" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/osm'].get
+  description: Tag GET /v1/supplemental/osm as "Supplemental Data" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/google-trends'].get
+  description: Tag GET /v1/supplemental/google-trends as "Supplemental Data" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/amazon'].get
+  description: Tag GET /v1/supplemental/amazon as "Supplemental Data" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/usda/ers-snapshot'].get
+  description: Tag GET /v1/supplemental/usda/ers-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/usda/nass-snapshot'].get
+  description: Tag GET /v1/supplemental/usda/nass-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/usda/fdc-search'].get
+  description: Tag GET /v1/supplemental/usda/fdc-search as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/usda/ams-snapshot'].get
+  description: Tag GET /v1/supplemental/usda/ams-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/bestbuy'].get
+  description: Tag GET /v1/supplemental/bestbuy as "Supplemental Data" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/tripadvisor/brand-intelligence'].get
+  description: Tag GET /v1/supplemental/tripadvisor/brand-intelligence as "Supplemental Data" and declare the observed
+    401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/fsa/hygiene'].get
+  description: Tag GET /v1/supplemental/fsa/hygiene as "Supplemental Data" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/companies-house/profile'].get
+  description: Tag GET /v1/supplemental/companies-house/profile as "Supplemental Data" and declare the observed
+    401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/pew/survey-data'].get
+  description: Tag GET /v1/supplemental/pew/survey-data as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/pew/attitudes-snapshot'].get
+  description: Tag GET /v1/supplemental/pew/attitudes-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/oecd/economic-snapshot'].get
+  description: Tag GET /v1/supplemental/oecd/economic-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/openalex/research-trends'].get
+  description: Tag GET /v1/supplemental/openalex/research-trends as "Supplemental Data" and declare the observed
+    401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/semantic-scholar/research-influence'].get
+  description: Tag GET /v1/supplemental/semantic-scholar/research-influence as "Supplemental Data" and declare the
+    observed 401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/sports/context'].post
+  description: Tag POST /v1/supplemental/sports/context as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/events/context'].post
+  description: Tag POST /v1/supplemental/events/context as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/youtube/context'].post
+  description: Tag POST /v1/supplemental/youtube/context as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/cbs/nl-buurt'].get
+  description: Tag GET /v1/supplemental/cbs/nl-buurt as "Supplemental Data" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/pdok/bag-snapshot'].get
+  description: Tag GET /v1/supplemental/pdok/bag-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/cbs/nl-crime'].get
+  description: Tag GET /v1/supplemental/cbs/nl-crime as "Supplemental Data" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/luchtmeetnet/snapshot'].get
+  description: Tag GET /v1/supplemental/luchtmeetnet/snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/police-uk/snapshot'].get
+  description: Tag GET /v1/supplemental/police-uk/snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/epc/snapshot'].get
+  description: Tag GET /v1/supplemental/epc/snapshot as "Supplemental Data" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/acs/tract-snapshot'].get
+  description: Tag GET /v1/supplemental/acs/tract-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/airnow/snapshot'].get
+  description: Tag GET /v1/supplemental/airnow/snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/nasa/eonet'].get
+  description: Tag GET /v1/supplemental/nasa/eonet as "Supplemental Data" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/nasa/power'].get
+  description: Tag GET /v1/supplemental/nasa/power as "Supplemental Data" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/nasa/techtransfer'].get
+  description: Tag GET /v1/supplemental/nasa/techtransfer as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/fbi/crime-snapshot'].get
+  description: Tag GET /v1/supplemental/fbi/crime-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/statcan/census-snapshot'].get
+  description: Tag GET /v1/supplemental/statcan/census-snapshot as "Supplemental Data" and declare the observed
+    401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/ons/neighbourhood-snapshot'].get
+  description: Tag GET /v1/supplemental/ons/neighbourhood-snapshot as "Supplemental Data" and declare the observed
+    401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/hud/snapshot'].get
+  description: Tag GET /v1/supplemental/hud/snapshot as "Supplemental Data" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/msc/aqhi-snapshot'].get
+  description: Tag GET /v1/supplemental/msc/aqhi-snapshot as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/predictions/context'].post
+  description: Tag POST /v1/supplemental/predictions/context as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/seatgeek/context'].post
+  description: Tag POST /v1/supplemental/seatgeek/context as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/finance/market-snapshot'].post
+  description: Tag POST /v1/supplemental/finance/market-snapshot as "Supplemental Data" and declare the observed
+    401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/finance/profile'].post
+  description: Tag POST /v1/supplemental/finance/profile as "Supplemental Data" and declare the observed 401/402
+    responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'
+- target: $.paths['/v1/supplemental/admin/probe'].post
+  description: Tag POST /v1/supplemental/admin/probe as "Supplemental Data" and declare the observed 401/402 responses
+  update:
+    tags:
+    - Supplemental Data
+    responses:
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '402':
+        $ref: '#/components/responses/PaymentRequired'

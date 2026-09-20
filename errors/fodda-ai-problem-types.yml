@@ -1,0 +1,130 @@
+generated: '2026-09-19'
+method: probed
+format: custom-json
+rfc9457: false
+source: Live unauthenticated responses from api.fodda.ai and mcp.fodda.ai on 2026-09-19, plus openapi/_original/fodda-ai-openapi.json
+  (which declares ONLY a 200 response on every one of its 157 operations — no 4xx/5xx is documented in the contract)
+  and the error-handling guidance in the provider's skills (references/fodda-api.md, deep-research SKILL.md).
+summary: 'The contract documents no errors at all, so this catalog is built from observed responses. api.fodda.ai
+  uses three different JSON envelopes depending on the layer that answers: an MPP 402 payment_required body, a flat
+  {"error": CODE, "message"} body from graph endpoints, a nested {"error": {"code", "message", "requestId"}} body
+  from the router, and an {"ok": false, "error", "message"} body from the SPT validator. mcp.fodda.ai answers JSON-RPC
+  errors (-32000 authentication, -32602 A2A task not found). Every api.fodda.ai response carries X-Request-Id (and
+  most bodies a requestId) — the correlation id to quote.'
+envelopes:
+- name: payment_required
+  media_type: application/json
+  status: 402
+  shape: '{ "type": "payment_required", "description": string, "price": {"amount": int (cents), "currency": "usd"},
+    "payment_methods": ["stripe-spt"], "payment_methods_detail": [...], "accept": "Authorization: Bearer <spt_token>",
+    "endpoints": {api, mcp, docs, openapi}, "requestId": string }'
+  headers:
+  - 'WWW-Authenticate: stripe-spt amount=<cents> currency=usd'
+  - 'X-Fodda-Deterministic: true'
+  - X-Request-Id
+- name: flat_error
+  media_type: application/json
+  shape: '{ "error": "SCREAMING_SNAKE_CODE", "message": string }'
+  observed_codes:
+  - GRAPH_NOT_FOUND
+  - 'MISSING_SPT (with "ok": false)'
+- name: nested_error
+  media_type: application/json
+  shape: '{ "error": { "code": "NOT_FOUND", "message": string, "requestId": string } }'
+- name: jsonrpc_error
+  media_type: application/json
+  shape: '{ "jsonrpc": "2.0", "error": { "code": int, "message": string }, "id": ... }'
+  surfaces:
+  - https://mcp.fodda.ai/mcp
+  - https://mcp.fodda.ai/copilot
+  - https://mcp.fodda.ai/a2a
+problems:
+- status: 402
+  title: Payment Required (Machine Payments Protocol challenge)
+  code: payment_required
+  surface: api.fodda.ai — every secured operation called without X-API-Key or an SPT
+  meaning: The request is priced and unpaid. The body states the exact price in cents and the accepted rail (Stripe
+    Shared Payment Token).
+  remediation: 'Retry with Authorization: Bearer spt_... (or X-Stripe-SPT) or with an account X-API-Key. The provider''s
+    skills say: always trust the 402 price over any table.'
+  observed: POST /v1/graphs/psfk/search, GET /v1/graphs, GET /v1/search/filters, GET /v1/supplemental/sources, GET
+    /v1/docs, POST /v1/psfk/overview (which the spec marks public)
+  example: '{"type":"payment_required","price":{"amount":50,"currency":"usd"},"payment_methods":["stripe-spt"],"accept":"Authorization:
+    Bearer <spt_token>","requestId":"2a4e9302bbee1c8165cb2719"}'
+- status: 401
+  title: Authentication required (MCP / SSE)
+  code: -32000
+  surface: mcp.fodda.ai /mcp, /copilot, /sse
+  meaning: The MCP server requires OAuth, a personal connection URL, or an API key.
+  remediation: 'Follow WWW-Authenticate: Bearer resource_metadata="https://mcp.fodda.ai/.well-known/oauth-protected-resource/mcp"
+    to clerk.fodda.ai (dynamic client registration + PKCE), or connect with the personal URL https://mcp.fodda.ai/c/<token>
+    from app.fodda.ai.'
+  example: '{"jsonrpc":"2.0","error":{"code":-32000,"message":"Authentication required. Connect via OAuth, or use
+    your personal connection URL or API key from https://app.fodda.ai."},"id":1}'
+- status: 401
+  title: Deprecated connection URL
+  surface: mcp.fodda.ai legacy ?api_key= / ?user_id= URLs
+  meaning: 'Documented in the fodda-mcp README: legacy query-string connection URLs return 401 with the message
+    "Fodda: this connection URL is outdated. Get your new MCP URL at https://app.fodda.ai...".'
+  remediation: Obtain a fresh personal connection URL or connect via OAuth.
+- status: 400
+  title: Missing SPT
+  code: MISSING_SPT
+  surface: GET /v1/spt/validate
+  remediation: 'Provide SPT via Authorization: Bearer spt_xxx or X-Stripe-SPT header.'
+  example: '{"ok":false,"error":"MISSING_SPT","message":"Provide SPT via Authorization: Bearer spt_xxx or X-Stripe-SPT
+    header."}'
+- status: 400
+  title: Missing required query parameter
+  surface: GET /v1/graph-slice without graph_id or source_id
+  meaning: Validation error (124-byte JSON body).
+  remediation: Pass graph_id or source_id.
+- status: 404
+  title: Graph not found
+  code: GRAPH_NOT_FOUND
+  surface: GET /v1/graph-slice?graph_id=<unknown>
+  remediation: Use GET /v1/graphs/catalog to see available graphs (message text).
+  example: '{"error":"GRAPH_NOT_FOUND","message":"Graph ''psfk-retail'' not found or not yet live. Use GET /v1/graphs/catalog
+    to see available graphs."}'
+- status: 404
+  title: Route not found
+  code: NOT_FOUND
+  surface: api.fodda.ai unknown paths (root, /.well-known/*, /docs)
+  example: '{"error":{"code":"NOT_FOUND","message":"Not found.","requestId":"..."}}'
+- status: 404
+  title: MCP route not found (GET)
+  surface: GET https://mcp.fodda.ai/mcp and /copilot
+  meaning: The MCP endpoints answer POST only; GET returns an 81-byte JSON 404.
+- status: 200
+  title: A2A task not found (JSON-RPC error inside a 200)
+  code: -32602
+  surface: POST https://mcp.fodda.ai/a2a tasks/get
+  meaning: A2A JSON-RPC errors are returned with HTTP 200 and an error object.
+  example: '{"jsonrpc":"2.0","id":1,"error":{"code":-32602,"message":"Task not found: probe"}}'
+- status: 200
+  title: Search REFUSE decision (soft error)
+  surface: POST /v1/graphs/{graph_id}/search
+  meaning: 'llms-full.txt: responses carry meta.decision ANSWER | ANSWER_WITH_CAVEATS | REFUSE and dataStatus TREND_MATCH
+    | ARTICLE_FALLBACK; a REFUSE is a grounded-evidence miss, not an HTTP error.'
+  remediation: 'Provider guidance: inform the user that no grounded expert evidence exists for that query.'
+async_job_failure:
+  surfaces:
+  - GET /v1/research/deep-dive/status/{job_id}
+  - MCP check_research_status / check_deliverable_status / check_supplemental_status
+  terminal_states:
+  - COMPLETE
+  - FAILED
+  - completed
+  - failed
+  - working
+  guidance: 'Skills: launch a paid job at most once and reuse the returned job_id; never retry-loop a paid launch
+    on transient errors.'
+correlation:
+  header: X-Request-Id
+  body_field: requestId
+  note: Present on every api.fodda.ai response observed, including 402/404.
+gap:
+  what: Any 4xx/5xx in the OpenAPI, a single error schema, and RFC 9457 problem details.
+  who_fixes_it: the provider
+  how: Declare the observed 401/402/404 responses and one error envelope in components.responses (the overlay in
+    overlays/fodda-ai-tags-overlay.yaml shows the shape).

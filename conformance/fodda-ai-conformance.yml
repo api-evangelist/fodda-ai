@@ -1,0 +1,124 @@
+generated: '2026-09-19'
+method: searched
+source: live probes of www/mcp/api/clerk.fodda.ai well-known surfaces 2026-09-19 + openapi/_original/fodda-ai-openapi.json
+  + https://www.fodda.ai/llms.txt + https://www.fodda.ai/iso-42001-compliance + https://www.fodda.ai/compliance-dossier
+standards:
+- id: openapi-3.1
+  conforms: true
+  evidence: 'https://api.fodda.ai/openapi.json (200, 143,136 bytes, OpenAPI 3.1.0, 155 paths / 157 operations, info.version
+    1.7.0) captured to openapi/_original/fodda-ai-openapi.json; a 10-operation subset at https://www.fodda.ai/openapi.json
+    (3.1.0, 1.2.0). Content gaps: zero tags, only 200 responses declared, nine duplicated operationIds, two component
+    schemas.'
+- id: oauth2
+  conforms: true
+  evidence: 'MCP resource delegates to https://clerk.fodda.ai (RFC 8414 metadata: authorization_code, refresh_token,
+    device_code grants; token endpoint auth client_secret_basic/post/none).'
+- id: oauth2-pkce
+  conforms: true
+  evidence: 'code_challenge_methods_supported: [S256] in well-known/fodda-ai-clerk-oauth-authorization-server.json.'
+- id: oauth2-dynamic-client-registration
+  conforms: true
+  evidence: registration_endpoint https://clerk.fodda.ai/oauth/register in the RFC 8414 document (RFC 7591).
+- id: rfc8628-device-authorization-grant
+  conforms: true
+  evidence: device_authorization_endpoint https://clerk.fodda.ai/oauth/device_authorization; grant urn:ietf:params:oauth:grant-type:device_code.
+- id: rfc8414-authorization-server-metadata
+  conforms: true
+  evidence: https://clerk.fodda.ai/.well-known/oauth-authorization-server returns 200 (issuer https://clerk.fodda.ai).
+    404 on mcp.fodda.ai itself — correct, since the resource server points at the AS host.
+- id: rfc9728-protected-resource-metadata
+  conforms: true
+  evidence: 'https://mcp.fodda.ai/.well-known/oauth-protected-resource (root), /oauth-protected-resource/mcp and
+    /oauth-protected-resource/copilot all 200 with authorization_servers: [https://clerk.fodda.ai]; the live 401
+    carries WWW-Authenticate: Bearer resource_metadata="https://mcp.fodda.ai/.well-known/oauth-protected-resource/mcp".
+    www.fodda.ai also serves one (resource https://mcp.fodda.ai/mcp, scopes_supported [read], authorization_servers
+    []).'
+- id: oidc-discovery
+  conforms: true
+  evidence: https://clerk.fodda.ai/.well-known/openid-configuration returns 200 (RS256, S256, claims incl. org_id);
+    jwks at /.well-known/jwks.json (1 RSA key).
+- id: rfc9727-api-catalog
+  conforms: true
+  evidence: 'https://www.fodda.ai/.well-known/api-catalog.json returns 200 with a linkset whose service-desc points
+    at https://www.fodda.ai/openapi.json (application/openapi+json). Deviation: served only with the .json extension
+    and as application/json rather than application/linkset+json; the extensionless /.well-known/api-catalog 404s.'
+- id: mcp
+  conforms: true
+  evidence: Hosted MCP server at https://mcp.fodda.ai/mcp (streamable-http, protocolVersion 2025-11-25 per /.well-known/mcp.json
+    and the offering cards), /sse, /copilot; listed in the official MCP Registry as ai.fodda/mcp-server; stdio package
+    fodda-mcp on npm.
+- id: a2a
+  conforms: true
+  evidence: A2A agent card at https://www.fodda.ai/.well-known/agent-card.json (protocolVersion 0.3.0, JSONRPC,
+    7 skills) graded conformant; live JSON-RPC endpoint https://mcp.fodda.ai/a2a. See a2a/fodda-ai-a2a.yml.
+- id: llms-txt
+  conforms: true
+  evidence: 'https://www.fodda.ai/llms.txt (200, text/plain, 8,091 bytes) and /llms-full.txt (26,059 bytes); linked
+    from robots.txt (LLMS: /llms.txt) and <link rel=alternate>.'
+- id: schema-org-json-ld
+  conforms: true
+  evidence: 'GET https://api.fodda.ai/v1/graph-slice?graph_id=retail returns application/ld+json: a schema.org Dataset
+    with hasPart CreativeWork nodes (json-ld/fodda-ai-retail-graph-slice.jsonld). A data document, not a JSON-LD
+    context/vocabulary.'
+- id: ietf-ratelimit-headers
+  conforms: true
+  evidence: 'RateLimit-Policy: 60;w=60, RateLimit-Limit, RateLimit-Remaining, RateLimit-Reset observed on public
+    responses (draft-ietf-httpapi-ratelimit-headers). See rate-limits/.'
+- id: http-402-machine-payments
+  conforms: true
+  evidence: 'Unauthenticated secured calls return 402 with WWW-Authenticate: stripe-spt amount=50 currency=usd and
+    a payment_required JSON body naming the SPT rail (Stripe Shared Payment Token / Machine Payments Protocol).
+    Provider-specific challenge scheme, not x402.'
+  note: Recorded as an observed protocol, not an IETF standard.
+- id: open-knowledge-format
+  conforms: true
+  evidence: 'GET https://api.fodda.ai/v1/catalog.okf returns a gzip tar (189 files: README.md bundle_root, 162 graphs,
+    15 experts, 10 skills, supplemental-sources.md) that the provider describes as Open Knowledge Format v0.2 (blog
+    2026-08-02, llms-full.txt).'
+  note: OKF is a June-2026 Google-published format; conformance is the provider's claim, the bundle shape was verified.
+- id: keep-a-changelog
+  conforms: true
+  evidence: https://github.com/piers-fawkes/fodda-mcp/blob/main/CHANGELOG.md declares Keep a Changelog 1.0.0 + Semantic
+    Versioning 2.0.0; dated entries through 1.46.79 (2026-09-18). MCP server only — no REST API changelog.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt 404 on www, api, mcp and clerk hosts (app.fodda.ai returns the SPA shell).
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: Errors are custom JSON in three envelope shapes ({"error":"CODE","message":...}, {"error":{"code":...}},
+    {"ok":false,"error":...}) plus the 402 payment_required body; zero application/problem+json in the spec or observed.
+    See errors/.
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: 'No Deprecation/Sunset headers documented or observed; no operation carries deprecated: true. The only
+    documented deprecation is the legacy ?api_key= MCP connection URL (401 with message).'
+- id: idempotency-key
+  conforms: false
+  evidence: 'No idempotency header or parameter in the 157-operation spec, docs or llms-full.txt. See conventions/
+    (coverage: none).'
+- id: asyncapi
+  conforms: false
+  evidence: No AsyncAPI document; the event surface is an SSE endpoint plus scheduled-briefing delivery to email/Slack
+    webhook (asyncapi/fodda-ai-event-surface.yml).
+- id: graphql
+  conforms: false
+  evidence: No GraphQL surface advertised or discovered.
+- id: iso-42001
+  conforms: false
+  evidence: https://www.fodda.ai/iso-42001-compliance states ISO/IEC 42001:2023 ALIGNMENT with an Annex A control
+    mapping (A.5–A.9); no certificate is claimed. Recorded as a published alignment claim, not a certification.
+  claim: alignment
+- id: nist-ai-rmf
+  conforms: false
+  evidence: 'Compliance dossier: "ISO/IEC 42001 and NIST AI RMF framework alignment" — alignment claim only.'
+  claim: alignment
+- id: soc2
+  conforms: false
+  evidence: 'Blog 2026-02-12: "roadmap for SOC 2 Type II readiness by Q4 2026"; the dossier cites Clerk''s SOC 2
+    Type 2 for delegated identity, not Fodda''s own. No report published.'
+  claim: roadmap
+domain_standard_signature:
+  found: false
+  note: Market/trend-research intelligence has no sector data standard to declare (no SCIM/OData/OpenRTB/HL7-class
+    analogue); the contract declares none. Reward-only dimension — nothing invented. The nearest domain-shaped surfaces
+    are schema.org JSON-LD (Dataset/CreativeWork) and the OKF catalog bundle, both recorded above.

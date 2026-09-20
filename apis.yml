@@ -1,23 +1,263 @@
 aid: fodda-ai
 name: Fodda (PSFK)
-description: 'Fodda (PSFK) is a company surfaced via the API Evangelist harvest backlog (source: a2a-registry)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  Fodda is the agent-native research layer built by PSFK, the trend-intelligence publisher, exposing
+  250+ expert-curated knowledge graphs (retail, beauty, fashion, sport, food and beverage, travel,
+  technology), named-expert "Human Agent" digital twins, earnings-call intelligence across 500+
+  consumer-sector companies, and 80+ live institutional data sources (FRED, BEA, BLS, Census, ONS,
+  Eurostat, ECB and more) to AI agents. It is reachable three ways from one data core: a REST API at
+  api.fodda.ai (OpenAPI 3.1, 157 operations, per-operation price extensions), a hosted MCP server at
+  mcp.fodda.ai (streamable-http, SSE, a curated Copilot endpoint, OAuth via Clerk with dynamic client
+  registration, plus a stdio package on npm), and an A2A agent at mcp.fodda.ai/a2a discovered from
+  /.well-known/agent-card.json. Access is metered per API call ($0.50) with three rails: an X-API-Key
+  account key with a free monthly tier, enterprise OIDC bearer tokens, and a zero-onboarding Machine
+  Payments Protocol flow in which any unauthenticated request answers HTTP 402 with the exact price
+  and a Stripe Shared Payment Token is presented on retry. The catalog itself is published as an Open
+  Knowledge Format bundle, an RFC 9727 api-catalog linkset, llms.txt/agents.txt manifests, and ten
+  MIT-licensed installable Agent Skills.
+image: https://ucarecdn.com/6e7893d7-6b14-426b-83bc-574a3f72d6bc/foddafavicon.png
 url: https://raw.githubusercontent.com/api-evangelist/fodda-ai/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:a2a-registry
-x-tier: stub
-x-tier-reason: harvest
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-09-19 (local-v3; was a2a-registry harvest stub)
 specificationVersion: '0.20'
 created: '2026-09-19'
 modified: '2026-09-19'
 tags:
-- Company
-apis: []
+  - Market Intelligence
+  - Trend Research
+  - Knowledge Graphs
+  - Consumer Insights
+  - Earnings Intelligence
+  - Brand Intelligence
+  - Research
+  - Institutional Data
+  - MCP
+  - A2A
+  - agent-native
+  - Machine Payments
+  - Company
+apis:
+  - name: Fodda Context & Research API
+    description: >-
+      REST interface at api.fodda.ai for expert-curated knowledge graphs (search, node retrieval,
+      neighbor traversal, evidence, statistics, adjacent-trend discovery), autonomous deep research
+      (async job launch + status poll, SSE streaming search, research chat, scheduled briefings
+      delivered by email or Slack webhook), brand intelligence, synthetic and human expert analyst
+      consults, cross-company earnings intelligence, and 100+ supplemental institutional data
+      snapshots. OpenAPI 3.1.0 (info.version 1.7.0, 157 operations) served at
+      https://api.fodda.ai/openapi.json; every operation carries x-fodda-price-usd and
+      x-fodda-billing-type. Auth: X-API-Key header or a Stripe Shared Payment Token bearer via the
+      HTTP 402 Machine Payments Protocol flow; a public tier (health, pricing map, offerings,
+      graph catalog, JSON-LD graph preview) needs no credential.
+    humanURL: https://www.fodda.ai/api
+    baseURL: https://api.fodda.ai
+    tags:
+      - Knowledge Graphs
+      - Trend Research
+      - Earnings Intelligence
+      - Brand Intelligence
+      - Institutional Data
+      - Machine Payments
+      - agent-native
+    properties:
+      - type: OpenAPI
+        url: openapi/fodda-ai-openapi.yml
+      - type: OpenAPI
+        name: Fodda Context & Research API (provider-hosted, api.fodda.ai)
+        url: https://api.fodda.ai/openapi.json
+      - type: OpenAPI
+        name: Fodda Context Delivery API (10-operation subset served from www.fodda.ai)
+        url: openapi/fodda-ai-context-delivery-openapi.yml
+      - type: OpenAPI
+        name: Fodda Context Delivery API (provider-hosted, www.fodda.ai)
+        url: https://www.fodda.ai/openapi.json
+      - type: Documentation
+        url: https://www.fodda.ai/api
+      - type: APIReference
+        url: https://www.fodda.ai/api
+      - type: GettingStarted
+        url: https://www.fodda.ai/connect-your-agent
+      - type: Authentication
+        url: authentication/fodda-ai-authentication.yml
+      - type: Conventions
+        url: conventions/fodda-ai-conventions.yml
+      - type: ErrorCatalog
+        url: errors/fodda-ai-problem-types.yml
+      - type: DataModel
+        url: data-model/fodda-ai-data-model.yml
+      - type: Overlay
+        url: overlays/fodda-ai-tags-overlay.yaml
+      - type: RateLimits
+        url: rate-limits/fodda-ai-rate-limits.yml
+      - type: Examples
+        url: examples/fodda-ai-examples.yml
+      - type: Webhooks
+        url: asyncapi/fodda-ai-event-surface.yml
+      - type: LLMsTxt
+        url: https://www.fodda.ai/llms.txt
+  - name: Fodda MCP Server
+    description: >-
+      Hosted Model Context Protocol server at mcp.fodda.ai exposing 53 tools (tools-manifest.json,
+      v1.46.79) over streamable-http (/mcp), SSE (/sse), a curated 17-tool Microsoft Copilot
+      endpoint (/copilot) and offering-scoped endpoints, plus a stdio package (npx -y fodda-mcp)
+      listed in the official MCP Registry as ai.fodda/mcp-server. Auth is OAuth 2.1 delegated to
+      clerk.fodda.ai (RFC 9728 protected-resource metadata on the MCP host, RFC 8414 authorization
+      server metadata with dynamic client registration, PKCE S256, device code) or an account API
+      key / personal connection URL. Anonymous tools/list returns 401 with a WWW-Authenticate
+      resource_metadata challenge, so live input schemas require authenticated introspection.
+    humanURL: https://www.fodda.ai/connect
+    baseURL: https://mcp.fodda.ai/mcp
+    tags:
+      - MCP
+      - agent-native
+      - Knowledge Graphs
+      - Research
+    properties:
+      - type: MCPServer
+        url: mcp/fodda-ai-mcp.yml
+      - type: MCPServer
+        name: Fodda MCP endpoint (Streamable HTTP)
+        url: https://mcp.fodda.ai/mcp
+      - type: ToolCrosswalk
+        url: mcp/fodda-ai-tool-crosswalk.yml
+      - type: OAuthScopes
+        url: scopes/fodda-ai-scopes.yml
+      - type: Documentation
+        url: https://www.fodda.ai/connect
+      - type: GettingStarted
+        url: https://www.fodda.ai/platform-integration-anthropic-claude
+  - name: Fodda Research Agent (A2A)
+    description: >-
+      Agent-to-Agent endpoint at mcp.fodda.ai/a2a (JSONRPC, A2A protocolVersion 0.3.0) discovered
+      from https://www.fodda.ai/.well-known/agent-card.json, declaring seven skills — brand
+      intelligence, trend search, deep research (async task, poll tasks/get), cross-company and
+      per-ticker earnings intelligence, expert consult, and commissioned deliverables. Outside
+      agents hand Fodda a natural-language research task and collect the cited result when ready.
+      Also listed on a2aregistry.org.
+    humanURL: https://www.fodda.ai/agents
+    baseURL: https://mcp.fodda.ai/a2a
+    tags:
+      - A2A
+      - agent-native
+      - Research
+    properties:
+      - type: AgentCard
+        url: a2a/fodda-ai-a2a.yml
+      - type: AgentCard
+        name: A2A Agent Card (provider-hosted)
+        url: https://www.fodda.ai/.well-known/agent-card.json
+      - type: Documentation
+        url: https://www.fodda.ai/agents
 maintainers:
-- FN: Kin Lane
-  email: kin@apievangelist.com
-- FN: APIs.json
-  email: info@apis.io
+  - FN: Kin Lane
+    email: kin@apievangelist.com
+  - FN: APIs.json
+    email: info@apis.io
 common:
-- type: Website
-  url: https://fodda.ai/
+  - type: Website
+    url: https://fodda.ai/
+  - type: DeveloperPortal
+    url: https://app.fodda.ai/
+  - type: Documentation
+    url: https://www.fodda.ai/api
+  - type: APIReference
+    url: https://www.fodda.ai/api
+  - type: GettingStarted
+    url: https://www.fodda.ai/connect
+  - type: Support
+    url: https://www.fodda.ai/contact
+  - type: FAQ
+    url: https://www.fodda.ai/faq
+  - type: Blog
+    url: https://www.fodda.ai/blog
+  - type: GitHubOrganization
+    url: https://github.com/fodda-ai
+  - type: Pricing
+    url: https://www.fodda.ai/pricing
+  - type: SignUp
+    url: https://app.fodda.ai/sign-up
+  - type: Login
+    url: https://app.fodda.ai/login
+  - type: TermsOfService
+    url: https://www.fodda.ai/terms
+  - type: PrivacyPolicy
+    url: https://www.fodda.ai/privacy
+  - type: LLMsTxt
+    url: llms/fodda-ai-llms.txt
+  - type: LLMsTxt
+    name: llms.txt (provider-hosted)
+    url: https://www.fodda.ai/llms.txt
+  - type: WellKnown
+    url: well-known/fodda-ai-well-known.yml
+  - type: APICatalog
+    name: RFC 9727 api-catalog linkset (provider-hosted)
+    url: https://www.fodda.ai/.well-known/api-catalog.json
+  - type: AgentCard
+    url: a2a/fodda-ai-a2a.yml
+  - type: MCPServer
+    url: mcp/fodda-ai-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/fodda-ai-tool-crosswalk.yml
+  - type: Packages
+    url: packages/fodda-ai-packages.yml
+  - type: CLI
+    url: cli/fodda-ai-cli.yml
+  - type: Authentication
+    url: authentication/fodda-ai-authentication.yml
+  - type: OAuthScopes
+    url: scopes/fodda-ai-scopes.yml
+  - type: OpenIDConnect
+    name: OIDC discovery (Clerk-delegated authorization server)
+    url: https://clerk.fodda.ai/.well-known/openid-configuration
+  - type: Conventions
+    url: conventions/fodda-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/fodda-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/fodda-ai-data-model.yml
+  - type: Overlay
+    url: overlays/fodda-ai-tags-overlay.yaml
+  - type: Examples
+    url: examples/fodda-ai-examples.yml
+  - type: RateLimits
+    url: rate-limits/fodda-ai-rate-limits.yml
+  - type: Plans
+    url: plans/fodda-ai-plans-pricing.yml
+  - type: Lifecycle
+    url: lifecycle/fodda-ai-lifecycle.yml
+  - type: ChangeLog
+    url: changelog/fodda-ai-changelog.yml
+  - type: ChangeLog
+    name: Fodda MCP server CHANGELOG (Keep a Changelog, semver)
+    url: https://github.com/piers-fawkes/fodda-mcp/blob/main/CHANGELOG.md
+  - type: Conformance
+    url: conformance/fodda-ai-conformance.yml
+  - type: Compliance
+    url: security/fodda-ai-trust-center.yml
+  - type: TrustCenter
+    url: security/fodda-ai-trust-center.yml
+  - type: VulnerabilityDisclosure
+    url: security/fodda-ai-vulnerability-disclosure.yml
+  - type: Security
+    url: security/fodda-ai-vulnerability-disclosure.yml
+  - type: DomainSecurity
+    url: security/fodda-ai-domain-security.yml
+  - type: AgenticAccess
+    url: agentic-access/fodda-ai-agentic-access.yml
+  - type: AgentSkill
+    url: skills/_index.yml
+  - type: Webhooks
+    url: asyncapi/fodda-ai-event-surface.yml
+  - type: AITransparency
+    url: regulatory/fodda-ai-regulatory-posture.yml
+  - type: DataSubjectRequest
+    url: regulatory/fodda-ai-regulatory-posture.yml
+  - type: ExitAssistance
+    url: regulatory/fodda-ai-regulatory-posture.yml
+x-enrichment:
+  date: '2026-09-19'
+  status: enriched
+  artifacts_added: 58
+  pass: local-v3

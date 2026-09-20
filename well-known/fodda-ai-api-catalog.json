@@ -1,0 +1,13 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://www.fodda.ai/",
+      "service-desc": [
+        {
+          "href": "https://www.fodda.ai/openapi.json",
+          "type": "application/openapi+json"
+        }
+      ]
+    }
+  ]
+}

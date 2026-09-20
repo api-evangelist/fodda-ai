@@ -1,0 +1,70 @@
+generated: '2026-09-19'
+method: searched
+source: https://api.fodda.ai/v1/health + openapi/_original/*.json + https://github.com/piers-fawkes/fodda-mcp/blob/main/CHANGELOG.md
+  + https://www.fodda.ai/terms + fodda-mcp README + live probes (status.fodda.ai, /status, /changelog, /sla) 2026-09-19
+versioning:
+  scheme: path (/v1) + semver on the MCP server
+  rest:
+    base: https://api.fodda.ai/v1
+    spec_info_version: 1.7.0 (api.fodda.ai/openapi.json); 1.2.0 (www.fodda.ai/openapi.json subset)
+    health_endpoint: GET /v1/health reports version v1.1, schema_version 1.0, billing_version 2026-Q1, graph_version
+      2026-Q1, deterministic true
+  mcp:
+    scheme: semver 2.0.0 (Keep a Changelog)
+    current: 1.46.79 (2026-09-18) — hosted server and repo; npm fodda-mcp latest 1.46.31 (2026-08-23)
+    protocol_version: '2025-11-25'
+  a2a:
+    card_version: 1.46.79 (tracks the MCP server)
+    protocol_version: 0.3.0
+  graphs:
+    scheme: quarterly graph_version (2026-Q1) plus per-graph version/last_synced/last_updated and a per-graph deprecated
+      boolean in GET /v1/graphs/catalog
+changelog:
+  url: https://github.com/piers-fawkes/fodda-mcp/blob/main/CHANGELOG.md
+  artifact: changelog/fodda-ai-changelog.yml
+  scope: MCP server (which also documents REST-side changes it depends on); there is no REST API changelog page
+    on fodda.ai (/changelog 404)
+  feeds: null
+status_page:
+  url: null
+  probed:
+  - url: https://status.fodda.ai/
+    status: NXDOMAIN
+  - url: https://www.fodda.ai/status
+    status: 404
+  - url: https://www.fodda.ai/status-page
+    status: 404
+  machine_readable_api: false
+  note: No status page. GET /v1/health (public, 200, {"status":"ok","database":"connected",...}) is the only liveness
+    signal. No StatusPage pointer is emitted.
+deprecation:
+  policy_documented: false
+  policy_url: null
+  sunset_headers: false
+  deprecated_operations: []
+  documented_deprecations:
+  - what: Legacy MCP connection URLs using ?api_key= or ?user_id= query strings
+    behavior: Return HTTP 401 with an explicit message pointing to app.fodda.ai for a new personal connection URL
+    source: fodda-mcp README (Quick Start note)
+  - what: Per-graph retirement
+    behavior: 'GET /v1/graphs/catalog carries deprecated: true|false and status live|coming_soon per graph (318
+      graphs, 261 live on 2026-09-20)'
+    source: https://api.fodda.ai/v1/graphs/catalog
+  note: No public deprecation/sunset policy and no RFC 8594 headers; no Deprecation pointer is emitted.
+sla:
+  published: false
+  note: 'Pricing page: Enterprise tier includes a "dedicated SLA" — terms not published. Terms of service (2026-04-26)
+    carry no uptime commitment.'
+support_lifetime:
+  stated: false
+  note: No stated support period for API versions or the stdio package.
+change_communication:
+  source: https://www.fodda.ai/terms
+  quote: We may update these terms from time to time. Material changes will be communicated via email or a notice
+    on our website.
+  api_changes: Not covered by the terms; the MCP CHANGELOG is the de-facto notice channel.
+observed_change_cadence:
+  window: 2026-09-06 to 2026-09-18
+  mcp_releases: 24
+  note: Twenty-four dated MCP releases in twelve days (1.46.56 -> 1.46.79) per the CHANGELOG — a very active surface;
+    tool count moved to 53 with verify_claim on 2026-09-18.

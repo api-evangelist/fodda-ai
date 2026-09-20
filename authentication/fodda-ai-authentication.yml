@@ -1,0 +1,151 @@
+generated: '2026-09-19'
+method: searched
+source: openapi/fodda-ai-openapi.yml + openapi/fodda-ai-context-delivery-openapi.yml (securitySchemes) + https://www.fodda.ai/llms.txt
+  + https://www.fodda.ai/llms-full.txt (RULE AuthenticationRules) + well-known/fodda-ai-clerk-openid-configuration.json
+  + well-known/fodda-ai-clerk-oauth-authorization-server.json + well-known/fodda-ai-mcp-oauth-protected-resource*.json
+  + a2a/fodda-ai-agent-legacy.json securitySchemes + live 401/402 challenges (2026-09-19)
+docs: https://www.fodda.ai/api
+summary:
+  types:
+  - apiKey
+  - http
+  - openIdConnect
+  - oauth2
+  api_key_in:
+  - header
+  - query (deprecated for MCP URLs)
+  oauth2_flows:
+  - authorizationCode (PKCE S256)
+  - deviceCode
+  - refresh_token
+  rails: 'Three rails meter one unit: account API key (free tier), Stripe Shared Payment Token via HTTP 402 (no
+    account), enterprise OIDC JWT. The MCP server adds OAuth 2.1 delegated to clerk.fodda.ai and personal connection
+    URLs.'
+schemes:
+- name: apiKey
+  type: apiKey
+  in: header
+  parameter: X-API-Key
+  description: 'Required for all endpoints unless marked public. Issued at app.fodda.ai (Account); free tier $50
+    of API calls / 100 calls per month with a card on file, then $0.50 per call. Self-serve key rotation at app.fodda.ai
+    (compliance dossier). Copilot Studio guide also accepts Authorization: Bearer <api key>. Autonomous provisioning:
+    POST /api/account/b2b-provision (named on /agents; not in the OpenAPI).'
+  sources:
+  - openapi/fodda-ai-openapi.yml
+  - openapi/fodda-ai-context-delivery-openapi.yml
+  - https://www.fodda.ai/llms.txt
+  - https://www.fodda.ai/agents
+  surfaces:
+  - REST
+  - MCP (header or personal URL)
+- name: stripeSPT
+  type: http
+  scheme: bearer
+  bearer_format: spt_... (Stripe Shared Payment Token)
+  description: 'Machine Payments Protocol: call any endpoint with no credentials, receive HTTP 402 with the exact
+    price (WWW-Authenticate: stripe-spt amount=<cents> currency=usd), obtain an SPT from Stripe Link, retry with
+    Authorization: Bearer spt_xxx or X-Stripe-SPT: spt_xxx. Price = API-call count × $0.50. Direct REST API only
+    (not MCP). Validate with GET /v1/spt/validate.'
+  sources:
+  - openapi/fodda-ai-openapi.yml
+  - https://www.fodda.ai/llms.txt
+  - https://www.fodda.ai/llms-full.txt
+  - live 402 on api.fodda.ai
+  surfaces:
+  - REST
+- name: oidc
+  type: openIdConnect
+  openIdConnectUrl: https://clerk.fodda.ai/.well-known/openid-configuration
+  description: 'Enterprise SSO via OIDC: Authorization: Bearer <jwt>. Issuer https://clerk.fodda.ai (Clerk-delegated;
+    RS256, claims incl. email, org_id). Named in llms.txt/agents.txt and the legacy agent document; the REST OpenAPI
+    does not declare it.'
+  sources:
+  - https://www.fodda.ai/llms.txt
+  - https://www.fodda.ai/agents.txt
+  - well-known/fodda-ai-clerk-openid-configuration.json
+  - a2a/fodda-ai-agent-legacy.json
+  surfaces:
+  - REST (enterprise)
+  - MCP
+- name: oauth2
+  type: oauth2
+  description: OAuth 2.1 for the MCP server, discovered per RFC 9728 from the 401 challenge. Resource metadata on
+    mcp.fodda.ai names authorization server https://clerk.fodda.ai; dynamic client registration is supported.
+  flows:
+  - flow: authorizationCode
+    authorization_server: https://clerk.fodda.ai
+    authorization_endpoint: https://clerk.fodda.ai/oauth/authorize
+    token_endpoint: https://clerk.fodda.ai/oauth/token
+    registration_endpoint: https://clerk.fodda.ai/oauth/register
+    revocation_endpoint: https://clerk.fodda.ai/oauth/token/revoke
+    introspection_endpoint: https://clerk.fodda.ai/oauth/token_info
+    userinfo_endpoint: https://clerk.fodda.ai/oauth/userinfo
+    pkce: S256
+    grant_types:
+    - authorization_code
+    - refresh_token
+    scopes:
+    - openid
+    - profile
+    - email
+    - public_metadata
+    - private_metadata
+    - offline_access
+    - user:org:read
+    token_endpoint_auth_methods:
+    - client_secret_basic
+    - client_secret_post
+    - none
+  - flow: deviceCode
+    device_authorization_endpoint: https://clerk.fodda.ai/oauth/device_authorization
+    grant_types:
+    - urn:ietf:params:oauth:grant-type:device_code
+  protected_resources:
+  - resource: https://mcp.fodda.ai
+    metadata: well-known/fodda-ai-mcp-oauth-protected-resource.json
+  - resource: https://mcp.fodda.ai/mcp
+    metadata: well-known/fodda-ai-mcp-oauth-protected-resource-mcp.json
+  - resource: https://mcp.fodda.ai/copilot
+    metadata: well-known/fodda-ai-mcp-oauth-protected-resource-copilot.json
+  - resource: https://mcp.fodda.ai/mcp (as published on www)
+    metadata: well-known/fodda-ai-www-oauth-protected-resource.json
+    scopes_supported:
+    - read
+    bearer_methods_supported:
+    - header
+  sources:
+  - well-known/fodda-ai-clerk-oauth-authorization-server.json
+  - live WWW-Authenticate on POST https://mcp.fodda.ai/mcp
+  surfaces:
+  - MCP
+- name: personalConnectionUrl
+  type: apiKey
+  in: path
+  parameter: token
+  description: 'MCP-only: https://mcp.fodda.ai/c/<token> from app.fodda.ai -> Account -> MCP Integration, pasted
+    into Claude/ChatGPT connectors with OAuth client fields left blank. Legacy ?api_key= / ?user_id= URLs are deprecated
+    and return 401.'
+  sources:
+  - fodda-mcp README
+  - https://www.fodda.ai/platform-integration-anthropic-claude
+  surfaces:
+  - MCP
+public_tier:
+  no_credential_required:
+  - GET /v1/health
+  - GET /v1/research/pricing
+  - GET /v1/offerings
+  - GET /v1/research/offerings
+  - GET /v1/graphs/catalog
+  - GET /v1/analysts
+  - GET /v1/graph-slice
+  - GET /v1/catalog.okf
+  - GET /openapi.json
+  note: Verified live 2026-09-19. The spec marks POST /v1/psfk/overview public but it answered 402 unauthenticated.
+challenges_observed:
+- surface: api.fodda.ai secured operation
+  status: 402
+  www_authenticate: stripe-spt amount=50 currency=usd
+- surface: mcp.fodda.ai /mcp, /copilot, /sse
+  status: 401
+  www_authenticate: Bearer resource_metadata="https://mcp.fodda.ai/.well-known/oauth-protected-resource/mcp"

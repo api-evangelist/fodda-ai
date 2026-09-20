@@ -1,0 +1,324 @@
+openapi: 3.1.0
+info:
+  title: Fodda Context Delivery API
+  description: Interface for retrieving expert context graphs and structured insight manifests. Supplemental data sources are available via MCP tools only.
+  version: 1.2.0
+servers:
+- url: https://api.fodda.ai/v1
+paths:
+  /psfk/overview:
+    post:
+      summary: PSFK Macro Overview (Public — no API key required)
+      description: LLM-synthesized executive summary of macro trends. Rate limited to 10 req/min.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                industry:
+                  type: string
+                sector:
+                  type: string
+                region:
+                  type: string
+      responses:
+        '200':
+          description: Executive summary with meta patterns and emerging signals
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /graphs:
+    get:
+      summary: List available context graphs
+      description: Returns a registry of all available knowledge graphs with metadata including curator, domain, update frequency, and record counts.
+      responses:
+        '200':
+          description: A stable list of graphs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Graph'
+  /graph-slice:
+    get:
+      summary: Graph Preview (Public)
+      description: Returns a public JSON-LD preview of a graph's top trending topics or a supplemental source's metadata. No authentication required.
+      parameters:
+      - name: graph_id
+        in: query
+        schema:
+          type: string
+        description: Knowledge graph identifier
+      - name: source_id
+        in: query
+        schema:
+          type: string
+        description: Supplemental source identifier
+      responses:
+        '200':
+          description: JSON-LD preview with Schema.org Dataset type
+          content:
+            application/ld+json:
+              schema:
+                type: object
+                properties:
+                  '@context':
+                    type: string
+                    example: https://schema.org/
+                  '@type':
+                    type: string
+                    example: Dataset
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  items:
+                    type: array
+                    items:
+                      type: object
+  /graphs/{graph_id}/search:
+    post:
+      summary: Graph Search
+      description: Hybrid vector + keyword search across a knowledge graph. Accepts semantic queries and returns ranked trend nodes with relevance scores.
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Graph identifier (e.g., retail, beauty, sports, sic, pew, ce-design, fashion)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - query
+              properties:
+                query:
+                  type: string
+                limit:
+                  type: integer
+                  default: 10
+                  maximum: 50
+                use_semantic:
+                  type: boolean
+                  default: true
+      responses:
+        '200':
+          description: Ranked search results with relevance scores
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+  /graphs/{graph_id}/nodes/{node_id}:
+    get:
+      summary: Node Retrieval
+      description: Get a single node's full metadata and properties.
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: node_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Complete node property set
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+  /graphs/{graph_id}/neighbors:
+    post:
+      summary: Neighbor Traversal
+      description: 'Explore connected nodes from a starting node. Depth-limited graph traversal (max depth: 2).'
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Connected nodes and relationships
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+  /graphs/{graph_id}/evidence:
+    post:
+      summary: Evidence Retrieval
+      description: Fetch source articles and signals backing a trend.
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Linked source articles, case studies, and structured evidence
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+  /graphs/{graph_id}/labels/{label}/values:
+    get:
+      summary: Filter Values
+      description: Discover available values for a label or category (e.g., Technology, Audience, RetailerType).
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: label
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Valid filter values
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+  /graphs/{graph_id}/adjacent:
+    get:
+      summary: Adjacent Trend Discovery
+      description: Find semantically similar trends via vector cosine similarity.
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Trends ranked by cosine similarity to a seed node
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+  /graphs/{graph_id}/statistics:
+    get:
+      summary: Statistics Search
+      description: Semantic search over curated statistics and data points (Metric nodes) with parent trend context.
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: query
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 10
+          maximum: 50
+      - name: min_score
+        in: query
+        schema:
+          type: number
+          default: 0.7
+      - name: include_signals
+        in: query
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Statistics with parent trend context
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+components:
+  schemas:
+    Graph:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        curator:
+          type: string
+        domain:
+          type: string
+    ApiResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        requestId:
+          type: string
+        schema_version:
+          type: string
+        search_path:
+          type: string
+          description: vector or keyword
+        deterministic:
+          type: boolean
+        dataStatus:
+          type: string
+          description: TREND_MATCH, NO_MATCH, etc.
+        rows:
+          type: array
+          items:
+            type: object
+            properties:
+              rowId:
+                type: string
+              rowName:
+                type: string
+              rowSummary:
+                type: string
+              _score:
+                type: number
+        meta:
+          type: object
+          properties:
+            decision:
+              type: string
+            usage:
+              type: object
+              properties:
+                total_billable_units:
+                  type: integer
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: X-API-Key
+      in: header
+      description: Required for all endpoints except POST /v1/psfk/overview (public).

@@ -1,0 +1,153 @@
+generated: '2026-09-19'
+method: derived
+source: 'Derived from openapi/fodda-ai-openapi.yml (path parameters graph_id, node_id, chunk_id, label, job_id,
+  schedule_id, brandName, cityKey; the two component schemas Graph and ApiResponse; request bodies), the live JSON-LD
+  graph slice (json-ld/fodda-ai-retail-graph-slice.jsonld: Dataset -> hasPart CreativeWork with ids fodda:<graph_id>:<node_id>),
+  the graph registry catalog fields observed on GET /v1/graphs/catalog, the analysts registry on GET /v1/analysts,
+  and the relationship names stated in llms-full.txt (EVIDENCE_FOR, neighbors max depth 2).'
+docs: https://www.fodda.ai/api
+notation: Graph nodes are addressed by (graph_id, node_id); the JSON-LD surface exposes the same node as fodda:<graph_id>:<node_id>.
+  Relationships use has_one / has_many / belongs_to with the reference field in via.
+entities:
+- name: Graph
+  id: graph_id
+  schema: Graph
+  domain: knowledge-graphs
+  description: A curated knowledge graph (domain, expert, industry report, analyst, supplemental, skill). 318 in
+    the registry on 2026-09-20, 261 live. Carries curator, verticals, topics, trend_count, evidence_count, version
+    (e.g. 2026-Q1), status, deprecated, last_synced.
+- name: Node
+  id: node_id
+  domain: knowledge-graphs
+  aliases:
+  - Trend
+  - Signal
+  description: A trend/signal node inside a graph, returned by search with cited evidence, lifecycle stage (emerging/building/mature/fading)
+    and next_moves; JSON-LD @id fodda:<graph_id>:<node_id>.
+- name: Evidence
+  domain: knowledge-graphs
+  aliases:
+  - SourceArticle
+  description: Source article linked to a trend via the EVIDENCE_FOR relationship (POST /v1/graphs/{graph_id}/evidence).
+- name: SourceChunk
+  id: chunk_id
+  domain: knowledge-graphs
+  description: Retrievable chunk of source content (GET /v1/sources/chunks/{chunk_id}).
+- name: Label
+  id: label
+  domain: knowledge-graphs
+  description: A filterable label category on a graph with enumerable values (GET /v1/graphs/{graph_id}/labels/{label}/values).
+- name: Statistic
+  domain: knowledge-graphs
+  description: Curated metric / quote / interpretation / signal attached to a trend (GET /v1/graphs/{graph_id}/statistics,
+    types metric|quote|interpretation|signal).
+- name: Analyst
+  id: analyst_id
+  domain: experts
+  aliases:
+  - SyntheticAnalyst
+  - HumanAgent
+  - DigitalTwin
+  description: A named expert persona (49 active on 2026-09-20) with offerings, tokenCost and topic coverage; consulted
+    turn-by-turn.
+- name: Offering
+  id: key
+  domain: billing
+  description: 'A priced product unit (84 on 2026-09-20: offerings, tools, use-case skills, capabilities) with typical_calls
+    and published_price_usd; the billing key an operation''s x-fodda-billing-type points at.'
+- name: ResearchJob
+  id: job_id
+  domain: research
+  description: An asynchronous deep-research job (POST /v1/research/deep-dive -> GET /v1/research/deep-dive/status/{job_id}).
+- name: Schedule
+  id: schedule_id
+  domain: research
+  aliases:
+  - ScheduledBriefing
+  description: A recurring briefing subscription (topic, frequency daily|weekly, email or slack_webhook delivery)
+    with runs.
+- name: ScheduleRun
+  domain: research
+  description: One execution of a Schedule (GET /v1/research/schedules/{schedule_id}/runs).
+- name: Brand
+  id: brandName
+  domain: brand-intelligence
+  description: A brand profiled across graphs (POST /v1/brand-intelligence/{brandName}).
+- name: Company
+  id: ticker
+  domain: earnings
+  description: A covered public company (517 consumer-sector tickers per llms-full.txt) with quarterly earnings-intelligence
+    records.
+- name: SupplementalSource
+  domain: supplemental
+  description: An institutional data source (FRED, BEA, BLS, Census, ONS, Eurostat, ECB, ...; 93 supplemental graphs
+    in the registry) behind /v1/supplemental/*.
+- name: Account
+  domain: account
+  aliases:
+  - User
+  description: 'The calling account: API-call balance, plan, enabled graphs, research context profile, preferences,
+    exports.'
+relationships:
+- from: Graph
+  to: Node
+  type: has_many
+  via: graph_id
+- from: Node
+  to: Evidence
+  type: has_many
+  via: EVIDENCE_FOR
+- from: Node
+  to: Node
+  type: has_many
+  via: neighbors (max depth 2)
+  note: POST /v1/graphs/{graph_id}/neighbors; also adjacent trends across graphs via GET /v1/graphs/{graph_id}/adjacent
+- from: Node
+  to: Statistic
+  type: has_many
+  via: graph_id + query
+- from: Graph
+  to: Label
+  type: has_many
+  via: graph_id
+- from: Evidence
+  to: SourceChunk
+  type: has_many
+  via: chunk_id
+- from: Graph
+  to: Analyst
+  type: has_many
+  via: analyst.topic / expertSlug
+  note: Expert graphs are curated by a named expert whose Analyst persona is grounded in them.
+- from: Analyst
+  to: Offering
+  type: has_many
+  via: offerings[]
+- from: Account
+  to: ResearchJob
+  type: has_many
+  via: job_id
+- from: Account
+  to: Schedule
+  type: has_many
+  via: schedule_id
+- from: Schedule
+  to: ScheduleRun
+  type: has_many
+  via: schedule_id
+- from: Account
+  to: Graph
+  type: has_many
+  via: GET /v1/graphs/mine (enabled graphs)
+- from: Company
+  to: Node
+  type: has_many
+  via: validated consumer trends (per-ticker earnings record)
+- from: Brand
+  to: Node
+  type: has_many
+  via: brand footprint across graphs
+gaps: The provider's OpenAPI declares only two component schemas (Graph, ApiResponse) and returns a generic ApiResponse
+  on 150+ operations, so field-level shapes for Node, Evidence, Analyst and ResearchJob are not machine-readable
+  from the contract; the entity set above is reconstructed from path parameters, request bodies, the public catalog/analyst/JSON-LD
+  responses and llms-full.txt.

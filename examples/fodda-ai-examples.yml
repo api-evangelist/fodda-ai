@@ -1,0 +1,119 @@
+generated: '2026-09-19'
+method: probed
+source: Live unauthenticated responses captured from api.fodda.ai on 2026-09-19 (UTC 2026-09-20 01:5x). Bodies are
+  verbatim; nothing is synthesized. The provider's OpenAPI itself carries no request/response examples on any of
+  its 157 operations.
+examples:
+- operationId: v1_api_health_check
+  method: GET
+  path: /v1/health
+  status: 200
+  content_type: application/json; charset=utf-8
+  response:
+    status: ok
+    database: connected
+    requestId: 8149a1d1d0125b6f6bd1544d
+    version: v1.1
+    schema_version: '1.0'
+    billing_version: 2026-Q1
+    graph_version: 2026-Q1
+    deterministic: true
+    generated_at: '2026-09-20T01:54:29.884Z'
+- operationId: graph_slice_json_ld
+  method: GET
+  path: /v1/graph-slice?graph_id=retail
+  status: 200
+  content_type: application/ld+json; charset=utf-8
+  response_file: json-ld/fodda-ai-retail-graph-slice.jsonld
+  response_headers:
+    ratelimit-policy: 60;w=60
+    ratelimit-limit: '60'
+    ratelimit-remaining: '58'
+    ratelimit-reset: '5'
+    x-fodda-ratelimit-tier: public
+    cache-control: public, max-age=86400, stale-while-revalidate=604800
+  note: Schema.org Dataset with hasPart[] CreativeWork trend nodes (ids of the form fodda:retail:<id>). Public tier,
+    no key.
+- operationId: get_pricing_map
+  method: GET
+  path: /v1/research/pricing
+  status: 200
+  content_type: application/json; charset=utf-8
+  response_excerpt:
+    ok: true
+    currency: api_calls
+    price_per_call_usd: 0.5
+    spt_rate_usd: 0.5
+    pricing:
+      search: 1
+      url_context: 1
+      deep_dive_fast: 5
+      deep_dive_comprehensive: 10
+      expert_agent: 1
+      human_agent_consult: 1
+      expert_graph_read: 1
+      research_stream: 1
+    spt_prices_usd:
+      search: 0.5
+      url_context: 0.5
+      deep_dive_fast: 2.5
+      deep_dive_comprehensive: 5
+      expert_agent: 0.5
+      human_agent_consult: 0.5
+      expert_graph_read: 0.5
+      research_stream: 0.5
+    note: 'Each value in "offerings" reflects measured typical API calls from the Airtable guide (last audit: 2026-09-04).
+      Standard price is $0.50 per API call. SPT price = calls × spt_rate_usd. 0 = free.'
+  note: 'Excerpt: the full map carries 42 billing keys and 84 offerings (see plans/fodda-ai-plans-pricing.yml).'
+- operationId: search_knowledge_graph
+  method: POST
+  path: /v1/graphs/psfk/search
+  request:
+    query: test
+  status: 402
+  content_type: application/json; charset=utf-8
+  response_headers:
+    www-authenticate: stripe-spt amount=50 currency=usd
+    x-fodda-deterministic: 'true'
+    x-request-id: 2a4e9302bbee1c8165cb2719
+  response:
+    type: payment_required
+    description: Fodda Research API — expert-curated knowledge graphs, real-time data across 30+ sources, and autonomous
+      research for AI agents.
+    price:
+      amount: 50
+      currency: usd
+    payment_methods:
+    - stripe-spt
+    payment_methods_detail:
+    - method: stripe-spt
+      name: SPT (Shared Payment Token)
+      description: Agents can pay per-call with a Shared Payment Token. Present an SPT via Authorization header
+        to access any endpoint without a subscription.
+      docs: https://fodda.ai/llms.txt
+    accept: 'Authorization: Bearer <spt_token>'
+    endpoints:
+      api: https://api.fodda.ai
+      mcp: https://mcp.fodda.ai/mcp
+      docs: https://fodda.ai/llms.txt
+      openapi: https://api.fodda.ai/openapi.json
+    requestId: 2a4e9302bbee1c8165cb2719
+  note: The Machine Payments Protocol challenge every unauthenticated secured call returns — the price is per request,
+    in cents.
+- operationId: graph_slice_json_ld
+  method: GET
+  path: /v1/graph-slice?graph_id=psfk-retail
+  status: 404
+  content_type: application/json; charset=utf-8
+  response:
+    error: GRAPH_NOT_FOUND
+    message: Graph 'psfk-retail' not found or not yet live. Use GET /v1/graphs/catalog to see available graphs.
+- operationId: validate_spt
+  method: GET
+  path: /v1/spt/validate
+  status: 400
+  content_type: application/json; charset=utf-8
+  response:
+    ok: false
+    error: MISSING_SPT
+    message: 'Provide SPT via Authorization: Bearer spt_xxx or X-Stripe-SPT header.'

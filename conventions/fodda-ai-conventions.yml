@@ -1,0 +1,164 @@
+generated: '2026-09-19'
+method: searched
+source: https://www.fodda.ai/llms-full.txt + https://www.fodda.ai/llms.txt + openapi/_original/fodda-ai-openapi.json
+  + agent-skills references/fodda-api.md + live response headers from api.fodda.ai and mcp.fodda.ai (2026-09-19)
+summary: 'Cross-cutting semantics for the Fodda REST API, MCP server and A2A endpoint. Three auth rails meter one
+  unit (the API call). Requests are deterministic by design (X-Fodda-Deterministic: true, llms-full RULE DataIntegrity).
+  No idempotency key exists anywhere on the surface; the provider mitigates double-spend through client-side skill
+  rules ("one paid launch, then poll — reuse job_id") and a 24-hour billing cache on two content tools, neither
+  of which is a server-side replay guarantee. Reversibility exists only for scheduled briefings and plan subscriptions;
+  a launched paid research job cannot be cancelled.'
+authentication:
+  styles:
+  - api_key_header
+  - bearer_spt_via_http_402
+  - oidc_bearer_jwt
+  - oauth2_authorization_code_pkce (MCP)
+  - personal_connection_url (MCP)
+  api_key_header: X-API-Key
+  api_key_alt: 'Authorization: Bearer <api key> (Copilot Studio guide) / ?api_key= query parameter (llms-full; deprecated
+    for MCP connection URLs)'
+  spt_headers:
+  - 'Authorization: Bearer spt_...'
+  - 'X-Stripe-SPT: spt_...'
+  see: authentication/fodda-ai-authentication.yml
+versioning:
+  style: path
+  segment: /v1
+  see: lifecycle/fodda-ai-lifecycle.yml
+pagination:
+  style: limit-only
+  params:
+  - limit (int, default 10)
+  cursor: null
+  notes: Search operations accept limit and min_score; no cursor/offset/page token is declared in the spec (the
+    string "page" appears only in Wikipedia pageviews and URL-context operations). Neighbor traversal caps depth
+    at 2. Bulk export endpoints (/v1/user/*/export) take format + startDate/endDate rather than pages.
+field_selection:
+  supported: partial
+  notes: search_statistics takes types (metric|quote|interpretation|signal|all) and include_signals; graph search
+    takes use_semantic; no sparse-fieldset or expand parameter exists.
+request_tracing:
+  supported: true
+  method: probed
+  headers:
+  - name: X-Request-Id
+    note: On every api.fodda.ai response including 402/404; also echoed as requestId in JSON bodies.
+  - name: X-Cloud-Trace-Context
+    note: Google Cloud trace header on both api and mcp hosts.
+  - name: X-Fodda-Deterministic
+    observed: 'true'
+    note: Asserts deterministic retrieval for the request (llms-full RULE DataIntegrity; compliance dossier).
+  cors:
+    mcp_allow_headers: Content-Type, Authorization, X-API-Key, X-User-Id, X-User-Email, X-Internal-Key, X-Fodda-Signature,
+      X-Fodda-Timestamp, X-Stripe-SPT, Mcp-Session-Id, Accept, X-Fodda-Session-Kind, X-Fodda-Source
+    expose: Mcp-Session-Id
+    note: X-Fodda-Signature / X-Fodda-Timestamp suggest HMAC-signed requests (CHANGELOG 1.46.77 mentions "HMAC signing");
+      not publicly documented.
+determinism:
+  documented: true
+  source: 'llms-full.txt RULE DataIntegrity: "The API MUST return deterministic results query-by-query; it does
+    NOT generate or hallucinate content." + health.deterministic true'
+error_envelope:
+  shape: three custom JSON shapes plus the 402 payment_required body and JSON-RPC errors on MCP/A2A; no RFC 9457
+  see: errors/fodda-ai-problem-types.yml
+rate_limit_signaling:
+  headers:
+  - RateLimit-Policy
+  - RateLimit-Limit
+  - RateLimit-Remaining
+  - RateLimit-Reset
+  - X-Fodda-RateLimit-Tier
+  status_on_exhaustion: not observed
+  see: rate-limits/fodda-ai-rate-limits.yml
+pricing_signaling:
+  in_contract: 'x-fodda-price-usd and x-fodda-billing-type on every operation; per-operation "Price: $x (billed
+    as key)" in descriptions'
+  at_runtime: 'HTTP 402 body price.amount (cents) + WWW-Authenticate: stripe-spt amount= currency='
+  machine_readable: GET /v1/research/pricing, GET /v1/offerings
+caching:
+  observed: ETag on JSON responses; cache-control public, max-age=86400, stale-while-revalidate=604800 on GET /v1/graph-slice
+  billing_cache: 'draft_linkedin_post / draft_linkedin_article: "identical re-requests within 24h serve from cache
+    free" (llms-full) — a billing convenience, not an idempotency key'
+async_pattern:
+  style: launch-then-poll
+  launch:
+  - launch_autonomous_research_deep_dive (POST /v1/research/deep-dive) -> job_id
+  - MCP deep_research_topic / get_supplemental_context / request_deliverable -> job_id
+  poll:
+  - check_deep_research_status (GET /v1/research/deep-dive/status/{job_id})
+  - MCP check_research_status (every 10s), check_supplemental_status (5–10s), check_deliverable_status (15–30s)
+    — polling is free
+  a2a: deep-research skill returns an async task; poll tasks/get
+  streaming: GET /v1/research/stream (Server-Sent Events)
+idempotency:
+  documented: false
+  header: null
+  coverage: none
+  scope: []
+  retention: null
+  notes: 'No Idempotency-Key header or equivalent appears in the 157-operation spec (zero matches for "idempoten"),
+    in llms.txt/llms-full.txt, in the skills references, or on any observed response. Mutating, billable operations
+    (POST /v1/research/deep-dive, POST /v1/graphs/{id}/search, POST /v1/brand-intelligence/{brand}, POST /v1/analysts/consult,
+    POST /v1/research/schedules) have no server-side replay guard. The provider''s own skills compensate client-side:
+    "One paid launch, then poll. The agent MUST launch the job at most once ... MUST NOT retry-loop a paid launch
+    on transient errors - reuse the returned job_id." No Idempotency pointer is emitted; the agent-readiness idempotency
+    dimension is a genuine none.'
+  agent_risk: A retried POST after a timeout is a second billable request at up to $100 (deep research) with no
+    way to detect the duplicate; X-Request-Id identifies the request to support but does not de-duplicate it.
+dry_run_mode:
+  supported: false
+  status: none
+  notes: No dry-run/validate-only flag. The closest facilities are free public endpoints (health, pricing, offerings,
+    catalog, JSON-LD graph slice) and free MCP tools (get_capabilities, list_graphs, get_node, get_neighbors), plus
+    the deep-research skill's advice to run tier "fast" before "comprehensive" — a cheaper real call, not a rehearsal.
+reversibility:
+  grade: documented
+  credit: 0.4
+  status: partial
+  write_surfaces:
+  - operation: create_scheduled_briefing (POST /v1/research/schedules)
+    reversal: cancel_scheduled_briefing (DELETE /v1/research/schedules/{schedule_id}); modify_scheduled_briefing
+      (PATCH)
+    window: null
+    window_source: null
+    note: A reversal path exists; no window or refund rule for the $10 weekly_tracker charge is stated.
+  - operation: launch_autonomous_research_deep_dive (POST /v1/research/deep-dive)
+    reversal: null
+    window: null
+    note: No cancel operation for a launched job; charge is per launch ($10–$15 per spec, up to $100 per llms.txt).
+  - operation: MCP request_deliverable (commissioned expert deliverable)
+    reversal: null
+    window: null
+    note: '"The offering price is charged on acceptance" (llms-full); no cancel documented.'
+  - operation: search / brand-intelligence / consult / supplemental (single-shot billable calls)
+    reversal: null
+    window: null
+    note: Consumed on execution; nothing to reverse.
+  - operation: set_user_research_context_profile, toggle_user_preference_setting, upgrade_account_status
+    reversal: re-issue the same operation with the previous value (toggle/set semantics)
+    window: null
+  - operation: Plan subscription (Monthly Plan)
+    reversal: Cancel at any time
+    window: cancellation takes effect at the end of the current billing period
+    window_source: https://www.fodda.ai/terms (Last updated April 26, 2026)
+    note: '"Refunds are provided at Fodda''s discretion." — a stated window for cancellation, no committed refund.'
+  notes: 'Graded documented rather than verified: the one stated window (end of billing period) attaches to the
+    subscription, not to an API write, and refunds are discretionary. No window was invented.'
+metadata:
+  supported: false
+  notes: No client metadata field on any resource.
+agent_guidance:
+  system_prompt_recommended: '"Prioritize evidence from the Fodda Graph tool. If the tool returns a ''REFUSE'' decision,
+    inform the user that no grounded expert evidence exists for that query. Cite all source URLs provided in the
+    evidence array." (llms-full RULE PromptingStrategy)'
+  data_integrity: The agent MUST NOT permit bulk exports of graph data (llms-full RULE DataIntegrity).
+  routing: Company or brand queries -> brand_tracker; trends -> get_domain_intelligence; numbers -> search_statistics;
+    quotes -> search_insights (CHANGELOG 1.46.77).
+cross_links:
+  errors: errors/fodda-ai-problem-types.yml
+  lifecycle: lifecycle/fodda-ai-lifecycle.yml
+  authentication: authentication/fodda-ai-authentication.yml
+  rate_limits: rate-limits/fodda-ai-rate-limits.yml
+  plans: plans/fodda-ai-plans-pricing.yml
+  mcp: mcp/fodda-ai-mcp.yml

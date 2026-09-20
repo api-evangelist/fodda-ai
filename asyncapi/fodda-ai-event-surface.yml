@@ -1,0 +1,69 @@
+generated: '2026-09-19'
+method: searched
+spec_type: null
+source: openapi/_original/fodda-ai-openapi.json (POST /v1/research/schedules requestBody; GET /v1/research/stream)
+  + a2a/fodda-ai-agent-card.json capabilities + https://www.fodda.ai/llms-full.txt + probes for /asyncapi.yaml on
+  api/www hosts (404)
+summary: Fodda publishes no AsyncAPI document and no inbound webhook-subscription API. Its event surface is (1)
+  a Server-Sent Events endpoint for streaming research, (2) scheduled briefings that Fodda pushes outbound to an
+  email address or a Slack incoming-webhook URL supplied when the schedule is created, and (3) MCP/A2A streaming
+  flags. The Webhooks pointer is emitted for the documented outbound Slack-webhook delivery; there is no event catalog,
+  payload schema or signing documentation to capture, so the asyncapi scoring family is otherwise N/A.
+asyncapi:
+  present: false
+  probed:
+  - url: https://api.fodda.ai/asyncapi.yaml
+    status: 404
+  - url: https://www.fodda.ai/asyncapi.yaml
+    status: 404
+streaming:
+- name: Streaming research search
+  operationId: streaming_research_search
+  method: GET
+  path: /v1/research/stream
+  protocol: Server-Sent Events
+  description: 'Run search and stream output using Server-Sent Events. Price: $1.50 (billed as research_stream).'
+  auth:
+  - apiKey
+  - stripeSPT
+- name: MCP SSE transport
+  url: https://mcp.fodda.ai/sse
+  protocol: SSE (MCP legacy transport)
+  auth: Bearer API key / OAuth (401 anonymous)
+webhooks:
+  direction: outbound
+  subscriptions_api: false
+  catalog:
+  - event: scheduled briefing run
+    trigger: Schedule created with POST /v1/research/schedules (operationId create_scheduled_briefing)
+    frequency:
+    - daily
+    - weekly
+    delivery:
+    - email (body field email)
+    - 'Slack incoming webhook (body field slack_webhook: string)'
+    payload_schema: not published (response schema is the generic ApiResponse)
+    signing: not documented (X-Fodda-Signature / X-Fodda-Timestamp appear only in the MCP host's CORS allow-list)
+    management:
+    - list_scheduled_briefings
+    - modify_scheduled_briefing
+    - cancel_scheduled_briefing
+    - get_scheduled_briefing_runs
+    price: $10.00 per schedule (billed as weekly_tracker) per the OpenAPI
+  mcp_equivalent: manage_scheduled_reports tool
+agent_protocol_flags:
+  a2a_card:
+    streaming: false
+    pushNotifications: false
+    stateTransitionHistory: false
+  a2a_legacy_document:
+    streaming: true
+    pushNotifications: false
+  mcp_offering_cards:
+    tools.listChanged: false
+    resources.subscribe: false
+    prompts.listChanged: false
+gap:
+  what: An AsyncAPI (or at least a payload schema and signing scheme) for the scheduled-briefing delivery and the
+    SSE stream.
+  who_fixes_it: the provider

@@ -1,0 +1,103 @@
+generated: '2026-09-19'
+method: searched
+source: well-known/fodda-ai-clerk-oauth-authorization-server.json + well-known/fodda-ai-clerk-openid-configuration.json
+  + well-known/fodda-ai-www-oauth-protected-resource.json
+docs: https://www.fodda.ai/connect
+note: derive-oauth-scopes.py found no oauth2 scheme in the OpenAPI (the REST contract declares apiKey + bearer SPT
+  only), so this file is built from the provider's published discovery documents. The scopes are identity scopes
+  of the Clerk-delegated authorization server plus the single resource scope "read" advertised by the www-hosted
+  protected-resource document; no per-tool or per-graph scopes are published, and MCP tool authorization is by account/plan
+  rather than scope.
+schemes:
+- name: oauth2
+  source: well-known/fodda-ai-clerk-oauth-authorization-server.json
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://clerk.fodda.ai/oauth/authorize
+    tokenUrl: https://clerk.fodda.ai/oauth/token
+    pkce: S256
+    registrationUrl: https://clerk.fodda.ai/oauth/register
+  - flow: deviceCode
+    deviceAuthorizationUrl: https://clerk.fodda.ai/oauth/device_authorization
+    tokenUrl: https://clerk.fodda.ai/oauth/token
+scopes:
+- scope: read
+  description: Read access to the MCP resource https://mcp.fodda.ai/mcp (scopes_supported in the www-hosted RFC
+    9728 document; bearer_methods_supported [header]).
+  flows:
+  - authorizationCode
+  sources:
+  - well-known/fodda-ai-www-oauth-protected-resource.json
+  kind: resource
+- scope: openid
+  description: OpenID Connect authentication (id_token, RS256).
+  flows:
+  - authorizationCode
+  - deviceCode
+  sources:
+  - well-known/fodda-ai-clerk-openid-configuration.json
+  kind: identity
+- scope: profile
+  description: 'Profile claims: name, given_name, family_name, picture, preferred_username.'
+  flows:
+  - authorizationCode
+  - deviceCode
+  sources:
+  - well-known/fodda-ai-clerk-openid-configuration.json
+  kind: identity
+- scope: email
+  description: email and email_verified claims.
+  flows:
+  - authorizationCode
+  - deviceCode
+  sources:
+  - well-known/fodda-ai-clerk-openid-configuration.json
+  kind: identity
+- scope: public_metadata
+  description: Clerk user public metadata.
+  flows:
+  - authorizationCode
+  - deviceCode
+  sources:
+  - well-known/fodda-ai-clerk-oauth-authorization-server.json
+  kind: identity
+- scope: private_metadata
+  description: Clerk user private metadata.
+  flows:
+  - authorizationCode
+  - deviceCode
+  sources:
+  - well-known/fodda-ai-clerk-oauth-authorization-server.json
+  kind: identity
+- scope: offline_access
+  description: Issue a refresh token (grant refresh_token supported).
+  flows:
+  - authorizationCode
+  - deviceCode
+  sources:
+  - well-known/fodda-ai-clerk-oauth-authorization-server.json
+  kind: identity
+- scope: user:org:read
+  description: Read the user's organization membership (org_id claim).
+  flows:
+  - authorizationCode
+  - deviceCode
+  sources:
+  - well-known/fodda-ai-clerk-oauth-authorization-server.json
+  kind: identity
+claims_supported:
+- sub
+- iss
+- aud
+- exp
+- iat
+- email
+- email_verified
+- name
+- given_name
+- family_name
+- picture
+- preferred_username
+- org_id
+gaps: No scope-to-tool or scope-to-graph mapping is published; the protected-resource documents on mcp.fodda.ai
+  list no scopes at all (only authorization_servers).

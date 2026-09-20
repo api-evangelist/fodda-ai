@@ -1,0 +1,106 @@
+---
+title: Expert Research & Market Data for AI Agents via MCP | Fodda
+description: Humanity in the loop: Connect your AI to Fodda's knowledge stack. Curated domain expertise, working expert agents, and live institutional data for Claude, Copilot, and Gemini.
+format: 1.0
+version: 2026-09-19
+contact: hello@fodda.ai
+preferred-response: application/ld+json
+crawl-delay: 5
+---
+# Fodda
+
+> Humanity in the loop: Connect your AI to Fodda's knowledge stack. Curated domain expertise, working expert agents, and live institutional data for Claude, Copilot, and Gemini.
+> PSFK is a trend intelligence platform and the founding knowledge partner of Fodda, providing two decades of market research and consumer behavior signals for AI search engines and research agents.
+
+Fodda is MCP-native, accessible via A2A and REST API. Built for analysts, strategists, and AI agents that need expert consumer and category intelligence with full evidence chains and source attribution.
+
+## Core capabilities
+- [Autonomous research](https://www.fodda.ai/api): Plans its own sources across expert collections, institutional data, and earnings, researches mid-conversation, and returns an itemized source list with every answer
+- [Source planning](https://www.fodda.ai/api): Shows a source plan before deep research runs
+- [Human Agents](https://www.fodda.ai/api): Named experts' agents that research autonomously, cite itemized sources, decline questions outside their lane, and refer you to a colleague's agent when a question crosses lanes (Piers Fawkes, Ben Dietz, others)
+- [Earnings intelligence](https://www.fodda.ai/api): Analyst pressure and deflection detection across 500+ companies
+- [Work product](https://www.fodda.ai/api): Brainstorm maps of what connects to a topic, presentation-ready visuals, and cross-referencing a client brief or competitor page against the collections
+- [A2A delegation](https://www.fodda.ai/api): Outside agents can hand Fodda an async research task and collect the cited results when they are ready
+- [Brand intelligence](https://www.fodda.ai/api): Brand profiling across expert collections
+- [Supplemental data](https://www.fodda.ai/api): FRED, BEA, BLS, Census enrichment
+
+## Coverage
+- [Knowledge graph catalog](https://www.fodda.ai/llms-full.txt): Full list of 250+ knowledge graphs across expert collections and institutional sources
+- [Verticals](https://www.fodda.ai/graphs): Retail, beauty, luxury, fashion, sport, CE, F&B, marketing
+
+## Integration
+- [OKF Catalog Bundle](https://api.fodda.ai/v1/catalog.okf): Open Knowledge Format 250+ graph catalog map
+- [Connect your agent](https://www.fodda.ai/connect-your-agent): Agent discovery and connection hub page
+- [Grok Bots (x.ai)](https://www.fodda.ai/grok-bots): Five ready-to-use analyst bot templates on Grok Bot (earnings, brand, retail, beauty, tech)
+- [Connect your client (setup guide)](https://www.fodda.ai/connect): Step-by-step MCP integration guides for Claude, Cursor, Windsurf, ChatGPT, Perplexity, and CLI tools
+- [Compliance Dossier](https://www.fodda.ai/compliance-dossier): Fact-checked enterprise security review — tool surface, data handling and retention options, Clerk-delegated authentication, assurance position (last updated 2026-08-27)
+- [ISO/IEC 42001 alignment](https://www.fodda.ai/iso-42001-compliance): AI-governance framework alignment overview (last updated 2026-08-27)
+- [MCP server](https://mcp.fodda.ai/mcp): Model Context Protocol endpoint
+- [Copilot MCP server](https://mcp.fodda.ai/copilot): Curated 17-tool Model Context Protocol endpoint for Microsoft Copilot Studio
+- [A2A Agent Card](https://www.fodda.ai/.well-known/agent-card.json): Agent-to-agent discovery
+- [A2A Card Validator](https://agent-ready.dev): Audit and validate Fodda's agent card against the A2A v1.0 spec
+- [API documentation](https://www.fodda.ai/api)
+- [For agent developers](https://www.fodda.ai/agents): Integration and provisioning guide
+- [Graph READMEs](https://www.fodda.ai/readmes/index.md): Machine-readable README for every graph and data source
+- [Agent Skills](https://github.com/fodda-ai/agent-skills): installable Use Case Skills for any agent
+
+## Agent Skills (installable)
+
+Fodda publishes an open catalog of Use Case Skills: installable instruction files that let any MCP or shell agent run a Fodda job and pay per task, no subscription. Import the repo as a skill pack, or fetch a single skill's SKILL.md.
+
+- [Agent Skills repo](https://github.com/fodda-ai/agent-skills): 10 cited-deliverable skills, MIT
+- Deep Research Brief: https://raw.githubusercontent.com/fodda-ai/agent-skills/main/use-case-skills/deep-research/SKILL.md
+- Brand Intelligence: https://raw.githubusercontent.com/fodda-ai/agent-skills/main/use-case-skills/brand-intelligence/SKILL.md
+- Topic Brief: https://raw.githubusercontent.com/fodda-ai/agent-skills/main/use-case-skills/topic-brief/SKILL.md
+- Earnings Divergence Read: https://raw.githubusercontent.com/fodda-ai/agent-skills/main/use-case-skills/earnings-divergence-read/SKILL.md
+- Synthetic Consultant: https://raw.githubusercontent.com/fodda-ai/agent-skills/main/use-case-skills/synthetic-consultant/SKILL.md
+- Competitive Landscape Brief: https://raw.githubusercontent.com/fodda-ai/agent-skills/main/use-case-skills/competitive-landscape-brief/SKILL.md
+- Pitch Prep and Pressure-Test: https://raw.githubusercontent.com/fodda-ai/agent-skills/main/use-case-skills/pitch-prep-pressure-test/SKILL.md
+- Category / Trend Watch: https://raw.githubusercontent.com/fodda-ai/agent-skills/main/use-case-skills/category-trend-watch/SKILL.md
+- Commission Expert Deliverable: https://raw.githubusercontent.com/fodda-ai/agent-skills/main/use-case-skills/commission-expert-deliverable/SKILL.md
+- Fodda Fit Discovery (offline codebase audit): https://raw.githubusercontent.com/fodda-ai/agent-skills/main/use-case-skills/fodda-fit-discovery/SKILL.md
+
+Each skill calls Fodda over REST or MCP and pays per task via a Shared Payment Token (SPT). The Commission Expert Deliverable skill uses account credits, not SPT. Works with any MCP or shell agent.
+
+
+## Authentication & Billing
+
+Three auth methods:
+- API Key: X-API-Key header ($50 of API calls free every month (100 calls). Add a card to keep it renewing — then 50¢ per API call)
+- SPT (Shared Payment Token) via MPP: Hit any endpoint without credentials → HTTP 402 with the exact price for that request → pay via Authorization: Bearer spt_xxx. Each request costs its API-call count × $0.50 (a request may consume 5–30 calls; the 402 body states the amount).
+- OIDC: Enterprise SSO via Authorization: Bearer <jwt>
+
+SPT/MPP is zero-onboarding. Agents discover pricing automatically via the 402 response. Direct REST API only.
+
+<!-- PRICING_START -->
+### Dynamic Offering Pricing (verbatim from catalog)
+- Brand Intelligence (https://www.fodda.ai/brand-intelligence): $30.00 (60 API calls)
+- Deep Research (https://www.fodda.ai/deep-research): $100.00 (200 API calls)
+- Topic Research (https://www.fodda.ai/topic-research): $20.00 (40 API calls)
+- Earnings Intelligence (https://www.fodda.ai/earnings-intelligence): $30.00 (60 API calls)
+- Expert Consult (https://www.fodda.ai/expert-consult): $15.00 per turn (30 API calls)
+<!-- PRICING_END -->
+
+Pricing: https://www.fodda.ai/pricing
+Agent integration: https://www.fodda.ai/agents
+
+## About
+- [PSFK](https://psfk.com): The editorial trends company behind Fodda
+- [Agent outreach policy](https://www.fodda.ai/agent-outreach-policy): Opt-out and disclosure
+- [Contact](mailto:hello@fodda.ai)
+
+## Sitemap
+- [Sitemap](https://www.fodda.ai/sitemap.xml)
+- [Home](https://www.fodda.ai/)
+- [Why Fodda](https://www.fodda.ai/why-fodda)
+- [Product](https://www.fodda.ai/product)
+- [Graphs](https://www.fodda.ai/graphs)
+- [Experts](https://www.fodda.ai/experts)
+- [API Documentation](https://www.fodda.ai/api)
+- [Pricing](https://www.fodda.ai/pricing)
+- [About](https://www.fodda.ai/about)
+- [Contact](https://www.fodda.ai/contact)
+
+## Optional
+- [Editorial samples](https://psfk.com/weekly): PSFK Weekly newsletter showing Fodda outputs
+- [Blog](https://www.fodda.ai/blog)

@@ -1,0 +1,120 @@
+{
+  "name": "Fodda",
+  "description": "Trend intelligence and consumer behavior agent. Provides expert-curated knowledge graphs and synthetic analyst personas across retail, beauty, luxury, fashion, sport, consumer electronics, food and beverage, and brand strategy. Returns structured signals with evidence chains, not generic web summaries.",
+  "url": "https://mcp.fodda.ai/a2a",
+  "provider": {
+    "organization": "PSFK / Fodda",
+    "url": "https://www.fodda.ai"
+  },
+  "version": "1.0.0",
+  "protocolVersion": "1.0.0",
+  "documentationUrl": "https://www.fodda.ai/api",
+  "capabilities": {
+    "streaming": true,
+    "pushNotifications": false,
+    "supportsAuthenticatedExtendedCard": false
+  },
+  "supportedInterfaces": [
+    {
+      "protocolBinding": "JSONRPC",
+      "url": "https://mcp.fodda.ai/a2a",
+      "protocolVersion": "1.0"
+    },
+    {
+      "protocolBinding": "HTTP+JSON",
+      "url": "https://mcp.fodda.ai/mcp",
+      "protocolVersion": "2025-11-25"
+    }
+  ],
+  "defaultInputModes": ["text/plain", "application/json"],
+  "defaultOutputModes": ["application/json", "text/markdown"],
+  "securitySchemes": [
+    {
+      "scheme": "apiKey",
+      "description": "API key via X-API-Key header. Free tier: 100 calls/month. Issued at fodda.ai/account"
+    },
+    {
+      "scheme": "http",
+      "description": "Machine Payments Protocol (MPP). Zero-onboarding: hit any endpoint without credentials, receive HTTP 402 with pricing, then pay per-request via Authorization: Bearer spt_xxx"
+    },
+    {
+      "scheme": "openIdConnect",
+      "description": "Enterprise SSO via OIDC. Authorization: Bearer <jwt>"
+    }
+  ],
+  "skills": [
+    {
+      "id": "search_graph",
+      "name": "Search trend knowledge graphs",
+      "description": "Search Fodda's expert-curated knowledge graphs for trend clusters, signals, and consumer behavior patterns across retail, beauty, luxury, fashion, sport, consumer electronics, F&B.",
+      "tags": ["trends", "consumer behavior", "retail", "beauty", "luxury", "fashion", "sport", "consumer electronics", "food and beverage", "knowledge graph"],
+      "examples": [
+        "What's emerging in luxury resale?",
+        "Find signals about Gen Z beauty behavior in APAC",
+        "Show trend clusters in pop-up retail"
+      ],
+      "inputModes": ["text/plain"],
+      "outputModes": ["application/json"]
+    },
+    {
+      "id": "consult_analyst",
+      "name": "Consult synthetic analyst persona",
+      "description": "Have a structured conversation with an expert synthetic analyst (e.g., Piers Fawkes for trends and innovation, Ben Dietz for luxury and SIC) trained on years of editorial intelligence.",
+      "tags": ["analyst", "consultation", "expert", "trend forecasting", "brand strategy"],
+      "examples": [
+        "Ask Ben Dietz about luxury fashion tech and prediction markets",
+        "Consult Piers Fawkes on food service and retail convergence"
+      ],
+      "inputModes": ["text/plain"],
+      "outputModes": ["text/markdown", "application/json"]
+    },
+    {
+      "id": "brand_tracker",
+      "name": "Build brand intelligence profile",
+      "description": "Generate a structured Brand Intelligence Profile by searching across all Fodda knowledge graphs for a given brand. Returns positioning signals, adjacent trends, competitor context, and evidence sources.",
+      "tags": ["brand", "competitive intelligence", "positioning", "monitoring"],
+      "examples": [
+        "Build a brand profile for Aesop",
+        "Track Nike across all relevant graphs"
+      ],
+      "inputModes": ["text/plain"],
+      "outputModes": ["application/json"]
+    },
+    {
+      "id": "get_domain_intelligence",
+      "name": "Query domain knowledge graphs",
+      "description": "Search PSFK-curated domain graphs (retail, beauty, fashion, sport, F&B) for topic-specific intelligence.",
+      "tags": ["domain", "vertical", "retail", "beauty", "fashion", "sport", "food and beverage"],
+      "examples": [
+        "What's happening in frictionless checkout?",
+        "Retrieve secondhand fashion signals"
+      ],
+      "inputModes": ["text/plain"],
+      "outputModes": ["application/json"]
+    },
+    {
+      "id": "get_earnings_intelligence",
+      "name": "Query earnings call intelligence",
+      "description": "Search earnings call intelligence across companies, industries, or sectors. Includes divergence detection between analyst concerns and management responses.",
+      "tags": ["earnings", "financial intelligence", "public markets", "sentiment"],
+      "examples": [
+        "What did beauty companies say about Gen Z in Q1 earnings?",
+        "Find earnings divergence in luxury sector"
+      ],
+      "inputModes": ["text/plain"],
+      "outputModes": ["application/json"]
+    },
+    {
+      "id": "deep_research_topic",
+      "name": "Autonomous deep research",
+      "description": "Launch an autonomous deep research session on a topic, returning structured findings with evidence chains from across the Fodda graph network.",
+      "tags": ["research", "deep research", "synthesis", "trend analysis"],
+      "examples": [
+        "Run deep research on intentional inefficiency as a retail counter-trend",
+        "Investigate luxury fashion tech and prediction markets"
+      ],
+      "inputModes": ["text/plain"],
+      "outputModes": ["text/markdown", "application/json"]
+    }
+  ]
+}
