@@ -27,6 +27,20 @@ modified: '2026-09-19'
 tags:
   - Market Intelligence
   - Trend Research
+  - Knowledge Graph
+  - Consumer Insights
+  - Earnings Intelligence
+  - Brand Intelligence
+  - Research
+  - Institutional Data
+  - MCP
+  - A2A
+  - agent-native
+  - Machine Payments
+  - Company
+tags_raw:
+  - Market Intelligence
+  - Trend Research
   - Knowledge Graphs
   - Consumer Insights
   - Earnings Intelligence
@@ -54,6 +68,14 @@ apis:
     humanURL: https://www.fodda.ai/api
     baseURL: https://api.fodda.ai
     tags:
+      - Knowledge Graph
+      - Trend Research
+      - Earnings Intelligence
+      - Brand Intelligence
+      - Institutional Data
+      - Machine Payments
+      - agent-native
+    tags_raw:
       - Knowledge Graphs
       - Trend Research
       - Earnings Intelligence
@@ -110,6 +132,11 @@ apis:
     humanURL: https://www.fodda.ai/connect
     baseURL: https://mcp.fodda.ai/mcp
     tags:
+      - MCP
+      - agent-native
+      - Knowledge Graph
+      - Research
+    tags_raw:
       - MCP
       - agent-native
       - Knowledge Graphs
