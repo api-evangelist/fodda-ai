@@ -1,0 +1,140 @@
+openapi: 3.2.0
+info:
+  title: Fodda Ai Graph Slice API
+  version: '1.0'
+  description: 'Operations tagged Graph Slice across 4 of this provider''s published API definitions: fodda-ai-context-delivery-openapi.json, fodda-ai-openapi.json, fodda-ai-context-delivery-openapi.yml, fodda-ai-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.fodda.ai/v1
+- url: https://api.fodda.ai
+tags:
+- name: Graph Slice
+paths:
+  /graph-slice:
+    get:
+      summary: Graph Preview (Public)
+      description: Returns a public JSON-LD preview of a graph's top trending topics or a supplemental source's metadata. No authentication required.
+      parameters:
+      - name: graph_id
+        in: query
+        schema:
+          type: string
+        description: Knowledge graph identifier
+      - name: source_id
+        in: query
+        schema:
+          type: string
+        description: Supplemental source identifier
+      responses:
+        '200':
+          description: JSON-LD preview with Schema.org Dataset type
+          content:
+            application/ld+json:
+              schema:
+                type: object
+                properties:
+                  '@context':
+                    type: string
+                    example: https://schema.org/
+                  '@type':
+                    type: string
+                    example: Dataset
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  items:
+                    type: array
+                    items:
+                      type: object
+      tags:
+      - Graph Slice
+      operationId: getGraphSlice
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.fodda.ai/v1
+  /v1/graph-slice:
+    get:
+      summary: Graph slice JSON-LD
+      description: 'Get semantic Schema.org slice of a graph.
+
+
+        Price: Free ($0)'
+      operationId: graph_slice_json_ld
+      x-fodda-price-usd: 0
+      x-fodda-billing-type: free
+      parameters:
+      - name: graph_id
+        in: query
+        schema:
+          type: string
+      - name: source_id
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security: []
+      tags:
+      - Graph Slice
+    servers:
+    - url: https://api.fodda.ai
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        requestId:
+          type: string
+        schema_version:
+          type: string
+        search_path:
+          type: string
+        deterministic:
+          type: boolean
+        dataStatus:
+          type: string
+        rows:
+          type: array
+          items:
+            type: object
+            properties:
+              rowId:
+                type: string
+              rowName:
+                type: string
+              rowSummary:
+                type: string
+              _score:
+                type: number
+        meta:
+          type: object
+          properties:
+            decision:
+              type: string
+            usage:
+              type: object
+              properties:
+                total_billable_units:
+                  type: integer
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: X-API-Key
+      in: header
+      description: Required for all endpoints except POST /v1/psfk/overview (public).
+    stripeSPT:
+      type: http
+      scheme: bearer
+      description: 'Stripe Shared Payment Token (MPP). Pass an SPT obtained from Stripe Link via Authorization: Bearer spt_xxx.'
+x-refined-from:
+- fodda-ai-context-delivery-openapi.json
+- fodda-ai-openapi.json
+- fodda-ai-context-delivery-openapi.yml
+- fodda-ai-openapi.yml

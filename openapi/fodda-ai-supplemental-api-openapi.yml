@@ -1,0 +1,2861 @@
+openapi: 3.2.0
+info:
+  title: Fodda Ai Supplemental API
+  version: 1.7.0
+  description: 'Operations tagged Supplemental across 2 of this provider''s published API definitions: fodda-ai-openapi.json, fodda-ai-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.fodda.ai
+tags:
+- name: Supplemental
+paths:
+  /v1/supplemental/context:
+    post:
+      summary: Unified Supplemental Context
+      description: 'Unified access to FRED, Census, PubMed, Google Trends, etc. in parallel.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: unified_supplemental_context
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - query
+              properties:
+                query:
+                  type: string
+                  description: Search query or research topic
+                domain:
+                  type: string
+                  description: Optional domain hint (retail, beauty, fashion, etc.)
+                brands:
+                  type: array
+                  items:
+                    type: string
+                  description: Brand names for product lookups
+                graph_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Graph IDs from prior search for domain inference
+                sources:
+                  type: array
+                  items:
+                    type: string
+                  description: Explicit source IDs to execute
+                categories:
+                  type: array
+                  items:
+                    type: string
+                  description: Category filters
+                geo:
+                  type: string
+                  description: Country code hint (e.g. BR, TH, GB)
+                geography:
+                  type: string
+                  description: Country code or country name (e.g. BR, Brazil, United Kingdom)
+                location:
+                  type: string
+                  description: Location hint
+      responses:
+        '200':
+          description: Unified supplemental data payload with source coverage telemetry
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  query:
+                    type: string
+                  domain:
+                    type: string
+                  sources_queried:
+                    type: number
+                  sources_returned:
+                    type: number
+                  sources_succeeded:
+                    type: array
+                    items:
+                      type: string
+                  sources_failed:
+                    type: array
+                    items:
+                      type: object
+                  sources_skipped:
+                    type: array
+                    items:
+                      type: object
+                  source_coverage:
+                    type: object
+                    properties:
+                      considered:
+                        type: number
+                      selected:
+                        type: number
+                      attempted:
+                        type: number
+                      returned:
+                        type: number
+                      dropped:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            stage:
+                              type: string
+                              enum:
+                              - routing
+                              - fetch
+                              - consolidate
+                              - coherence
+                            reason:
+                              type: string
+                      query_interpreted_as:
+                        type: string
+                      domain_inference:
+                        type: string
+                      classifier_path:
+                        type: string
+                        enum:
+                        - regex
+                        - gemini
+                        - fallback
+                      need_adjacency_applied:
+                        type: array
+                        items:
+                          type: string
+                  demand_signals:
+                    type: object
+                  economic_context:
+                    type: object
+                  market_data:
+                    type: object
+                  financial_reporting:
+                    type: object
+                  research_signals:
+                    type: object
+                  demographic_context:
+                    type: object
+                  _meta:
+                    type: object
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/sources:
+    get:
+      summary: List supplemental sources
+      description: 'Retrieve catalog of institutional data providers.
+
+
+        Price: Free ($0)'
+      operationId: list_supplemental_sources
+      x-fodda-price-usd: 0
+      x-fodda-billing-type: free
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/earnings/snapshot:
+    get:
+      summary: Earnings call snapshot intelligence
+      description: 'Query company earnings transcripts, commentary and guidance.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: earnings_call_snapshot_intelligence
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/earnings/analyst-concerns:
+    get:
+      summary: Get earnings top analyst concerns
+      description: 'Retrieve Wall Street worries about a sector/ticker.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: get_earnings_top_analyst_concerns
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/earnings/question-themes:
+    get:
+      summary: Get earnings Q&A question themes
+      description: 'Retrieve analyst questions focus areas.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: get_earnings_q_a_question_themes
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/earnings/management-themes:
+    get:
+      summary: Get management presentation themes
+      description: 'Retrieve executive messaging focal points.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: get_management_presentation_themes
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/earnings/divergence:
+    get:
+      summary: Get earnings concerns divergence
+      description: 'Identify divergence gaps between worries and management answers.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: get_earnings_concerns_divergence
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/suggest:
+    get:
+      summary: 'Supplemental: suggest'
+      description: 'Supplemental data snapshot endpoint for suggest.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__suggest
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/census/retail-snapshot:
+    get:
+      summary: 'Supplemental: retail-snapshot'
+      description: 'Supplemental data snapshot endpoint for census.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__retail_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/census/demographics-snapshot:
+    get:
+      summary: 'Supplemental: demographics-snapshot'
+      description: 'Supplemental data snapshot endpoint for census.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__demographics_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/fred/economic-snapshot:
+    get:
+      summary: 'Supplemental: economic-snapshot'
+      description: 'Supplemental data snapshot endpoint for fred.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__economic_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/wikipedia/pageviews:
+    get:
+      summary: 'Supplemental: pageviews'
+      description: 'Supplemental data snapshot endpoint for wikipedia.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__pageviews
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/worldbank/global-snapshot:
+    get:
+      summary: 'Supplemental: global-snapshot'
+      description: 'Supplemental data snapshot endpoint for worldbank.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__global_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/fda/ingredient-safety:
+    get:
+      summary: 'Supplemental: ingredient-safety'
+      description: 'Supplemental data snapshot endpoint for fda.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__ingredient_safety
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/fda/recalls:
+    get:
+      summary: 'Supplemental: recalls'
+      description: 'Supplemental data snapshot endpoint for fda.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__recalls
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/clinical-trials/search:
+    get:
+      summary: 'Supplemental: search'
+      description: 'Supplemental data snapshot endpoint for clinical-trials.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__search
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/bls/economic-snapshot:
+    get:
+      summary: 'Supplemental: economic-snapshot'
+      description: 'Supplemental data snapshot endpoint for bls.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: getV1SupplementalBlsEconomicSnapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+      x-operation-id-source: normalized
+      x-operation-id-original: supplemental__economic_snapshot
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/bea/spending-snapshot:
+    get:
+      summary: 'Supplemental: spending-snapshot'
+      description: 'Supplemental data snapshot endpoint for bea.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__spending_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/ons/uk-snapshot:
+    get:
+      summary: 'Supplemental: uk-snapshot'
+      description: 'Supplemental data snapshot endpoint for ons.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__uk_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/cbs/nl-snapshot:
+    get:
+      summary: 'Supplemental: nl-snapshot'
+      description: 'Supplemental data snapshot endpoint for cbs.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__nl_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/ptdata/pt-snapshot:
+    get:
+      summary: 'Supplemental: pt-snapshot'
+      description: 'Supplemental data snapshot endpoint for ptdata.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__pt_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/bcb/br-snapshot:
+    get:
+      summary: 'Supplemental: br-snapshot'
+      description: 'Supplemental data snapshot endpoint for bcb.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__br_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/ibge/br-snapshot:
+    get:
+      summary: 'Supplemental: br-snapshot'
+      description: 'Supplemental data snapshot endpoint for ibge.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: getV1SupplementalIbgeBrSnapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+      x-operation-id-source: normalized
+      x-operation-id-original: supplemental__br_snapshot
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/bcrp/pe-snapshot:
+    get:
+      summary: 'Supplemental: pe-snapshot'
+      description: 'Supplemental data snapshot endpoint for bcrp.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__pe_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/arg/ar-snapshot:
+    get:
+      summary: 'Supplemental: ar-snapshot'
+      description: 'Supplemental data snapshot endpoint for arg.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__ar_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/banxico/mx-snapshot:
+    get:
+      summary: 'Supplemental: mx-snapshot'
+      description: 'Supplemental data snapshot endpoint for banxico.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__mx_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/bch/hn-snapshot:
+    get:
+      summary: 'Supplemental: hn-snapshot'
+      description: 'Supplemental data snapshot endpoint for bch.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__hn_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/abs/au-snapshot:
+    get:
+      summary: 'Supplemental: au-snapshot'
+      description: 'Supplemental data snapshot endpoint for abs.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__au_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/eurostat/eu-snapshot:
+    get:
+      summary: 'Supplemental: eu-snapshot'
+      description: 'Supplemental data snapshot endpoint for eurostat.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__eu_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/ecb/ea-snapshot:
+    get:
+      summary: 'Supplemental: ea-snapshot'
+      description: 'Supplemental data snapshot endpoint for ecb.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__ea_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/ecb/euro-snapshot:
+    get:
+      summary: 'Supplemental: euro-snapshot'
+      description: 'Supplemental data snapshot endpoint for ecb.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__euro_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/boe/uk-snapshot:
+    get:
+      summary: 'Supplemental: uk-snapshot'
+      description: 'Supplemental data snapshot endpoint for boe.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: getV1SupplementalBoeUkSnapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+      x-operation-id-source: normalized
+      x-operation-id-original: supplemental__uk_snapshot
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/nordic/region-snapshot:
+    get:
+      summary: 'Supplemental: region-snapshot'
+      description: 'Supplemental data snapshot endpoint for nordic.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__region_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/nordic/snapshot:
+    get:
+      summary: 'Supplemental: snapshot'
+      description: 'Supplemental data snapshot endpoint for nordic.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/rba/au-rates:
+    get:
+      summary: 'Supplemental: au-rates'
+      description: 'Supplemental data snapshot endpoint for rba.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__au_rates
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/bundesbank/de-snapshot:
+    get:
+      summary: 'Supplemental: de-snapshot'
+      description: 'Supplemental data snapshot endpoint for bundesbank.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__de_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/ine/es-snapshot:
+    get:
+      summary: 'Supplemental: es-snapshot'
+      description: 'Supplemental data snapshot endpoint for ine.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__es_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/insee/fr-snapshot:
+    get:
+      summary: 'Supplemental: fr-snapshot'
+      description: 'Supplemental data snapshot endpoint for insee.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__fr_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/snb/ch-snapshot:
+    get:
+      summary: 'Supplemental: ch-snapshot'
+      description: 'Supplemental data snapshot endpoint for snb.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__ch_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/snb/swiss-snapshot:
+    get:
+      summary: 'Supplemental: swiss-snapshot'
+      description: 'Supplemental data snapshot endpoint for snb.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__swiss_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/bis/global-snapshot:
+    get:
+      summary: 'Supplemental: global-snapshot'
+      description: 'Supplemental data snapshot endpoint for bis.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: getV1SupplementalBisGlobalSnapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+      x-operation-id-source: normalized
+      x-operation-id-original: supplemental__global_snapshot
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/pdh/pacific-snapshot:
+    get:
+      summary: 'Supplemental: pacific-snapshot'
+      description: 'Supplemental data snapshot endpoint for pdh.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__pacific_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/qatar/qa-snapshot:
+    get:
+      summary: 'Supplemental: qa-snapshot'
+      description: 'Supplemental data snapshot endpoint for qatar.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__qa_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/bahrain/bh-snapshot:
+    get:
+      summary: 'Supplemental: bh-snapshot'
+      description: 'Supplemental data snapshot endpoint for bahrain.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__bh_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/boi/il-snapshot:
+    get:
+      summary: 'Supplemental: il-snapshot'
+      description: 'Supplemental data snapshot endpoint for boi.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__il_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/india/in-snapshot:
+    get:
+      summary: 'Supplemental: in-snapshot'
+      description: 'Supplemental data snapshot endpoint for india.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__in_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/sarb/za-snapshot:
+    get:
+      summary: 'Supplemental: za-snapshot'
+      description: 'Supplemental data snapshot endpoint for sarb.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__za_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/bnm/my-snapshot:
+    get:
+      summary: 'Supplemental: my-snapshot'
+      description: 'Supplemental data snapshot endpoint for bnm.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__my_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/hkma/hk-snapshot:
+    get:
+      summary: 'Supplemental: hk-snapshot'
+      description: 'Supplemental data snapshot endpoint for hkma.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__hk_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/estat/jp-snapshot:
+    get:
+      summary: 'Supplemental: jp-snapshot'
+      description: 'Supplemental data snapshot endpoint for estat.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__jp_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/bok/kr-snapshot:
+    get:
+      summary: 'Supplemental: kr-snapshot'
+      description: 'Supplemental data snapshot endpoint for bok.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__kr_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/bot/th-snapshot:
+    get:
+      summary: 'Supplemental: th-snapshot'
+      description: 'Supplemental data snapshot endpoint for bot.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__th_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/boc/ca-snapshot:
+    get:
+      summary: 'Supplemental: ca-snapshot'
+      description: 'Supplemental data snapshot endpoint for boc.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__ca_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/statcan/ca-snapshot:
+    get:
+      summary: 'Supplemental: ca-snapshot'
+      description: 'Supplemental data snapshot endpoint for statcan.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: getV1SupplementalStatcanCaSnapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+      x-operation-id-source: normalized
+      x-operation-id-original: supplemental__ca_snapshot
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/bps/id-snapshot:
+    get:
+      summary: 'Supplemental: id-snapshot'
+      description: 'Supplemental data snapshot endpoint for bps.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__id_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/psa/ph-snapshot:
+    get:
+      summary: 'Supplemental: ph-snapshot'
+      description: 'Supplemental data snapshot endpoint for psa.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__ph_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/sg/sg-snapshot:
+    get:
+      summary: 'Supplemental: sg-snapshot'
+      description: 'Supplemental data snapshot endpoint for sg.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__sg_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/bcch/cl-snapshot:
+    get:
+      summary: 'Supplemental: cl-snapshot'
+      description: 'Supplemental data snapshot endpoint for bcch.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__cl_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/cn/cn-snapshot:
+    get:
+      summary: 'Supplemental: cn-snapshot'
+      description: 'Supplemental data snapshot endpoint for cn.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__cn_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/usaspending/snapshot:
+    get:
+      summary: 'Supplemental: snapshot'
+      description: 'Supplemental data snapshot endpoint for usaspending.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: getV1SupplementalUsaspendingSnapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+      x-operation-id-source: normalized
+      x-operation-id-original: supplemental__snapshot
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/dol/snapshot:
+    get:
+      summary: 'Supplemental: snapshot'
+      description: 'Supplemental data snapshot endpoint for dol.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: getV1SupplementalDolSnapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+      x-operation-id-source: normalized
+      x-operation-id-original: supplemental__snapshot
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/socrata/us-snapshot:
+    get:
+      summary: 'Supplemental: us-snapshot'
+      description: 'Supplemental data snapshot endpoint for socrata.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__us_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/socrata/city/{cityKey}:
+    get:
+      summary: 'Supplemental: {cityKey}'
+      description: 'Supplemental data snapshot endpoint for socrata.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental___citykey_
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/socrata/portals:
+    get:
+      summary: 'Supplemental: portals'
+      description: 'Supplemental data snapshot endpoint for socrata.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__portals
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/cdc/health-data:
+    get:
+      summary: 'Supplemental: health-data'
+      description: 'Supplemental data snapshot endpoint for cdc.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__health_data
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/pubmed/research-trends:
+    get:
+      summary: 'Supplemental: research-trends'
+      description: 'Supplemental data snapshot endpoint for pubmed.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__research_trends
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/wto/trade-snapshot:
+    get:
+      summary: 'Supplemental: trade-snapshot'
+      description: 'Supplemental data snapshot endpoint for wto.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__trade_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/wto/global-snapshot:
+    get:
+      summary: 'Supplemental: global-snapshot'
+      description: 'Supplemental data snapshot endpoint for wto.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: getV1SupplementalWtoGlobalSnapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+      x-operation-id-source: normalized
+      x-operation-id-original: supplemental__global_snapshot
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/openfoodfacts:
+    get:
+      summary: 'Supplemental: openfoodfacts'
+      description: 'Supplemental data snapshot endpoint for openfoodfacts.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__openfoodfacts
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/ridb:
+    get:
+      summary: 'Supplemental: ridb'
+      description: 'Supplemental data snapshot endpoint for ridb.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__ridb
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/osm:
+    get:
+      summary: 'Supplemental: osm'
+      description: 'Supplemental data snapshot endpoint for osm.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__osm
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/google-trends:
+    get:
+      summary: 'Supplemental: google-trends'
+      description: 'Supplemental data snapshot endpoint for google-trends.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__google_trends
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/amazon:
+    get:
+      summary: 'Supplemental: amazon'
+      description: 'Supplemental data snapshot endpoint for amazon.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__amazon
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/usda/ers-snapshot:
+    get:
+      summary: 'Supplemental: ers-snapshot'
+      description: 'Supplemental data snapshot endpoint for usda.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__ers_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/usda/nass-snapshot:
+    get:
+      summary: 'Supplemental: nass-snapshot'
+      description: 'Supplemental data snapshot endpoint for usda.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__nass_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/usda/fdc-search:
+    get:
+      summary: 'Supplemental: fdc-search'
+      description: 'Supplemental data snapshot endpoint for usda.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__fdc_search
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/usda/ams-snapshot:
+    get:
+      summary: 'Supplemental: ams-snapshot'
+      description: 'Supplemental data snapshot endpoint for usda.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__ams_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/bestbuy:
+    get:
+      summary: 'Supplemental: bestbuy'
+      description: 'Supplemental data snapshot endpoint for bestbuy.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__bestbuy
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/tripadvisor/brand-intelligence:
+    get:
+      summary: 'Supplemental: brand-intelligence'
+      description: 'Supplemental data snapshot endpoint for tripadvisor.
+
+
+        Price: $10.00 (billed as brand_intelligence)'
+      operationId: supplemental__brand_intelligence
+      x-fodda-price-usd: 10
+      x-fodda-billing-type: brand_intelligence
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/fsa/hygiene:
+    get:
+      summary: 'Supplemental: hygiene'
+      description: 'Supplemental data snapshot endpoint for fsa.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__hygiene
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/companies-house/profile:
+    get:
+      summary: 'Supplemental: profile'
+      description: 'Supplemental data snapshot endpoint for companies-house.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__profile
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/pew/survey-data:
+    get:
+      summary: 'Supplemental: survey-data'
+      description: 'Supplemental data snapshot endpoint for pew.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__survey_data
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/pew/attitudes-snapshot:
+    get:
+      summary: 'Supplemental: attitudes-snapshot'
+      description: 'Supplemental data snapshot endpoint for pew.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__attitudes_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/oecd/economic-snapshot:
+    get:
+      summary: 'Supplemental: economic-snapshot'
+      description: 'Supplemental data snapshot endpoint for oecd.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: getV1SupplementalOecdEconomicSnapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+      x-operation-id-source: normalized
+      x-operation-id-original: supplemental__economic_snapshot
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/openalex/research-trends:
+    get:
+      summary: 'Supplemental: research-trends'
+      description: 'Supplemental data snapshot endpoint for openalex.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: getV1SupplementalOpenalexResearchTrends
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+      x-operation-id-source: normalized
+      x-operation-id-original: supplemental__research_trends
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/semantic-scholar/research-influence:
+    get:
+      summary: 'Supplemental: research-influence'
+      description: 'Supplemental data snapshot endpoint for semantic-scholar.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__research_influence
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/sports/context:
+    post:
+      summary: 'Supplemental: context'
+      description: 'Supplemental data snapshot endpoint for sports.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__context
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/events/context:
+    post:
+      summary: 'Supplemental: context'
+      description: 'Supplemental data snapshot endpoint for events.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: postV1SupplementalEventsContext
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+      x-operation-id-source: normalized
+      x-operation-id-original: supplemental__context
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/youtube/context:
+    post:
+      summary: 'Supplemental: context'
+      description: 'Supplemental data snapshot endpoint for youtube.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: postV1SupplementalYoutubeContext
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+      x-operation-id-source: normalized
+      x-operation-id-original: supplemental__context
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/cbs/nl-buurt:
+    get:
+      summary: 'Supplemental: nl-buurt'
+      description: 'Supplemental data snapshot endpoint for cbs.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__nl_buurt
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/pdok/bag-snapshot:
+    get:
+      summary: 'Supplemental: bag-snapshot'
+      description: 'Supplemental data snapshot endpoint for pdok.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__bag_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/cbs/nl-crime:
+    get:
+      summary: 'Supplemental: nl-crime'
+      description: 'Supplemental data snapshot endpoint for cbs.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__nl_crime
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/luchtmeetnet/snapshot:
+    get:
+      summary: 'Supplemental: snapshot'
+      description: 'Supplemental data snapshot endpoint for luchtmeetnet.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: getV1SupplementalLuchtmeetnetSnapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+      x-operation-id-source: normalized
+      x-operation-id-original: supplemental__snapshot
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/police-uk/snapshot:
+    get:
+      summary: 'Supplemental: snapshot'
+      description: 'Supplemental data snapshot endpoint for police-uk.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: getV1SupplementalPoliceUkSnapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+      x-operation-id-source: normalized
+      x-operation-id-original: supplemental__snapshot
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/epc/snapshot:
+    get:
+      summary: 'Supplemental: snapshot'
+      description: 'Supplemental data snapshot endpoint for epc.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: getV1SupplementalEpcSnapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+      x-operation-id-source: normalized
+      x-operation-id-original: supplemental__snapshot
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/acs/tract-snapshot:
+    get:
+      summary: 'Supplemental: tract-snapshot'
+      description: 'Supplemental data snapshot endpoint for acs.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__tract_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/airnow/snapshot:
+    get:
+      summary: 'Supplemental: snapshot'
+      description: 'Supplemental data snapshot endpoint for airnow.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: getV1SupplementalAirnowSnapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+      x-operation-id-source: normalized
+      x-operation-id-original: supplemental__snapshot
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/nasa/eonet:
+    get:
+      summary: 'Supplemental: eonet'
+      description: 'Supplemental data snapshot endpoint for nasa.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__eonet
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/nasa/power:
+    get:
+      summary: 'Supplemental: power'
+      description: 'Supplemental data snapshot endpoint for nasa.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__power
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/nasa/techtransfer:
+    get:
+      summary: 'Supplemental: techtransfer'
+      description: 'Supplemental data snapshot endpoint for nasa.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__techtransfer
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/fbi/crime-snapshot:
+    get:
+      summary: 'Supplemental: crime-snapshot'
+      description: 'Supplemental data snapshot endpoint for fbi.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__crime_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/statcan/census-snapshot:
+    get:
+      summary: 'Supplemental: census-snapshot'
+      description: 'Supplemental data snapshot endpoint for statcan.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__census_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/ons/neighbourhood-snapshot:
+    get:
+      summary: 'Supplemental: neighbourhood-snapshot'
+      description: 'Supplemental data snapshot endpoint for ons.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__neighbourhood_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/hud/snapshot:
+    get:
+      summary: 'Supplemental: snapshot'
+      description: 'Supplemental data snapshot endpoint for hud.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: getV1SupplementalHudSnapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+      x-operation-id-source: normalized
+      x-operation-id-original: supplemental__snapshot
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/msc/aqhi-snapshot:
+    get:
+      summary: 'Supplemental: aqhi-snapshot'
+      description: 'Supplemental data snapshot endpoint for msc.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__aqhi_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/predictions/context:
+    post:
+      summary: 'Supplemental: context'
+      description: 'Supplemental data snapshot endpoint for predictions.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: postV1SupplementalPredictionsContext
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+      x-operation-id-source: normalized
+      x-operation-id-original: supplemental__context
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/seatgeek/context:
+    post:
+      summary: 'Supplemental: context'
+      description: 'Supplemental data snapshot endpoint for seatgeek.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: postV1SupplementalSeatgeekContext
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+      x-operation-id-source: normalized
+      x-operation-id-original: supplemental__context
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/finance/market-snapshot:
+    post:
+      summary: 'Supplemental: market-snapshot'
+      description: 'Supplemental data snapshot endpoint for finance.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__market_snapshot
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/finance/profile:
+    post:
+      summary: 'Supplemental: profile'
+      description: 'Supplemental data snapshot endpoint for finance.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: postV1SupplementalFinanceProfile
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+      x-operation-id-source: normalized
+      x-operation-id-original: supplemental__profile
+    servers:
+    - url: https://api.fodda.ai
+  /v1/supplemental/admin/probe:
+    post:
+      summary: 'Supplemental: probe'
+      description: 'Supplemental data snapshot endpoint for admin.
+
+
+        Price: $2.50 (billed as standalone_supplemental)'
+      operationId: supplemental__probe
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_supplemental
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Supplemental
+    servers:
+    - url: https://api.fodda.ai
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        requestId:
+          type: string
+        schema_version:
+          type: string
+        search_path:
+          type: string
+        deterministic:
+          type: boolean
+        dataStatus:
+          type: string
+        rows:
+          type: array
+          items:
+            type: object
+            properties:
+              rowId:
+                type: string
+              rowName:
+                type: string
+              rowSummary:
+                type: string
+              _score:
+                type: number
+        meta:
+          type: object
+          properties:
+            decision:
+              type: string
+            usage:
+              type: object
+              properties:
+                total_billable_units:
+                  type: integer
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: X-API-Key
+      in: header
+      description: Required for all endpoints unless marked public.
+    stripeSPT:
+      type: http
+      scheme: bearer
+      description: 'Stripe Shared Payment Token (MPP). Pass an SPT obtained from Stripe Link via Authorization: Bearer spt_xxx.'
+x-refined-from:
+- fodda-ai-openapi.json
+- fodda-ai-openapi.yml

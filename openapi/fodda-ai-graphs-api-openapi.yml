@@ -1,0 +1,682 @@
+openapi: 3.2.0
+info:
+  title: Fodda Ai Graphs API
+  version: '1.0'
+  description: 'Operations tagged Graphs across 4 of this provider''s published API definitions: fodda-ai-context-delivery-openapi.json, fodda-ai-openapi.json, fodda-ai-context-delivery-openapi.yml, fodda-ai-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.fodda.ai/v1
+- url: https://api.fodda.ai
+tags:
+- name: Graphs
+paths:
+  /graphs:
+    get:
+      summary: List available context graphs
+      description: Returns a registry of all available knowledge graphs with metadata including curator, domain, update frequency, and record counts.
+      responses:
+        '200':
+          description: A stable list of graphs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Graph'
+      tags:
+      - Graphs
+      operationId: getGraphs
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.fodda.ai/v1
+  /graphs/{graph_id}/search:
+    post:
+      summary: Graph Search
+      description: Hybrid vector + keyword search across a knowledge graph. Accepts semantic queries and returns ranked trend nodes with relevance scores.
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Graph identifier (e.g., retail, beauty, sports, sic, pew, ce-design, fashion)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - query
+              properties:
+                query:
+                  type: string
+                limit:
+                  type: integer
+                  default: 10
+                  maximum: 50
+                use_semantic:
+                  type: boolean
+                  default: true
+      responses:
+        '200':
+          description: Ranked search results with relevance scores
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      tags:
+      - Graphs
+      operationId: postGraphsByGraphIdSearch
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.fodda.ai/v1
+  /graphs/{graph_id}/nodes/{node_id}:
+    get:
+      summary: Node Retrieval
+      description: Get a single node's full metadata and properties.
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: node_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Complete node property set
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      tags:
+      - Graphs
+      operationId: getGraphsByGraphIdNodesByNodeId
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.fodda.ai/v1
+  /graphs/{graph_id}/neighbors:
+    post:
+      summary: Neighbor Traversal
+      description: 'Explore connected nodes from a starting node. Depth-limited graph traversal (max depth: 2).'
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Connected nodes and relationships
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      tags:
+      - Graphs
+      operationId: postGraphsByGraphIdNeighbors
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.fodda.ai/v1
+  /graphs/{graph_id}/evidence:
+    post:
+      summary: Evidence Retrieval
+      description: Fetch source articles and signals backing a trend.
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Linked source articles, case studies, and structured evidence
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      tags:
+      - Graphs
+      operationId: postGraphsByGraphIdEvidence
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.fodda.ai/v1
+  /graphs/{graph_id}/labels/{label}/values:
+    get:
+      summary: Filter Values
+      description: Discover available values for a label or category (e.g., Technology, Audience, RetailerType).
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: label
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Valid filter values
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      tags:
+      - Graphs
+      operationId: getGraphsByGraphIdLabelsByLabelValues
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.fodda.ai/v1
+  /graphs/{graph_id}/adjacent:
+    get:
+      summary: Adjacent Trend Discovery
+      description: Find semantically similar trends via vector cosine similarity.
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Trends ranked by cosine similarity to a seed node
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      tags:
+      - Graphs
+      operationId: getGraphsByGraphIdAdjacent
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.fodda.ai/v1
+  /graphs/{graph_id}/statistics:
+    get:
+      summary: Statistics Search
+      description: Semantic search over curated statistics and data points (Metric nodes) with parent trend context.
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: query
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 10
+          maximum: 50
+      - name: min_score
+        in: query
+        schema:
+          type: number
+          default: 0.7
+      - name: include_signals
+        in: query
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Statistics with parent trend context
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      tags:
+      - Graphs
+      operationId: getGraphsByGraphIdStatistics
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.fodda.ai/v1
+  /v1/graphs/catalog:
+    get:
+      summary: Graph registry catalog
+      description: 'Get all registry graphs.
+
+
+        Price: Free ($0)'
+      operationId: graph_registry_catalog
+      x-fodda-price-usd: 0
+      x-fodda-billing-type: free
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_2'
+      security: []
+      tags:
+      - Graphs
+    servers:
+    - url: https://api.fodda.ai
+  /v1/graphs/mine:
+    get:
+      summary: Get active graphs list
+      description: 'Get graphs active on user account.
+
+
+        Price: Free ($0)'
+      operationId: get_active_graphs_list
+      x-fodda-price-usd: 0
+      x-fodda-billing-type: free
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_2'
+      security: []
+      tags:
+      - Graphs
+    servers:
+    - url: https://api.fodda.ai
+  /v1/graphs:
+    get:
+      summary: List available context graphs
+      description: 'List available knowledge graphs.
+
+
+        Price: $0.50 (billed as search)'
+      operationId: list_available_context_graphs
+      x-fodda-price-usd: 0.5
+      x-fodda-billing-type: search
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_2'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Graphs
+    servers:
+    - url: https://api.fodda.ai
+  /v1/graphs/{graph_id}/nodes/{node_id}:
+    get:
+      summary: Get node properties
+      description: 'Retrieve complete properties of a graph node.
+
+
+        Price: Free ($0)'
+      operationId: get_node_properties
+      x-fodda-price-usd: 0
+      x-fodda-billing-type: free
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: node_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_2'
+      security: []
+      tags:
+      - Graphs
+    servers:
+    - url: https://api.fodda.ai
+  /v1/graphs/{graph_id}/neighbors:
+    post:
+      summary: Traverse neighbors
+      description: 'Depth-limited relationship exploration.
+
+
+        Price: Free ($0)'
+      operationId: traverse_neighbors
+      x-fodda-price-usd: 0
+      x-fodda-billing-type: free
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_2'
+      security: []
+      tags:
+      - Graphs
+    servers:
+    - url: https://api.fodda.ai
+  /v1/graphs/{graph_id}/adjacent:
+    get:
+      summary: Discover adjacent trends
+      description: 'Surfaces similar trends in the embeddings space.
+
+
+        Price: $7.50 (billed as adjacent_trends)'
+      operationId: discover_adjacent_trends
+      x-fodda-price-usd: 7.5
+      x-fodda-billing-type: adjacent_trends
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_2'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Graphs
+    servers:
+    - url: https://api.fodda.ai
+  /v1/graphs/{graph_id}/search:
+    post:
+      summary: Search knowledge graph
+      description: 'Search trends and signals semantically.
+
+
+        Price: $7.50 (billed as topic_research)'
+      operationId: search_knowledge_graph
+      x-fodda-price-usd: 7.5
+      x-fodda-billing-type: topic_research
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_2'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Graphs
+    servers:
+    - url: https://api.fodda.ai
+  /v1/graphs/{graph_id}/evidence:
+    post:
+      summary: Get evidence
+      description: 'Get source articles and signals for a trend.
+
+
+        Price: $2.50 (billed as standalone_evidence)'
+      operationId: get_evidence
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_evidence
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_2'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Graphs
+    servers:
+    - url: https://api.fodda.ai
+  /v1/graphs/{graph_id}/labels/{label}/values:
+    get:
+      summary: List label category values
+      description: 'Enumerate all unique filter values.
+
+
+        Price: Free ($0)'
+      operationId: list_label_category_values
+      x-fodda-price-usd: 0
+      x-fodda-billing-type: free
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: label
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_2'
+      security: []
+      tags:
+      - Graphs
+    servers:
+    - url: https://api.fodda.ai
+  /v1/graphs/{graph_id}/statistics:
+    get:
+      summary: Search statistics
+      description: 'Get metrics and expert quotes.
+
+
+        Price: $2.50 (billed as standalone_statistics)'
+      operationId: search_statistics
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: standalone_statistics
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse_2'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Graphs
+    servers:
+    - url: https://api.fodda.ai
+components:
+  schemas:
+    Graph:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        curator:
+          type: string
+        domain:
+          type: string
+    ApiResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        requestId:
+          type: string
+        schema_version:
+          type: string
+        search_path:
+          type: string
+          description: vector or keyword
+        deterministic:
+          type: boolean
+        dataStatus:
+          type: string
+          description: TREND_MATCH, NO_MATCH, etc.
+        rows:
+          type: array
+          items:
+            type: object
+            properties:
+              rowId:
+                type: string
+              rowName:
+                type: string
+              rowSummary:
+                type: string
+              _score:
+                type: number
+        meta:
+          type: object
+          properties:
+            decision:
+              type: string
+            usage:
+              type: object
+              properties:
+                total_billable_units:
+                  type: integer
+    ApiResponse_2:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        requestId:
+          type: string
+        schema_version:
+          type: string
+        search_path:
+          type: string
+        deterministic:
+          type: boolean
+        dataStatus:
+          type: string
+        rows:
+          type: array
+          items:
+            type: object
+            properties:
+              rowId:
+                type: string
+              rowName:
+                type: string
+              rowSummary:
+                type: string
+              _score:
+                type: number
+        meta:
+          type: object
+          properties:
+            decision:
+              type: string
+            usage:
+              type: object
+              properties:
+                total_billable_units:
+                  type: integer
+    ApiResponse_3:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        requestId:
+          type: string
+        schema_version:
+          type: string
+        search_path:
+          type: string
+        deterministic:
+          type: boolean
+        dataStatus:
+          type: string
+        rows:
+          type: array
+          items:
+            type: object
+            properties:
+              rowId:
+                type: string
+              rowName:
+                type: string
+              rowSummary:
+                type: string
+              _score:
+                type: number
+        meta:
+          type: object
+          properties:
+            decision:
+              type: string
+            usage:
+              type: object
+              properties:
+                total_billable_units:
+                  type: integer
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: X-API-Key
+      in: header
+      description: Required for all endpoints except POST /v1/psfk/overview (public).
+    stripeSPT:
+      type: http
+      scheme: bearer
+      description: 'Stripe Shared Payment Token (MPP). Pass an SPT obtained from Stripe Link via Authorization: Bearer spt_xxx.'
+x-refined-from:
+- fodda-ai-context-delivery-openapi.json
+- fodda-ai-openapi.json
+- fodda-ai-context-delivery-openapi.yml
+- fodda-ai-openapi.yml

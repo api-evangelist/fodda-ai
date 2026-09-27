@@ -1,0 +1,90 @@
+openapi: 3.2.0
+info:
+  title: Fodda Ai Psfk API
+  version: 1.2.0
+  description: 'Operations tagged Psfk across 2 of this provider''s published API definitions: fodda-ai-context-delivery-openapi.json, fodda-ai-context-delivery-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.fodda.ai/v1
+tags:
+- name: Psfk
+paths:
+  /psfk/overview:
+    post:
+      summary: PSFK Macro Overview (Public — no API key required)
+      description: LLM-synthesized executive summary of macro trends. Rate limited to 10 req/min.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                industry:
+                  type: string
+                sector:
+                  type: string
+                region:
+                  type: string
+      responses:
+        '200':
+          description: Executive summary with meta patterns and emerging signals
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      tags:
+      - Psfk
+      operationId: postPsfkOverview
+      x-operation-id-source: derived
+    servers:
+    - url: https://api.fodda.ai/v1
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        requestId:
+          type: string
+        schema_version:
+          type: string
+        search_path:
+          type: string
+          description: vector or keyword
+        deterministic:
+          type: boolean
+        dataStatus:
+          type: string
+          description: TREND_MATCH, NO_MATCH, etc.
+        rows:
+          type: array
+          items:
+            type: object
+            properties:
+              rowId:
+                type: string
+              rowName:
+                type: string
+              rowSummary:
+                type: string
+              _score:
+                type: number
+        meta:
+          type: object
+          properties:
+            decision:
+              type: string
+            usage:
+              type: object
+              properties:
+                total_billable_units:
+                  type: integer
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: X-API-Key
+      in: header
+      description: Required for all endpoints except POST /v1/psfk/overview (public).
+x-refined-from:
+- fodda-ai-context-delivery-openapi.json
+- fodda-ai-context-delivery-openapi.yml

@@ -1,0 +1,85 @@
+openapi: 3.2.0
+info:
+  title: Fodda Ai Accounts API
+  version: 1.7.0
+  description: 'Operations tagged Accounts across 2 of this provider''s published API definitions: fodda-ai-openapi.json, fodda-ai-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.fodda.ai
+tags:
+- name: Accounts
+paths:
+  /v1/accounts/trial-upgrade:
+    post:
+      summary: Upgrade account status
+      description: 'Upgrade trial account.
+
+
+        Price: Free ($0)'
+      operationId: upgrade_account_status
+      x-fodda-price-usd: 0
+      x-fodda-billing-type: free
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security: []
+      tags:
+      - Accounts
+    servers:
+    - url: https://api.fodda.ai
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        requestId:
+          type: string
+        schema_version:
+          type: string
+        search_path:
+          type: string
+        deterministic:
+          type: boolean
+        dataStatus:
+          type: string
+        rows:
+          type: array
+          items:
+            type: object
+            properties:
+              rowId:
+                type: string
+              rowName:
+                type: string
+              rowSummary:
+                type: string
+              _score:
+                type: number
+        meta:
+          type: object
+          properties:
+            decision:
+              type: string
+            usage:
+              type: object
+              properties:
+                total_billable_units:
+                  type: integer
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: X-API-Key
+      in: header
+      description: Required for all endpoints unless marked public.
+    stripeSPT:
+      type: http
+      scheme: bearer
+      description: 'Stripe Shared Payment Token (MPP). Pass an SPT obtained from Stripe Link via Authorization: Bearer spt_xxx.'
+x-refined-from:
+- fodda-ai-openapi.json
+- fodda-ai-openapi.yml

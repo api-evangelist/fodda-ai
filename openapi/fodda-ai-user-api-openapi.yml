@@ -1,0 +1,222 @@
+openapi: 3.2.0
+info:
+  title: Fodda Ai User API
+  version: 1.7.0
+  description: 'Operations tagged User across 2 of this provider''s published API definitions: fodda-ai-openapi.json, fodda-ai-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.fodda.ai
+tags:
+- name: User
+paths:
+  /v1/user/context:
+    post:
+      summary: Set user research context profile
+      description: 'Set custom profile filters.
+
+
+        Price: $0.50 (billed as url_context)'
+      operationId: set_user_research_context_profile
+      x-fodda-price-usd: 0.5
+      x-fodda-billing-type: url_context
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - User
+    servers:
+    - url: https://api.fodda.ai
+  /v1/user/usage/export:
+    get:
+      summary: Bulk export query and usage history
+      description: 'Export customer query usage history as CSV or JSON for accounting, finance, and agentic workflows.
+
+
+        Price: Free ($0)'
+      operationId: bulk_export_query_and_usage_history
+      x-fodda-price-usd: 0
+      x-fodda-billing-type: free
+      parameters:
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - csv
+          - json
+          default: csv
+        description: Export format
+      - name: startDate
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+        description: Start date filter (YYYY-MM-DD)
+      - name: endDate
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+        description: End date filter (YYYY-MM-DD)
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security: []
+      tags:
+      - User
+    servers:
+    - url: https://api.fodda.ai
+  /v1/user/invoices/export:
+    get:
+      summary: Bulk export consolidated invoices and billing summary
+      description: 'Export consolidated Stripe and Lava billing transactions as CSV.
+
+
+        Price: Free ($0)'
+      operationId: bulk_export_consolidated_invoices_and_billing_summary
+      x-fodda-price-usd: 0
+      x-fodda-billing-type: free
+      parameters:
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - csv
+          - json
+          default: csv
+        description: Export format
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security: []
+      tags:
+      - User
+    servers:
+    - url: https://api.fodda.ai
+  /v1/user/briefings/export:
+    get:
+      summary: Bulk export research briefings and deliverables
+      description: 'Export all completed analyst research briefings and consult sessions with YAML frontmatter as a ZIP archive or JSON payload.
+
+
+        Price: Free ($0)'
+      operationId: bulk_export_research_briefings_and_deliverables
+      x-fodda-price-usd: 0
+      x-fodda-billing-type: free
+      parameters:
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - zip
+          - json
+          default: zip
+        description: Export format
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security: []
+      tags:
+      - User
+    servers:
+    - url: https://api.fodda.ai
+  /v1/user/preferences/toggle:
+    post:
+      summary: Toggle user preference setting
+      description: 'Set settings.
+
+
+        Price: Free ($0)'
+      operationId: toggle_user_preference_setting
+      x-fodda-price-usd: 0
+      x-fodda-billing-type: free
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security: []
+      tags:
+      - User
+    servers:
+    - url: https://api.fodda.ai
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        requestId:
+          type: string
+        schema_version:
+          type: string
+        search_path:
+          type: string
+        deterministic:
+          type: boolean
+        dataStatus:
+          type: string
+        rows:
+          type: array
+          items:
+            type: object
+            properties:
+              rowId:
+                type: string
+              rowName:
+                type: string
+              rowSummary:
+                type: string
+              _score:
+                type: number
+        meta:
+          type: object
+          properties:
+            decision:
+              type: string
+            usage:
+              type: object
+              properties:
+                total_billable_units:
+                  type: integer
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: X-API-Key
+      in: header
+      description: Required for all endpoints unless marked public.
+    stripeSPT:
+      type: http
+      scheme: bearer
+      description: 'Stripe Shared Payment Token (MPP). Pass an SPT obtained from Stripe Link via Authorization: Bearer spt_xxx.'
+x-refined-from:
+- fodda-ai-openapi.json
+- fodda-ai-openapi.yml

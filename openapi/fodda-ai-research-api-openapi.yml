@@ -1,0 +1,392 @@
+openapi: 3.2.0
+info:
+  title: Fodda Ai Research API
+  version: 1.7.0
+  description: 'Operations tagged Research across 2 of this provider''s published API definitions: fodda-ai-openapi.json, fodda-ai-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.fodda.ai
+tags:
+- name: Research
+paths:
+  /v1/research/pricing:
+    get:
+      summary: Get Pricing map
+      description: 'Get canonical price map for billing.
+
+
+        Price: Free ($0)'
+      operationId: get_pricing_map
+      x-fodda-price-usd: 0
+      x-fodda-billing-type: free
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security: []
+      tags:
+      - Research
+    servers:
+    - url: https://api.fodda.ai
+  /v1/research/offerings:
+    get:
+      summary: Get research offerings catalog
+      description: 'List all research tools available.
+
+
+        Price: Free ($0)'
+      operationId: get_research_offerings_catalog
+      x-fodda-price-usd: 0
+      x-fodda-billing-type: free
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security: []
+      tags:
+      - Research
+    servers:
+    - url: https://api.fodda.ai
+  /v1/research/deep-dive:
+    post:
+      summary: Launch Autonomous Research Deep Dive
+      description: 'Trigger the autonomous research agent to explore a topic, search graphs, and synthesize a report.
+
+
+        Price: $10–$15 (billed as deep_research_light/heavy)'
+      operationId: launch_autonomous_research_deep_dive
+      x-fodda-price-usd: 10
+      x-fodda-billing-type: deep_research_light/heavy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - query
+              properties:
+                query:
+                  type: string
+                  description: The research prompt
+                mode:
+                  type: string
+                  enum:
+                  - fast
+                  - comprehensive
+                  default: fast
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Research
+    servers:
+    - url: https://api.fodda.ai
+  /v1/research/deep-dive/status/{job_id}:
+    get:
+      summary: Check Deep Research Status
+      description: 'Check status of deep research and return report when completed.
+
+
+        Price: $10–$15 (billed as deep_research_light/heavy)'
+      operationId: check_deep_research_status
+      x-fodda-price-usd: 10
+      x-fodda-billing-type: deep_research_light/heavy
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Research
+    servers:
+    - url: https://api.fodda.ai
+  /v1/research/chat:
+    post:
+      summary: Research chat turn
+      description: 'Persist chat state and get next turn response.
+
+
+        Price: $1.50 (billed as research_chat)'
+      operationId: research_chat_turn
+      x-fodda-price-usd: 1.5
+      x-fodda-billing-type: research_chat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - sessionId
+              - message
+              properties:
+                sessionId:
+                  type: string
+                message:
+                  type: string
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Research
+    servers:
+    - url: https://api.fodda.ai
+  /v1/research/stream:
+    get:
+      summary: Streaming research search
+      description: 'Run search and stream output using Server-Sent Events.
+
+
+        Price: $1.50 (billed as research_stream)'
+      operationId: streaming_research_search
+      x-fodda-price-usd: 1.5
+      x-fodda-billing-type: research_stream
+      parameters:
+      - name: query
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Research
+    servers:
+    - url: https://api.fodda.ai
+  /v1/research/schedules:
+    post:
+      summary: Create scheduled Briefing
+      description: 'Create a subscription schedule for brand or topic briefings.
+
+
+        Price: $10.00 (billed as weekly_tracker)'
+      operationId: create_scheduled_briefing
+      x-fodda-price-usd: 10
+      x-fodda-billing-type: weekly_tracker
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - topic
+              - frequency
+              properties:
+                topic:
+                  type: string
+                frequency:
+                  type: string
+                  enum:
+                  - daily
+                  - weekly
+                email:
+                  type: string
+                slack_webhook:
+                  type: string
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Research
+    get:
+      summary: List scheduled briefings
+      description: 'Get all configured schedules.
+
+
+        Price: Free ($0)'
+      operationId: list_scheduled_briefings
+      x-fodda-price-usd: 0
+      x-fodda-billing-type: free
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security: []
+      tags:
+      - Research
+    servers:
+    - url: https://api.fodda.ai
+  /v1/research/schedules/{schedule_id}:
+    delete:
+      summary: Cancel scheduled briefing
+      description: 'Delete briefing schedule.
+
+
+        Price: Free ($0)'
+      operationId: cancel_scheduled_briefing
+      x-fodda-price-usd: 0
+      x-fodda-billing-type: free
+      parameters:
+      - name: schedule_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security: []
+      tags:
+      - Research
+    patch:
+      summary: Modify scheduled briefing
+      description: 'Update brief schedule configuration.
+
+
+        Price: Free ($0)'
+      operationId: modify_scheduled_briefing
+      x-fodda-price-usd: 0
+      x-fodda-billing-type: free
+      parameters:
+      - name: schedule_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security: []
+      tags:
+      - Research
+    servers:
+    - url: https://api.fodda.ai
+  /v1/research/schedules/{schedule_id}/runs:
+    get:
+      summary: Get scheduled briefing runs
+      description: 'Retrieve execution history of runs.
+
+
+        Price: Free ($0)'
+      operationId: get_scheduled_briefing_runs
+      x-fodda-price-usd: 0
+      x-fodda-billing-type: free
+      parameters:
+      - name: schedule_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security: []
+      tags:
+      - Research
+    servers:
+    - url: https://api.fodda.ai
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        requestId:
+          type: string
+        schema_version:
+          type: string
+        search_path:
+          type: string
+        deterministic:
+          type: boolean
+        dataStatus:
+          type: string
+        rows:
+          type: array
+          items:
+            type: object
+            properties:
+              rowId:
+                type: string
+              rowName:
+                type: string
+              rowSummary:
+                type: string
+              _score:
+                type: number
+        meta:
+          type: object
+          properties:
+            decision:
+              type: string
+            usage:
+              type: object
+              properties:
+                total_billable_units:
+                  type: integer
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: X-API-Key
+      in: header
+      description: Required for all endpoints unless marked public.
+    stripeSPT:
+      type: http
+      scheme: bearer
+      description: 'Stripe Shared Payment Token (MPP). Pass an SPT obtained from Stripe Link via Authorization: Bearer spt_xxx.'
+x-refined-from:
+- fodda-ai-openapi.json
+- fodda-ai-openapi.yml

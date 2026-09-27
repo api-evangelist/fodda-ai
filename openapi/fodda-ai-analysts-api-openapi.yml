@@ -1,0 +1,145 @@
+openapi: 3.2.0
+info:
+  title: Fodda Ai Analysts API
+  version: 1.7.0
+  description: 'Operations tagged Analysts across 2 of this provider''s published API definitions: fodda-ai-openapi.json, fodda-ai-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.fodda.ai
+tags:
+- name: Analysts
+paths:
+  /v1/analysts:
+    get:
+      summary: List synthetic expert analysts
+      description: 'Retrieve registered expert analyst personas.
+
+
+        Price: Free ($0)'
+      operationId: list_synthetic_expert_analysts
+      x-fodda-price-usd: 0
+      x-fodda-billing-type: free
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security: []
+      tags:
+      - Analysts
+    servers:
+    - url: https://api.fodda.ai
+  /v1/analysts/brands:
+    get:
+      summary: List covered analyst brands
+      description: 'Get brands covered by specialists.
+
+
+        Price: Free ($0)'
+      operationId: list_covered_analyst_brands
+      x-fodda-price-usd: 0
+      x-fodda-billing-type: free
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security: []
+      tags:
+      - Analysts
+    servers:
+    - url: https://api.fodda.ai
+  /v1/analysts/consult:
+    post:
+      summary: Consult analyst turn
+      description: 'Ask a synthetic expert analyst a question.
+
+
+        Price: $2.50 (billed as expert_agent)'
+      operationId: consult_analyst_turn
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: expert_agent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - analyst_id
+              - query
+              properties:
+                analyst_id:
+                  type: string
+                query:
+                  type: string
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Analysts
+    servers:
+    - url: https://api.fodda.ai
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        requestId:
+          type: string
+        schema_version:
+          type: string
+        search_path:
+          type: string
+        deterministic:
+          type: boolean
+        dataStatus:
+          type: string
+        rows:
+          type: array
+          items:
+            type: object
+            properties:
+              rowId:
+                type: string
+              rowName:
+                type: string
+              rowSummary:
+                type: string
+              _score:
+                type: number
+        meta:
+          type: object
+          properties:
+            decision:
+              type: string
+            usage:
+              type: object
+              properties:
+                total_billable_units:
+                  type: integer
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: X-API-Key
+      in: header
+      description: Required for all endpoints unless marked public.
+    stripeSPT:
+      type: http
+      scheme: bearer
+      description: 'Stripe Shared Payment Token (MPP). Pass an SPT obtained from Stripe Link via Authorization: Bearer spt_xxx.'
+x-refined-from:
+- fodda-ai-openapi.json
+- fodda-ai-openapi.yml

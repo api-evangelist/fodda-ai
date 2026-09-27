@@ -1,0 +1,181 @@
+openapi: 3.2.0
+info:
+  title: Fodda Ai Search API
+  version: 1.7.0
+  description: 'Operations tagged Search across 2 of this provider''s published API definitions: fodda-ai-openapi.json, fodda-ai-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.fodda.ai
+tags:
+- name: Search
+paths:
+  /v1/search/domain:
+    post:
+      summary: Domain Intelligence parallel search
+      description: 'Search across all PSFK domain graphs.
+
+
+        Price: $2.50 (billed as domain_intelligence)'
+      operationId: domain_intelligence_parallel_search
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: domain_intelligence
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Search
+    servers:
+    - url: https://api.fodda.ai
+  /v1/search/expert:
+    post:
+      summary: Expert Intelligence parallel search
+      description: 'Search across specialist/framework graphs.
+
+
+        Price: $2.50 (billed as expert_intelligence)'
+      operationId: expert_intelligence_parallel_search
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: expert_intelligence
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Search
+    servers:
+    - url: https://api.fodda.ai
+  /v1/search/report:
+    post:
+      summary: Report Intelligence parallel search
+      description: 'Search across industry research report graphs.
+
+
+        Price: $2.50 (billed as report_intelligence)'
+      operationId: report_intelligence_parallel_search
+      x-fodda-price-usd: 2.5
+      x-fodda-billing-type: report_intelligence
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Search
+    servers:
+    - url: https://api.fodda.ai
+  /v1/search/filtered:
+    post:
+      summary: Filtered semantic search
+      description: 'Semantic search with metadata filter options.
+
+
+        Price: $0.50 (billed as search)'
+      operationId: filtered_semantic_search
+      x-fodda-price-usd: 0.5
+      x-fodda-billing-type: search
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Search
+    servers:
+    - url: https://api.fodda.ai
+  /v1/search/filters:
+    get:
+      summary: List search filters keys
+      description: 'Returns available filters.
+
+
+        Price: Free ($0)'
+      operationId: list_search_filters_keys
+      x-fodda-price-usd: 0
+      x-fodda-billing-type: free
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security: []
+      tags:
+      - Search
+    servers:
+    - url: https://api.fodda.ai
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        requestId:
+          type: string
+        schema_version:
+          type: string
+        search_path:
+          type: string
+        deterministic:
+          type: boolean
+        dataStatus:
+          type: string
+        rows:
+          type: array
+          items:
+            type: object
+            properties:
+              rowId:
+                type: string
+              rowName:
+                type: string
+              rowSummary:
+                type: string
+              _score:
+                type: number
+        meta:
+          type: object
+          properties:
+            decision:
+              type: string
+            usage:
+              type: object
+              properties:
+                total_billable_units:
+                  type: integer
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: X-API-Key
+      in: header
+      description: Required for all endpoints unless marked public.
+    stripeSPT:
+      type: http
+      scheme: bearer
+      description: 'Stripe Shared Payment Token (MPP). Pass an SPT obtained from Stripe Link via Authorization: Bearer spt_xxx.'
+x-refined-from:
+- fodda-ai-openapi.json
+- fodda-ai-openapi.yml

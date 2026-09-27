@@ -1,0 +1,129 @@
+openapi: 3.2.0
+info:
+  title: Fodda Ai Copilot API
+  version: 1.7.0
+  description: 'Operations tagged Copilot across 2 of this provider''s published API definitions: fodda-ai-openapi.json, fodda-ai-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.fodda.ai
+tags:
+- name: Copilot
+paths:
+  /copilot/search_insights:
+    post:
+      summary: Strategic Insight Retrieval (Copilot)
+      description: 'High-level trend and insight discovery optimized for Microsoft Copilot reasoning.
+
+
+        Price: Free ($0)'
+      operationId: strategic_insight_retrieval__copilot_
+      x-fodda-price-usd: 0
+      x-fodda-billing-type: free
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security: []
+      tags:
+      - Copilot
+    servers:
+    - url: https://api.fodda.ai
+  /copilot/get_evidence:
+    post:
+      summary: Evidence-Backed Grounding (Copilot)
+      description: 'Retrieve verifiable source articles and data points for grounding.
+
+
+        Price: Free ($0)'
+      operationId: evidence_backed_grounding__copilot_
+      x-fodda-price-usd: 0
+      x-fodda-billing-type: free
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security: []
+      tags:
+      - Copilot
+    servers:
+    - url: https://api.fodda.ai
+  /copilot/get_statistics:
+    post:
+      summary: Quantitative Statistics (Copilot)
+      description: 'Semantic search over metrics and expert quotes for Copilot.
+
+
+        Price: Free ($0)'
+      operationId: quantitative_statistics__copilot_
+      x-fodda-price-usd: 0
+      x-fodda-billing-type: free
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security: []
+      tags:
+      - Copilot
+    servers:
+    - url: https://api.fodda.ai
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        requestId:
+          type: string
+        schema_version:
+          type: string
+        search_path:
+          type: string
+        deterministic:
+          type: boolean
+        dataStatus:
+          type: string
+        rows:
+          type: array
+          items:
+            type: object
+            properties:
+              rowId:
+                type: string
+              rowName:
+                type: string
+              rowSummary:
+                type: string
+              _score:
+                type: number
+        meta:
+          type: object
+          properties:
+            decision:
+              type: string
+            usage:
+              type: object
+              properties:
+                total_billable_units:
+                  type: integer
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: X-API-Key
+      in: header
+      description: Required for all endpoints unless marked public.
+    stripeSPT:
+      type: http
+      scheme: bearer
+      description: 'Stripe Shared Payment Token (MPP). Pass an SPT obtained from Stripe Link via Authorization: Bearer spt_xxx.'
+x-refined-from:
+- fodda-ai-openapi.json
+- fodda-ai-openapi.yml

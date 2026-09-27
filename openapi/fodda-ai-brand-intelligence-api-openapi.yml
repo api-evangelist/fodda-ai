@@ -1,0 +1,93 @@
+openapi: 3.2.0
+info:
+  title: Fodda Ai Brand Intelligence API
+  version: 1.7.0
+  description: 'Operations tagged Brand Intelligence across 2 of this provider''s published API definitions: fodda-ai-openapi.json, fodda-ai-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.fodda.ai
+tags:
+- name: Brand Intelligence
+paths:
+  /v1/brand-intelligence/{brandName}:
+    post:
+      summary: Get Brand Intelligence profile
+      description: 'Consolidated brand signals dashboard.
+
+
+        Price: $10.00 (billed as brand_intelligence)'
+      operationId: get_brand_intelligence_profile
+      x-fodda-price-usd: 10
+      x-fodda-billing-type: brand_intelligence
+      parameters:
+      - name: brandName
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+      - apiKey: []
+      - stripeSPT: []
+      tags:
+      - Brand Intelligence
+    servers:
+    - url: https://api.fodda.ai
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        requestId:
+          type: string
+        schema_version:
+          type: string
+        search_path:
+          type: string
+        deterministic:
+          type: boolean
+        dataStatus:
+          type: string
+        rows:
+          type: array
+          items:
+            type: object
+            properties:
+              rowId:
+                type: string
+              rowName:
+                type: string
+              rowSummary:
+                type: string
+              _score:
+                type: number
+        meta:
+          type: object
+          properties:
+            decision:
+              type: string
+            usage:
+              type: object
+              properties:
+                total_billable_units:
+                  type: integer
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: X-API-Key
+      in: header
+      description: Required for all endpoints unless marked public.
+    stripeSPT:
+      type: http
+      scheme: bearer
+      description: 'Stripe Shared Payment Token (MPP). Pass an SPT obtained from Stripe Link via Authorization: Bearer spt_xxx.'
+x-refined-from:
+- fodda-ai-openapi.json
+- fodda-ai-openapi.yml

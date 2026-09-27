@@ -35,7 +35,7 @@ tags:
   - Institutional Data
   - MCP
   - A2A
-  - agent-native
+  - Agent-Native
   - Machine Payments
   - Company
 tags_raw:
@@ -53,130 +53,643 @@ tags_raw:
   - Machine Payments
   - Company
 apis:
-  - name: Fodda Context & Research API
-    description: >-
-      REST interface at api.fodda.ai for expert-curated knowledge graphs (search, node retrieval,
-      neighbor traversal, evidence, statistics, adjacent-trend discovery), autonomous deep research
-      (async job launch + status poll, SSE streaming search, research chat, scheduled briefings
-      delivered by email or Slack webhook), brand intelligence, synthetic and human expert analyst
-      consults, cross-company earnings intelligence, and 100+ supplemental institutional data
-      snapshots. OpenAPI 3.1.0 (info.version 1.7.0, 157 operations) served at
-      https://api.fodda.ai/openapi.json; every operation carries x-fodda-price-usd and
-      x-fodda-billing-type. Auth: X-API-Key header or a Stripe Shared Payment Token bearer via the
-      HTTP 402 Machine Payments Protocol flow; a public tier (health, pricing map, offerings,
-      graph catalog, JSON-LD graph preview) needs no credential.
-    humanURL: https://www.fodda.ai/api
-    baseURL: https://api.fodda.ai
-    tags:
-      - Knowledge Graph
-      - Trend Research
-      - Earnings Intelligence
-      - Brand Intelligence
-      - Institutional Data
-      - Machine Payments
-      - agent-native
-    tags_raw:
-      - Knowledge Graphs
-      - Trend Research
-      - Earnings Intelligence
-      - Brand Intelligence
-      - Institutional Data
-      - Machine Payments
-      - agent-native
-    properties:
-      - type: OpenAPI
-        url: openapi/fodda-ai-openapi.yml
-      - type: OpenAPI
-        name: Fodda Context & Research API (provider-hosted, api.fodda.ai)
-        url: https://api.fodda.ai/openapi.json
-      - type: OpenAPI
-        name: Fodda Context Delivery API (10-operation subset served from www.fodda.ai)
-        url: openapi/fodda-ai-context-delivery-openapi.yml
-      - type: OpenAPI
-        name: Fodda Context Delivery API (provider-hosted, www.fodda.ai)
-        url: https://www.fodda.ai/openapi.json
-      - type: Documentation
-        url: https://www.fodda.ai/api
-      - type: APIReference
-        url: https://www.fodda.ai/api
-      - type: GettingStarted
-        url: https://www.fodda.ai/connect-your-agent
-      - type: Authentication
-        url: authentication/fodda-ai-authentication.yml
-      - type: Conventions
-        url: conventions/fodda-ai-conventions.yml
-      - type: ErrorCatalog
-        url: errors/fodda-ai-problem-types.yml
-      - type: DataModel
-        url: data-model/fodda-ai-data-model.yml
-      - type: Overlay
-        url: overlays/fodda-ai-tags-overlay.yaml
-      - type: RateLimits
-        url: rate-limits/fodda-ai-rate-limits.yml
-      - type: Examples
-        url: examples/fodda-ai-examples.yml
-      - type: Webhooks
-        url: asyncapi/fodda-ai-event-surface.yml
-      - type: LLMsTxt
-        url: https://www.fodda.ai/llms.txt
-  - name: Fodda MCP Server
-    description: >-
-      Hosted Model Context Protocol server at mcp.fodda.ai exposing 53 tools (tools-manifest.json,
-      v1.46.79) over streamable-http (/mcp), SSE (/sse), a curated 17-tool Microsoft Copilot
-      endpoint (/copilot) and offering-scoped endpoints, plus a stdio package (npx -y fodda-mcp)
-      listed in the official MCP Registry as ai.fodda/mcp-server. Auth is OAuth 2.1 delegated to
-      clerk.fodda.ai (RFC 9728 protected-resource metadata on the MCP host, RFC 8414 authorization
-      server metadata with dynamic client registration, PKCE S256, device code) or an account API
-      key / personal connection URL. Anonymous tools/list returns 401 with a WWW-Authenticate
-      resource_metadata challenge, so live input schemas require authenticated introspection.
-    humanURL: https://www.fodda.ai/connect
-    baseURL: https://mcp.fodda.ai/mcp
-    tags:
-      - MCP
-      - agent-native
-      - Knowledge Graph
-      - Research
-    tags_raw:
-      - MCP
-      - agent-native
-      - Knowledge Graphs
-      - Research
-    properties:
-      - type: MCPServer
-        url: mcp/fodda-ai-mcp.yml
-      - type: MCPServer
-        name: Fodda MCP endpoint (Streamable HTTP)
-        url: https://mcp.fodda.ai/mcp
-      - type: ToolCrosswalk
-        url: mcp/fodda-ai-tool-crosswalk.yml
-      - type: OAuthScopes
-        url: scopes/fodda-ai-scopes.yml
-      - type: Documentation
-        url: https://www.fodda.ai/connect
-      - type: GettingStarted
-        url: https://www.fodda.ai/platform-integration-anthropic-claude
-  - name: Fodda Research Agent (A2A)
-    description: >-
-      Agent-to-Agent endpoint at mcp.fodda.ai/a2a (JSONRPC, A2A protocolVersion 0.3.0) discovered
-      from https://www.fodda.ai/.well-known/agent-card.json, declaring seven skills — brand
-      intelligence, trend search, deep research (async task, poll tasks/get), cross-company and
-      per-ticker earnings intelligence, expert consult, and commissioned deliverables. Outside
-      agents hand Fodda a natural-language research task and collect the cited result when ready.
-      Also listed on a2aregistry.org.
-    humanURL: https://www.fodda.ai/agents
-    baseURL: https://mcp.fodda.ai/a2a
-    tags:
-      - A2A
-      - agent-native
-      - Research
-    properties:
-      - type: AgentCard
-        url: a2a/fodda-ai-a2a.yml
-      - type: AgentCard
-        name: A2A Agent Card (provider-hosted)
-        url: https://www.fodda.ai/.well-known/agent-card.json
-      - type: Documentation
-        url: https://www.fodda.ai/agents
+- name: Fodda MCP Server
+  description: >-
+    Hosted Model Context Protocol server at mcp.fodda.ai exposing 53 tools (tools-manifest.json, v1.46.79)
+    over streamable-http (/mcp), SSE (/sse), a curated 17-tool Microsoft Copilot endpoint (/copilot) and
+    offering-scoped endpoints, plus a stdio package (npx -y fodda-mcp) listed in the official MCP Registry
+    as ai.fodda/mcp-server. Auth is OAuth 2.1 delegated to clerk.fodda.ai (RFC 9728 protected-resource
+    metadata on the MCP host, RFC 8414 authorization server metadata with dynamic client registration,
+    PKCE S256, device code) or an account API key / personal connection URL. Anonymous tools/list returns
+    401 with a WWW-Authenticate resource_metadata challenge, so live input schemas require authenticated
+    introspection.
+  humanURL: https://www.fodda.ai/connect
+  baseURL: https://mcp.fodda.ai/mcp
+  tags:
+  - MCP
+  - Agent-Native
+  - Knowledge Graph
+  - Research
+  tags_raw:
+  - MCP
+  - agent-native
+  - Knowledge Graphs
+  - Research
+  properties:
+  - type: MCPServer
+    url: mcp/fodda-ai-mcp.yml
+  - type: MCPServer
+    name: Fodda MCP endpoint (Streamable HTTP)
+    url: https://mcp.fodda.ai/mcp
+  - type: ToolCrosswalk
+    url: mcp/fodda-ai-tool-crosswalk.yml
+  - type: OAuthScopes
+    url: scopes/fodda-ai-scopes.yml
+  - type: Documentation
+    url: https://www.fodda.ai/connect
+  - type: GettingStarted
+    url: https://www.fodda.ai/platform-integration-anthropic-claude
+- name: Fodda Research Agent (A2A)
+  description: >-
+    Agent-to-Agent endpoint at mcp.fodda.ai/a2a (JSONRPC, A2A protocolVersion 0.3.0) discovered from https://www.fodda.ai/.well-known/agent-card.json,
+    declaring seven skills — brand intelligence, trend search, deep research (async task, poll tasks/get),
+    cross-company and per-ticker earnings intelligence, expert consult, and commissioned deliverables.
+    Outside agents hand Fodda a natural-language research task and collect the cited result when ready.
+    Also listed on a2aregistry.org.
+  humanURL: https://www.fodda.ai/agents
+  baseURL: https://mcp.fodda.ai/a2a
+  tags:
+  - A2A
+  - Agent-Native
+  - Research
+  tags_raw:
+  - A2A
+  - agent-native
+  - Research
+  properties:
+  - type: AgentCard
+    url: a2a/fodda-ai-a2a.yml
+  - type: AgentCard
+    name: A2A Agent Card (provider-hosted)
+    url: https://www.fodda.ai/.well-known/agent-card.json
+  - type: Documentation
+    url: https://www.fodda.ai/agents
+- aid: fodda-ai:fodda-ai-accounts-api
+  name: Fodda (PSFK) Accounts API
+  description: The Accounts API from Fodda (PSFK) — 1 operation(s) for accounts.
+  humanURL: https://www.fodda.ai/api
+  baseURL: https://api.fodda.ai
+  tags:
+  - Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/fodda-ai-accounts-api-openapi.yml
+  - type: Documentation
+    url: https://www.fodda.ai/api
+  - type: APIReference
+    url: https://www.fodda.ai/api
+  - type: GettingStarted
+    url: https://www.fodda.ai/connect-your-agent
+  - type: Authentication
+    url: authentication/fodda-ai-authentication.yml
+  - type: Conventions
+    url: conventions/fodda-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/fodda-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/fodda-ai-data-model.yml
+  - type: RateLimits
+    url: rate-limits/fodda-ai-rate-limits.yml
+  - type: Examples
+    url: examples/fodda-ai-examples.yml
+  - type: Webhooks
+    url: asyncapi/fodda-ai-event-surface.yml
+  - type: LLMsTxt
+    url: https://www.fodda.ai/llms.txt
+- aid: fodda-ai:fodda-ai-admin-api
+  name: Fodda (PSFK) Admin API
+  description: The Admin API from Fodda (PSFK) — 1 operation(s) for admin.
+  humanURL: https://www.fodda.ai/api
+  baseURL: https://api.fodda.ai
+  tags:
+  - Admin
+  properties:
+  - type: OpenAPI
+    url: openapi/fodda-ai-admin-api-openapi.yml
+  - type: Documentation
+    url: https://www.fodda.ai/api
+  - type: APIReference
+    url: https://www.fodda.ai/api
+  - type: GettingStarted
+    url: https://www.fodda.ai/connect-your-agent
+  - type: Authentication
+    url: authentication/fodda-ai-authentication.yml
+  - type: Conventions
+    url: conventions/fodda-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/fodda-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/fodda-ai-data-model.yml
+  - type: RateLimits
+    url: rate-limits/fodda-ai-rate-limits.yml
+  - type: Examples
+    url: examples/fodda-ai-examples.yml
+  - type: Webhooks
+    url: asyncapi/fodda-ai-event-surface.yml
+  - type: LLMsTxt
+    url: https://www.fodda.ai/llms.txt
+- aid: fodda-ai:fodda-ai-analysts-api
+  name: Fodda (PSFK) Analysts API
+  description: The Analysts API from Fodda (PSFK) — 3 operation(s) for analysts.
+  humanURL: https://www.fodda.ai/api
+  baseURL: https://api.fodda.ai
+  tags:
+  - Analysts
+  properties:
+  - type: OpenAPI
+    url: openapi/fodda-ai-analysts-api-openapi.yml
+  - type: Documentation
+    url: https://www.fodda.ai/api
+  - type: APIReference
+    url: https://www.fodda.ai/api
+  - type: GettingStarted
+    url: https://www.fodda.ai/connect-your-agent
+  - type: Authentication
+    url: authentication/fodda-ai-authentication.yml
+  - type: Conventions
+    url: conventions/fodda-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/fodda-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/fodda-ai-data-model.yml
+  - type: RateLimits
+    url: rate-limits/fodda-ai-rate-limits.yml
+  - type: Examples
+    url: examples/fodda-ai-examples.yml
+  - type: Webhooks
+    url: asyncapi/fodda-ai-event-surface.yml
+  - type: LLMsTxt
+    url: https://www.fodda.ai/llms.txt
+- aid: fodda-ai:fodda-ai-brand-intelligence-api
+  name: Fodda (PSFK) Brand Intelligence API
+  description: The Brand Intelligence API from Fodda (PSFK) — 1 operation(s) for brand intelligence.
+  humanURL: https://www.fodda.ai/api
+  baseURL: https://api.fodda.ai
+  tags:
+  - Brand Intelligence
+  properties:
+  - type: OpenAPI
+    url: openapi/fodda-ai-brand-intelligence-api-openapi.yml
+  - type: Documentation
+    url: https://www.fodda.ai/api
+  - type: APIReference
+    url: https://www.fodda.ai/api
+  - type: GettingStarted
+    url: https://www.fodda.ai/connect-your-agent
+  - type: Authentication
+    url: authentication/fodda-ai-authentication.yml
+  - type: Conventions
+    url: conventions/fodda-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/fodda-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/fodda-ai-data-model.yml
+  - type: RateLimits
+    url: rate-limits/fodda-ai-rate-limits.yml
+  - type: Examples
+    url: examples/fodda-ai-examples.yml
+  - type: Webhooks
+    url: asyncapi/fodda-ai-event-surface.yml
+  - type: LLMsTxt
+    url: https://www.fodda.ai/llms.txt
+- aid: fodda-ai:fodda-ai-context-api
+  name: Fodda (PSFK) Context API
+  description: The Context API from Fodda (PSFK) — 1 operation(s) for context.
+  humanURL: https://www.fodda.ai/api
+  baseURL: https://api.fodda.ai
+  tags:
+  - Context
+  properties:
+  - type: OpenAPI
+    url: openapi/fodda-ai-context-api-openapi.yml
+  - type: Documentation
+    url: https://www.fodda.ai/api
+  - type: APIReference
+    url: https://www.fodda.ai/api
+  - type: GettingStarted
+    url: https://www.fodda.ai/connect-your-agent
+  - type: Authentication
+    url: authentication/fodda-ai-authentication.yml
+  - type: Conventions
+    url: conventions/fodda-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/fodda-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/fodda-ai-data-model.yml
+  - type: RateLimits
+    url: rate-limits/fodda-ai-rate-limits.yml
+  - type: Examples
+    url: examples/fodda-ai-examples.yml
+  - type: Webhooks
+    url: asyncapi/fodda-ai-event-surface.yml
+  - type: LLMsTxt
+    url: https://www.fodda.ai/llms.txt
+- aid: fodda-ai:fodda-ai-copilot-api
+  name: Fodda (PSFK) Copilot API
+  description: The Copilot API from Fodda (PSFK) — 3 operation(s) for copilot.
+  humanURL: https://www.fodda.ai/api
+  baseURL: https://api.fodda.ai
+  tags:
+  - Copilot
+  properties:
+  - type: OpenAPI
+    url: openapi/fodda-ai-copilot-api-openapi.yml
+  - type: Documentation
+    url: https://www.fodda.ai/api
+  - type: APIReference
+    url: https://www.fodda.ai/api
+  - type: GettingStarted
+    url: https://www.fodda.ai/connect-your-agent
+  - type: Authentication
+    url: authentication/fodda-ai-authentication.yml
+  - type: Conventions
+    url: conventions/fodda-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/fodda-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/fodda-ai-data-model.yml
+  - type: RateLimits
+    url: rate-limits/fodda-ai-rate-limits.yml
+  - type: Examples
+    url: examples/fodda-ai-examples.yml
+  - type: Webhooks
+    url: asyncapi/fodda-ai-event-surface.yml
+  - type: LLMsTxt
+    url: https://www.fodda.ai/llms.txt
+- aid: fodda-ai:fodda-ai-graph-slice-api
+  name: Fodda (PSFK) Graph Slice API
+  description: The Graph Slice API from Fodda (PSFK) — 2 operation(s) for graph slice.
+  humanURL: https://www.fodda.ai/api
+  baseURL: https://api.fodda.ai
+  tags:
+  - Graph Slice
+  properties:
+  - type: OpenAPI
+    url: openapi/fodda-ai-graph-slice-api-openapi.yml
+  - type: Documentation
+    url: https://www.fodda.ai/api
+  - type: APIReference
+    url: https://www.fodda.ai/api
+  - type: GettingStarted
+    url: https://www.fodda.ai/connect-your-agent
+  - type: Authentication
+    url: authentication/fodda-ai-authentication.yml
+  - type: Conventions
+    url: conventions/fodda-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/fodda-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/fodda-ai-data-model.yml
+  - type: RateLimits
+    url: rate-limits/fodda-ai-rate-limits.yml
+  - type: Examples
+    url: examples/fodda-ai-examples.yml
+  - type: Webhooks
+    url: asyncapi/fodda-ai-event-surface.yml
+  - type: LLMsTxt
+    url: https://www.fodda.ai/llms.txt
+- aid: fodda-ai:fodda-ai-graphs-api
+  name: Fodda (PSFK) Graphs API
+  description: The Graphs API from Fodda (PSFK) — 18 operation(s) for graphs.
+  humanURL: https://www.fodda.ai/api
+  baseURL: https://api.fodda.ai
+  tags:
+  - Graphs
+  properties:
+  - type: OpenAPI
+    url: openapi/fodda-ai-graphs-api-openapi.yml
+  - type: Documentation
+    url: https://www.fodda.ai/api
+  - type: APIReference
+    url: https://www.fodda.ai/api
+  - type: GettingStarted
+    url: https://www.fodda.ai/connect-your-agent
+  - type: Authentication
+    url: authentication/fodda-ai-authentication.yml
+  - type: Conventions
+    url: conventions/fodda-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/fodda-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/fodda-ai-data-model.yml
+  - type: RateLimits
+    url: rate-limits/fodda-ai-rate-limits.yml
+  - type: Examples
+    url: examples/fodda-ai-examples.yml
+  - type: Webhooks
+    url: asyncapi/fodda-ai-event-surface.yml
+  - type: LLMsTxt
+    url: https://www.fodda.ai/llms.txt
+- aid: fodda-ai:fodda-ai-health-api
+  name: Fodda (PSFK) Health API
+  description: The Health API from Fodda (PSFK) — 1 operation(s) for health.
+  humanURL: https://www.fodda.ai/api
+  baseURL: https://api.fodda.ai
+  tags:
+  - Health
+  properties:
+  - type: OpenAPI
+    url: openapi/fodda-ai-health-api-openapi.yml
+  - type: Documentation
+    url: https://www.fodda.ai/api
+  - type: APIReference
+    url: https://www.fodda.ai/api
+  - type: GettingStarted
+    url: https://www.fodda.ai/connect-your-agent
+  - type: Authentication
+    url: authentication/fodda-ai-authentication.yml
+  - type: Conventions
+    url: conventions/fodda-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/fodda-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/fodda-ai-data-model.yml
+  - type: RateLimits
+    url: rate-limits/fodda-ai-rate-limits.yml
+  - type: Examples
+    url: examples/fodda-ai-examples.yml
+  - type: Webhooks
+    url: asyncapi/fodda-ai-event-surface.yml
+  - type: LLMsTxt
+    url: https://www.fodda.ai/llms.txt
+- aid: fodda-ai:fodda-ai-log-api
+  name: Fodda (PSFK) Log API
+  description: The Log API from Fodda (PSFK) — 1 operation(s) for log.
+  humanURL: https://www.fodda.ai/api
+  baseURL: https://api.fodda.ai
+  tags:
+  - Log
+  properties:
+  - type: OpenAPI
+    url: openapi/fodda-ai-log-api-openapi.yml
+  - type: Documentation
+    url: https://www.fodda.ai/api
+  - type: APIReference
+    url: https://www.fodda.ai/api
+  - type: GettingStarted
+    url: https://www.fodda.ai/connect-your-agent
+  - type: Authentication
+    url: authentication/fodda-ai-authentication.yml
+  - type: Conventions
+    url: conventions/fodda-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/fodda-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/fodda-ai-data-model.yml
+  - type: RateLimits
+    url: rate-limits/fodda-ai-rate-limits.yml
+  - type: Examples
+    url: examples/fodda-ai-examples.yml
+  - type: Webhooks
+    url: asyncapi/fodda-ai-event-surface.yml
+  - type: LLMsTxt
+    url: https://www.fodda.ai/llms.txt
+- aid: fodda-ai:fodda-ai-offerings-api
+  name: Fodda (PSFK) Offerings API
+  description: The Offerings API from Fodda (PSFK) — 1 operation(s) for offerings.
+  humanURL: https://www.fodda.ai/api
+  baseURL: https://api.fodda.ai
+  tags:
+  - Offerings
+  properties:
+  - type: OpenAPI
+    url: openapi/fodda-ai-offerings-api-openapi.yml
+  - type: Documentation
+    url: https://www.fodda.ai/api
+  - type: APIReference
+    url: https://www.fodda.ai/api
+  - type: GettingStarted
+    url: https://www.fodda.ai/connect-your-agent
+  - type: Authentication
+    url: authentication/fodda-ai-authentication.yml
+  - type: Conventions
+    url: conventions/fodda-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/fodda-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/fodda-ai-data-model.yml
+  - type: RateLimits
+    url: rate-limits/fodda-ai-rate-limits.yml
+  - type: Examples
+    url: examples/fodda-ai-examples.yml
+  - type: Webhooks
+    url: asyncapi/fodda-ai-event-surface.yml
+  - type: LLMsTxt
+    url: https://www.fodda.ai/llms.txt
+- aid: fodda-ai:fodda-ai-psfk-api
+  name: Fodda (PSFK) Psfk API
+  description: The Psfk API from Fodda (PSFK) — 1 operation(s) for psfk.
+  humanURL: https://www.fodda.ai/api
+  baseURL: https://api.fodda.ai
+  tags:
+  - Psfk
+  properties:
+  - type: OpenAPI
+    url: openapi/fodda-ai-psfk-api-openapi.yml
+  - type: Documentation
+    url: https://www.fodda.ai/api
+  - type: APIReference
+    url: https://www.fodda.ai/api
+  - type: GettingStarted
+    url: https://www.fodda.ai/connect-your-agent
+  - type: Authentication
+    url: authentication/fodda-ai-authentication.yml
+  - type: Conventions
+    url: conventions/fodda-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/fodda-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/fodda-ai-data-model.yml
+  - type: RateLimits
+    url: rate-limits/fodda-ai-rate-limits.yml
+  - type: Examples
+    url: examples/fodda-ai-examples.yml
+  - type: Webhooks
+    url: asyncapi/fodda-ai-event-surface.yml
+  - type: LLMsTxt
+    url: https://www.fodda.ai/llms.txt
+- aid: fodda-ai:fodda-ai-research-api
+  name: Fodda (PSFK) Research API
+  description: The Research API from Fodda (PSFK) — 9 operation(s) for research.
+  humanURL: https://www.fodda.ai/api
+  baseURL: https://api.fodda.ai
+  tags:
+  - Research
+  properties:
+  - type: OpenAPI
+    url: openapi/fodda-ai-research-api-openapi.yml
+  - type: Documentation
+    url: https://www.fodda.ai/api
+  - type: APIReference
+    url: https://www.fodda.ai/api
+  - type: GettingStarted
+    url: https://www.fodda.ai/connect-your-agent
+  - type: Authentication
+    url: authentication/fodda-ai-authentication.yml
+  - type: Conventions
+    url: conventions/fodda-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/fodda-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/fodda-ai-data-model.yml
+  - type: RateLimits
+    url: rate-limits/fodda-ai-rate-limits.yml
+  - type: Examples
+    url: examples/fodda-ai-examples.yml
+  - type: Webhooks
+    url: asyncapi/fodda-ai-event-surface.yml
+  - type: LLMsTxt
+    url: https://www.fodda.ai/llms.txt
+- aid: fodda-ai:fodda-ai-search-api
+  name: Fodda (PSFK) Search API
+  description: The Search API from Fodda (PSFK) — 5 operation(s) for search.
+  humanURL: https://www.fodda.ai/api
+  baseURL: https://api.fodda.ai
+  tags:
+  - Search
+  properties:
+  - type: OpenAPI
+    url: openapi/fodda-ai-search-api-openapi.yml
+  - type: Documentation
+    url: https://www.fodda.ai/api
+  - type: APIReference
+    url: https://www.fodda.ai/api
+  - type: GettingStarted
+    url: https://www.fodda.ai/connect-your-agent
+  - type: Authentication
+    url: authentication/fodda-ai-authentication.yml
+  - type: Conventions
+    url: conventions/fodda-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/fodda-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/fodda-ai-data-model.yml
+  - type: RateLimits
+    url: rate-limits/fodda-ai-rate-limits.yml
+  - type: Examples
+    url: examples/fodda-ai-examples.yml
+  - type: Webhooks
+    url: asyncapi/fodda-ai-event-surface.yml
+  - type: LLMsTxt
+    url: https://www.fodda.ai/llms.txt
+- aid: fodda-ai:fodda-ai-sources-api
+  name: Fodda (PSFK) Sources API
+  description: The Sources API from Fodda (PSFK) — 1 operation(s) for sources.
+  humanURL: https://www.fodda.ai/api
+  baseURL: https://api.fodda.ai
+  tags:
+  - Sources
+  properties:
+  - type: OpenAPI
+    url: openapi/fodda-ai-sources-api-openapi.yml
+  - type: Documentation
+    url: https://www.fodda.ai/api
+  - type: APIReference
+    url: https://www.fodda.ai/api
+  - type: GettingStarted
+    url: https://www.fodda.ai/connect-your-agent
+  - type: Authentication
+    url: authentication/fodda-ai-authentication.yml
+  - type: Conventions
+    url: conventions/fodda-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/fodda-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/fodda-ai-data-model.yml
+  - type: RateLimits
+    url: rate-limits/fodda-ai-rate-limits.yml
+  - type: Examples
+    url: examples/fodda-ai-examples.yml
+  - type: Webhooks
+    url: asyncapi/fodda-ai-event-surface.yml
+  - type: LLMsTxt
+    url: https://www.fodda.ai/llms.txt
+- aid: fodda-ai:fodda-ai-spt-api
+  name: Fodda (PSFK) Spt API
+  description: The Spt API from Fodda (PSFK) — 1 operation(s) for spt.
+  humanURL: https://www.fodda.ai/api
+  baseURL: https://api.fodda.ai
+  tags:
+  - Spt
+  properties:
+  - type: OpenAPI
+    url: openapi/fodda-ai-spt-api-openapi.yml
+  - type: Documentation
+    url: https://www.fodda.ai/api
+  - type: APIReference
+    url: https://www.fodda.ai/api
+  - type: GettingStarted
+    url: https://www.fodda.ai/connect-your-agent
+  - type: Authentication
+    url: authentication/fodda-ai-authentication.yml
+  - type: Conventions
+    url: conventions/fodda-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/fodda-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/fodda-ai-data-model.yml
+  - type: RateLimits
+    url: rate-limits/fodda-ai-rate-limits.yml
+  - type: Examples
+    url: examples/fodda-ai-examples.yml
+  - type: Webhooks
+    url: asyncapi/fodda-ai-event-surface.yml
+  - type: LLMsTxt
+    url: https://www.fodda.ai/llms.txt
+- aid: fodda-ai:fodda-ai-supplemental-api
+  name: Fodda (PSFK) Supplemental API
+  description: The Supplemental API from Fodda (PSFK) — 110 operation(s) for supplemental.
+  humanURL: https://www.fodda.ai/api
+  baseURL: https://api.fodda.ai
+  tags:
+  - Supplemental
+  properties:
+  - type: OpenAPI
+    url: openapi/fodda-ai-supplemental-api-openapi.yml
+  - type: Documentation
+    url: https://www.fodda.ai/api
+  - type: APIReference
+    url: https://www.fodda.ai/api
+  - type: GettingStarted
+    url: https://www.fodda.ai/connect-your-agent
+  - type: Authentication
+    url: authentication/fodda-ai-authentication.yml
+  - type: Conventions
+    url: conventions/fodda-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/fodda-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/fodda-ai-data-model.yml
+  - type: RateLimits
+    url: rate-limits/fodda-ai-rate-limits.yml
+  - type: Examples
+    url: examples/fodda-ai-examples.yml
+  - type: Webhooks
+    url: asyncapi/fodda-ai-event-surface.yml
+  - type: LLMsTxt
+    url: https://www.fodda.ai/llms.txt
+- aid: fodda-ai:fodda-ai-user-api
+  name: Fodda (PSFK) User API
+  description: The User API from Fodda (PSFK) — 5 operation(s) for user.
+  humanURL: https://www.fodda.ai/api
+  baseURL: https://api.fodda.ai
+  tags:
+  - User
+  properties:
+  - type: OpenAPI
+    url: openapi/fodda-ai-user-api-openapi.yml
+  - type: Documentation
+    url: https://www.fodda.ai/api
+  - type: APIReference
+    url: https://www.fodda.ai/api
+  - type: GettingStarted
+    url: https://www.fodda.ai/connect-your-agent
+  - type: Authentication
+    url: authentication/fodda-ai-authentication.yml
+  - type: Conventions
+    url: conventions/fodda-ai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/fodda-ai-problem-types.yml
+  - type: DataModel
+    url: data-model/fodda-ai-data-model.yml
+  - type: RateLimits
+    url: rate-limits/fodda-ai-rate-limits.yml
+  - type: Examples
+    url: examples/fodda-ai-examples.yml
+  - type: Webhooks
+    url: asyncapi/fodda-ai-event-surface.yml
+  - type: LLMsTxt
+    url: https://www.fodda.ai/llms.txt
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
@@ -288,3 +801,10 @@ x-enrichment:
   status: enriched
   artifacts_added: 58
   pass: local-v3
+x-a2a:
+  verified: true
+  probed: '2026-09-26'
+  url: "https://www.fodda.ai/.well-known/agent-card.json"
+  grade: "conformant"
+  protocol_version: "0.3.0"
+  control: 404
