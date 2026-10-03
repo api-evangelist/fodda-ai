@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Fodda Ai User API
+  title: Fodda Context & Research User API
+  description: Complete technical interface for retrieving expert-curated knowledge graphs, real-time institutional data, and autonomous research profiles.
   version: 1.7.0
-  description: 'Operations tagged User across 2 of this provider''s published API definitions: fodda-ai-openapi.json, fodda-ai-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.fodda.ai
 tags:
@@ -30,8 +30,6 @@ paths:
       - stripeSPT: []
       tags:
       - User
-    servers:
-    - url: https://api.fodda.ai
   /v1/user/usage/export:
     get:
       summary: Bulk export query and usage history
@@ -77,8 +75,6 @@ paths:
       security: []
       tags:
       - User
-    servers:
-    - url: https://api.fodda.ai
   /v1/user/invoices/export:
     get:
       summary: Bulk export consolidated invoices and billing summary
@@ -110,8 +106,6 @@ paths:
       security: []
       tags:
       - User
-    servers:
-    - url: https://api.fodda.ai
   /v1/user/briefings/export:
     get:
       summary: Bulk export research briefings and deliverables
@@ -143,8 +137,6 @@ paths:
       security: []
       tags:
       - User
-    servers:
-    - url: https://api.fodda.ai
   /v1/user/preferences/toggle:
     post:
       summary: Toggle user preference setting
@@ -165,8 +157,6 @@ paths:
       security: []
       tags:
       - User
-    servers:
-    - url: https://api.fodda.ai
 components:
   schemas:
     ApiResponse:
@@ -217,6 +207,3 @@ components:
       type: http
       scheme: bearer
       description: 'Stripe Shared Payment Token (MPP). Pass an SPT obtained from Stripe Link via Authorization: Bearer spt_xxx.'
-x-refined-from:
-- fodda-ai-openapi.json
-- fodda-ai-openapi.yml

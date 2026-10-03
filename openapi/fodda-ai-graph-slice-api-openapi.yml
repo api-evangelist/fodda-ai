@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Fodda Ai Graph Slice API
   version: '1.0'
-  description: 'Operations tagged Graph Slice across 4 of this provider''s published API definitions: fodda-ai-context-delivery-openapi.json, fodda-ai-openapi.json, fodda-ai-context-delivery-openapi.yml, fodda-ai-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged Graph Slice across 2 of this provider''s published API definitions: fodda-ai-context-delivery-openapi.json, fodda-ai-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.fodda.ai/v1
 - url: https://api.fodda.ai
@@ -136,5 +136,3 @@ components:
 x-refined-from:
 - fodda-ai-context-delivery-openapi.json
 - fodda-ai-openapi.json
-- fodda-ai-context-delivery-openapi.yml
-- fodda-ai-openapi.yml

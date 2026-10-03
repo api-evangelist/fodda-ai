@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Fodda Ai Psfk API
+  title: Fodda Context Delivery Psfk API
+  description: Interface for retrieving expert context graphs and structured insight manifests. Supplemental data sources are available via MCP tools only.
   version: 1.2.0
-  description: 'Operations tagged Psfk across 2 of this provider''s published API definitions: fodda-ai-context-delivery-openapi.json, fodda-ai-context-delivery-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.fodda.ai/v1
 tags:
@@ -35,8 +35,6 @@ paths:
       - Psfk
       operationId: postPsfkOverview
       x-operation-id-source: derived
-    servers:
-    - url: https://api.fodda.ai/v1
 components:
   schemas:
     ApiResponse:
@@ -85,6 +83,3 @@ components:
       name: X-API-Key
       in: header
       description: Required for all endpoints except POST /v1/psfk/overview (public).
-x-refined-from:
-- fodda-ai-context-delivery-openapi.json
-- fodda-ai-context-delivery-openapi.yml

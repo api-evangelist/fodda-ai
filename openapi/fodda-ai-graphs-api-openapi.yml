@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Fodda Ai Graphs API
   version: '1.0'
-  description: 'Operations tagged Graphs across 4 of this provider''s published API definitions: fodda-ai-context-delivery-openapi.json, fodda-ai-openapi.json, fodda-ai-context-delivery-openapi.yml, fodda-ai-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged Graphs across 2 of this provider''s published API definitions: fodda-ai-context-delivery-openapi.json, fodda-ai-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.fodda.ai/v1
 - url: https://api.fodda.ai
@@ -536,19 +536,6 @@ paths:
     - url: https://api.fodda.ai
 components:
   schemas:
-    Graph:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        curator:
-          type: string
-        domain:
-          type: string
     ApiResponse:
       type: object
       properties:
@@ -589,45 +576,20 @@ components:
               properties:
                 total_billable_units:
                   type: integer
-    ApiResponse_2:
+    Graph:
       type: object
       properties:
-        ok:
-          type: boolean
-        requestId:
+        id:
           type: string
-        schema_version:
+        name:
           type: string
-        search_path:
+        description:
           type: string
-        deterministic:
-          type: boolean
-        dataStatus:
+        curator:
           type: string
-        rows:
-          type: array
-          items:
-            type: object
-            properties:
-              rowId:
-                type: string
-              rowName:
-                type: string
-              rowSummary:
-                type: string
-              _score:
-                type: number
-        meta:
-          type: object
-          properties:
-            decision:
-              type: string
-            usage:
-              type: object
-              properties:
-                total_billable_units:
-                  type: integer
-    ApiResponse_3:
+        domain:
+          type: string
+    ApiResponse_2:
       type: object
       properties:
         ok:
@@ -678,5 +640,3 @@ components:
 x-refined-from:
 - fodda-ai-context-delivery-openapi.json
 - fodda-ai-openapi.json
-- fodda-ai-context-delivery-openapi.yml
-- fodda-ai-openapi.yml

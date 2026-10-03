@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Fodda Ai Supplemental API
+  title: Fodda Context & Research Supplemental API
+  description: Complete technical interface for retrieving expert-curated knowledge graphs, real-time institutional data, and autonomous research profiles.
   version: 1.7.0
-  description: 'Operations tagged Supplemental across 2 of this provider''s published API definitions: fodda-ai-openapi.json, fodda-ai-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.fodda.ai
 tags:
@@ -150,8 +150,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/sources:
     get:
       summary: List supplemental sources
@@ -172,8 +170,6 @@ paths:
       security: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/earnings/snapshot:
     get:
       summary: Earnings call snapshot intelligence
@@ -196,8 +192,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/earnings/analyst-concerns:
     get:
       summary: Get earnings top analyst concerns
@@ -220,8 +214,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/earnings/question-themes:
     get:
       summary: Get earnings Q&A question themes
@@ -244,8 +236,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/earnings/management-themes:
     get:
       summary: Get management presentation themes
@@ -268,8 +258,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/earnings/divergence:
     get:
       summary: Get earnings concerns divergence
@@ -292,8 +280,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/suggest:
     get:
       summary: 'Supplemental: suggest'
@@ -316,8 +302,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/census/retail-snapshot:
     get:
       summary: 'Supplemental: retail-snapshot'
@@ -340,8 +324,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/census/demographics-snapshot:
     get:
       summary: 'Supplemental: demographics-snapshot'
@@ -364,8 +346,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/fred/economic-snapshot:
     get:
       summary: 'Supplemental: economic-snapshot'
@@ -388,8 +368,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/wikipedia/pageviews:
     get:
       summary: 'Supplemental: pageviews'
@@ -412,8 +390,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/worldbank/global-snapshot:
     get:
       summary: 'Supplemental: global-snapshot'
@@ -436,8 +412,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/fda/ingredient-safety:
     get:
       summary: 'Supplemental: ingredient-safety'
@@ -460,8 +434,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/fda/recalls:
     get:
       summary: 'Supplemental: recalls'
@@ -484,8 +456,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/clinical-trials/search:
     get:
       summary: 'Supplemental: search'
@@ -508,8 +478,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/bls/economic-snapshot:
     get:
       summary: 'Supplemental: economic-snapshot'
@@ -534,8 +502,6 @@ paths:
       - Supplemental
       x-operation-id-source: normalized
       x-operation-id-original: supplemental__economic_snapshot
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/bea/spending-snapshot:
     get:
       summary: 'Supplemental: spending-snapshot'
@@ -558,8 +524,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/ons/uk-snapshot:
     get:
       summary: 'Supplemental: uk-snapshot'
@@ -582,8 +546,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/cbs/nl-snapshot:
     get:
       summary: 'Supplemental: nl-snapshot'
@@ -606,8 +568,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/ptdata/pt-snapshot:
     get:
       summary: 'Supplemental: pt-snapshot'
@@ -630,8 +590,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/bcb/br-snapshot:
     get:
       summary: 'Supplemental: br-snapshot'
@@ -654,8 +612,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/ibge/br-snapshot:
     get:
       summary: 'Supplemental: br-snapshot'
@@ -680,8 +636,6 @@ paths:
       - Supplemental
       x-operation-id-source: normalized
       x-operation-id-original: supplemental__br_snapshot
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/bcrp/pe-snapshot:
     get:
       summary: 'Supplemental: pe-snapshot'
@@ -704,8 +658,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/arg/ar-snapshot:
     get:
       summary: 'Supplemental: ar-snapshot'
@@ -728,8 +680,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/banxico/mx-snapshot:
     get:
       summary: 'Supplemental: mx-snapshot'
@@ -752,8 +702,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/bch/hn-snapshot:
     get:
       summary: 'Supplemental: hn-snapshot'
@@ -776,8 +724,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/abs/au-snapshot:
     get:
       summary: 'Supplemental: au-snapshot'
@@ -800,8 +746,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/eurostat/eu-snapshot:
     get:
       summary: 'Supplemental: eu-snapshot'
@@ -824,8 +768,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/ecb/ea-snapshot:
     get:
       summary: 'Supplemental: ea-snapshot'
@@ -848,8 +790,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/ecb/euro-snapshot:
     get:
       summary: 'Supplemental: euro-snapshot'
@@ -872,8 +812,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/boe/uk-snapshot:
     get:
       summary: 'Supplemental: uk-snapshot'
@@ -898,8 +836,6 @@ paths:
       - Supplemental
       x-operation-id-source: normalized
       x-operation-id-original: supplemental__uk_snapshot
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/nordic/region-snapshot:
     get:
       summary: 'Supplemental: region-snapshot'
@@ -922,8 +858,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/nordic/snapshot:
     get:
       summary: 'Supplemental: snapshot'
@@ -946,8 +880,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/rba/au-rates:
     get:
       summary: 'Supplemental: au-rates'
@@ -970,8 +902,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/bundesbank/de-snapshot:
     get:
       summary: 'Supplemental: de-snapshot'
@@ -994,8 +924,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/ine/es-snapshot:
     get:
       summary: 'Supplemental: es-snapshot'
@@ -1018,8 +946,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/insee/fr-snapshot:
     get:
       summary: 'Supplemental: fr-snapshot'
@@ -1042,8 +968,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/snb/ch-snapshot:
     get:
       summary: 'Supplemental: ch-snapshot'
@@ -1066,8 +990,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/snb/swiss-snapshot:
     get:
       summary: 'Supplemental: swiss-snapshot'
@@ -1090,8 +1012,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/bis/global-snapshot:
     get:
       summary: 'Supplemental: global-snapshot'
@@ -1116,8 +1036,6 @@ paths:
       - Supplemental
       x-operation-id-source: normalized
       x-operation-id-original: supplemental__global_snapshot
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/pdh/pacific-snapshot:
     get:
       summary: 'Supplemental: pacific-snapshot'
@@ -1140,8 +1058,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/qatar/qa-snapshot:
     get:
       summary: 'Supplemental: qa-snapshot'
@@ -1164,8 +1080,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/bahrain/bh-snapshot:
     get:
       summary: 'Supplemental: bh-snapshot'
@@ -1188,8 +1102,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/boi/il-snapshot:
     get:
       summary: 'Supplemental: il-snapshot'
@@ -1212,8 +1124,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/india/in-snapshot:
     get:
       summary: 'Supplemental: in-snapshot'
@@ -1236,8 +1146,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/sarb/za-snapshot:
     get:
       summary: 'Supplemental: za-snapshot'
@@ -1260,8 +1168,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/bnm/my-snapshot:
     get:
       summary: 'Supplemental: my-snapshot'
@@ -1284,8 +1190,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/hkma/hk-snapshot:
     get:
       summary: 'Supplemental: hk-snapshot'
@@ -1308,8 +1212,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/estat/jp-snapshot:
     get:
       summary: 'Supplemental: jp-snapshot'
@@ -1332,8 +1234,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/bok/kr-snapshot:
     get:
       summary: 'Supplemental: kr-snapshot'
@@ -1356,8 +1256,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/bot/th-snapshot:
     get:
       summary: 'Supplemental: th-snapshot'
@@ -1380,8 +1278,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/boc/ca-snapshot:
     get:
       summary: 'Supplemental: ca-snapshot'
@@ -1404,8 +1300,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/statcan/ca-snapshot:
     get:
       summary: 'Supplemental: ca-snapshot'
@@ -1430,8 +1324,6 @@ paths:
       - Supplemental
       x-operation-id-source: normalized
       x-operation-id-original: supplemental__ca_snapshot
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/bps/id-snapshot:
     get:
       summary: 'Supplemental: id-snapshot'
@@ -1454,8 +1346,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/psa/ph-snapshot:
     get:
       summary: 'Supplemental: ph-snapshot'
@@ -1478,8 +1368,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/sg/sg-snapshot:
     get:
       summary: 'Supplemental: sg-snapshot'
@@ -1502,8 +1390,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/bcch/cl-snapshot:
     get:
       summary: 'Supplemental: cl-snapshot'
@@ -1526,8 +1412,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/cn/cn-snapshot:
     get:
       summary: 'Supplemental: cn-snapshot'
@@ -1550,8 +1434,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/usaspending/snapshot:
     get:
       summary: 'Supplemental: snapshot'
@@ -1576,8 +1458,6 @@ paths:
       - Supplemental
       x-operation-id-source: normalized
       x-operation-id-original: supplemental__snapshot
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/dol/snapshot:
     get:
       summary: 'Supplemental: snapshot'
@@ -1602,8 +1482,6 @@ paths:
       - Supplemental
       x-operation-id-source: normalized
       x-operation-id-original: supplemental__snapshot
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/socrata/us-snapshot:
     get:
       summary: 'Supplemental: us-snapshot'
@@ -1626,8 +1504,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/socrata/city/{cityKey}:
     get:
       summary: 'Supplemental: {cityKey}'
@@ -1650,8 +1526,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/socrata/portals:
     get:
       summary: 'Supplemental: portals'
@@ -1674,8 +1548,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/cdc/health-data:
     get:
       summary: 'Supplemental: health-data'
@@ -1698,8 +1570,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/pubmed/research-trends:
     get:
       summary: 'Supplemental: research-trends'
@@ -1722,8 +1592,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/wto/trade-snapshot:
     get:
       summary: 'Supplemental: trade-snapshot'
@@ -1746,8 +1614,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/wto/global-snapshot:
     get:
       summary: 'Supplemental: global-snapshot'
@@ -1772,8 +1638,6 @@ paths:
       - Supplemental
       x-operation-id-source: normalized
       x-operation-id-original: supplemental__global_snapshot
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/openfoodfacts:
     get:
       summary: 'Supplemental: openfoodfacts'
@@ -1796,8 +1660,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/ridb:
     get:
       summary: 'Supplemental: ridb'
@@ -1820,8 +1682,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/osm:
     get:
       summary: 'Supplemental: osm'
@@ -1844,8 +1704,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/google-trends:
     get:
       summary: 'Supplemental: google-trends'
@@ -1868,8 +1726,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/amazon:
     get:
       summary: 'Supplemental: amazon'
@@ -1892,8 +1748,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/usda/ers-snapshot:
     get:
       summary: 'Supplemental: ers-snapshot'
@@ -1916,8 +1770,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/usda/nass-snapshot:
     get:
       summary: 'Supplemental: nass-snapshot'
@@ -1940,8 +1792,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/usda/fdc-search:
     get:
       summary: 'Supplemental: fdc-search'
@@ -1964,8 +1814,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/usda/ams-snapshot:
     get:
       summary: 'Supplemental: ams-snapshot'
@@ -1988,8 +1836,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/bestbuy:
     get:
       summary: 'Supplemental: bestbuy'
@@ -2012,8 +1858,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/tripadvisor/brand-intelligence:
     get:
       summary: 'Supplemental: brand-intelligence'
@@ -2036,8 +1880,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/fsa/hygiene:
     get:
       summary: 'Supplemental: hygiene'
@@ -2060,8 +1902,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/companies-house/profile:
     get:
       summary: 'Supplemental: profile'
@@ -2084,8 +1924,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/pew/survey-data:
     get:
       summary: 'Supplemental: survey-data'
@@ -2108,8 +1946,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/pew/attitudes-snapshot:
     get:
       summary: 'Supplemental: attitudes-snapshot'
@@ -2132,8 +1968,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/oecd/economic-snapshot:
     get:
       summary: 'Supplemental: economic-snapshot'
@@ -2158,8 +1992,6 @@ paths:
       - Supplemental
       x-operation-id-source: normalized
       x-operation-id-original: supplemental__economic_snapshot
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/openalex/research-trends:
     get:
       summary: 'Supplemental: research-trends'
@@ -2184,8 +2016,6 @@ paths:
       - Supplemental
       x-operation-id-source: normalized
       x-operation-id-original: supplemental__research_trends
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/semantic-scholar/research-influence:
     get:
       summary: 'Supplemental: research-influence'
@@ -2208,8 +2038,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/sports/context:
     post:
       summary: 'Supplemental: context'
@@ -2232,8 +2060,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/events/context:
     post:
       summary: 'Supplemental: context'
@@ -2258,8 +2084,6 @@ paths:
       - Supplemental
       x-operation-id-source: normalized
       x-operation-id-original: supplemental__context
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/youtube/context:
     post:
       summary: 'Supplemental: context'
@@ -2284,8 +2108,6 @@ paths:
       - Supplemental
       x-operation-id-source: normalized
       x-operation-id-original: supplemental__context
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/cbs/nl-buurt:
     get:
       summary: 'Supplemental: nl-buurt'
@@ -2308,8 +2130,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/pdok/bag-snapshot:
     get:
       summary: 'Supplemental: bag-snapshot'
@@ -2332,8 +2152,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/cbs/nl-crime:
     get:
       summary: 'Supplemental: nl-crime'
@@ -2356,8 +2174,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/luchtmeetnet/snapshot:
     get:
       summary: 'Supplemental: snapshot'
@@ -2382,8 +2198,6 @@ paths:
       - Supplemental
       x-operation-id-source: normalized
       x-operation-id-original: supplemental__snapshot
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/police-uk/snapshot:
     get:
       summary: 'Supplemental: snapshot'
@@ -2408,8 +2222,6 @@ paths:
       - Supplemental
       x-operation-id-source: normalized
       x-operation-id-original: supplemental__snapshot
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/epc/snapshot:
     get:
       summary: 'Supplemental: snapshot'
@@ -2434,8 +2246,6 @@ paths:
       - Supplemental
       x-operation-id-source: normalized
       x-operation-id-original: supplemental__snapshot
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/acs/tract-snapshot:
     get:
       summary: 'Supplemental: tract-snapshot'
@@ -2458,8 +2268,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/airnow/snapshot:
     get:
       summary: 'Supplemental: snapshot'
@@ -2484,8 +2292,6 @@ paths:
       - Supplemental
       x-operation-id-source: normalized
       x-operation-id-original: supplemental__snapshot
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/nasa/eonet:
     get:
       summary: 'Supplemental: eonet'
@@ -2508,8 +2314,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/nasa/power:
     get:
       summary: 'Supplemental: power'
@@ -2532,8 +2336,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/nasa/techtransfer:
     get:
       summary: 'Supplemental: techtransfer'
@@ -2556,8 +2358,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/fbi/crime-snapshot:
     get:
       summary: 'Supplemental: crime-snapshot'
@@ -2580,8 +2380,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/statcan/census-snapshot:
     get:
       summary: 'Supplemental: census-snapshot'
@@ -2604,8 +2402,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/ons/neighbourhood-snapshot:
     get:
       summary: 'Supplemental: neighbourhood-snapshot'
@@ -2628,8 +2424,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/hud/snapshot:
     get:
       summary: 'Supplemental: snapshot'
@@ -2654,8 +2448,6 @@ paths:
       - Supplemental
       x-operation-id-source: normalized
       x-operation-id-original: supplemental__snapshot
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/msc/aqhi-snapshot:
     get:
       summary: 'Supplemental: aqhi-snapshot'
@@ -2678,8 +2470,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/predictions/context:
     post:
       summary: 'Supplemental: context'
@@ -2704,8 +2494,6 @@ paths:
       - Supplemental
       x-operation-id-source: normalized
       x-operation-id-original: supplemental__context
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/seatgeek/context:
     post:
       summary: 'Supplemental: context'
@@ -2730,8 +2518,6 @@ paths:
       - Supplemental
       x-operation-id-source: normalized
       x-operation-id-original: supplemental__context
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/finance/market-snapshot:
     post:
       summary: 'Supplemental: market-snapshot'
@@ -2754,8 +2540,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/finance/profile:
     post:
       summary: 'Supplemental: profile'
@@ -2780,8 +2564,6 @@ paths:
       - Supplemental
       x-operation-id-source: normalized
       x-operation-id-original: supplemental__profile
-    servers:
-    - url: https://api.fodda.ai
   /v1/supplemental/admin/probe:
     post:
       summary: 'Supplemental: probe'
@@ -2804,8 +2586,6 @@ paths:
       - stripeSPT: []
       tags:
       - Supplemental
-    servers:
-    - url: https://api.fodda.ai
 components:
   schemas:
     ApiResponse:
@@ -2856,6 +2636,3 @@ components:
       type: http
       scheme: bearer
       description: 'Stripe Shared Payment Token (MPP). Pass an SPT obtained from Stripe Link via Authorization: Bearer spt_xxx.'
-x-refined-from:
-- fodda-ai-openapi.json
-- fodda-ai-openapi.yml

@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Fodda Ai Brand Intelligence API
+  title: Fodda Context & Research Brand Intelligence API
+  description: Complete technical interface for retrieving expert-curated knowledge graphs, real-time institutional data, and autonomous research profiles.
   version: 1.7.0
-  description: 'Operations tagged Brand Intelligence across 2 of this provider''s published API definitions: fodda-ai-openapi.json, fodda-ai-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.fodda.ai
 tags:
@@ -36,8 +36,6 @@ paths:
       - stripeSPT: []
       tags:
       - Brand Intelligence
-    servers:
-    - url: https://api.fodda.ai
 components:
   schemas:
     ApiResponse:
@@ -88,6 +86,3 @@ components:
       type: http
       scheme: bearer
       description: 'Stripe Shared Payment Token (MPP). Pass an SPT obtained from Stripe Link via Authorization: Bearer spt_xxx.'
-x-refined-from:
-- fodda-ai-openapi.json
-- fodda-ai-openapi.yml

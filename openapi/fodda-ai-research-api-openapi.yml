@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Fodda Ai Research API
+  title: Fodda Context Research API
+  description: Complete technical interface for retrieving expert-curated knowledge graphs, real-time institutional data, and autonomous research profiles.
   version: 1.7.0
-  description: 'Operations tagged Research across 2 of this provider''s published API definitions: fodda-ai-openapi.json, fodda-ai-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.fodda.ai
 tags:
@@ -28,8 +28,6 @@ paths:
       security: []
       tags:
       - Research
-    servers:
-    - url: https://api.fodda.ai
   /v1/research/offerings:
     get:
       summary: Get research offerings catalog
@@ -50,8 +48,6 @@ paths:
       security: []
       tags:
       - Research
-    servers:
-    - url: https://api.fodda.ai
   /v1/research/deep-dive:
     post:
       summary: Launch Autonomous Research Deep Dive
@@ -92,8 +88,6 @@ paths:
       - stripeSPT: []
       tags:
       - Research
-    servers:
-    - url: https://api.fodda.ai
   /v1/research/deep-dive/status/{job_id}:
     get:
       summary: Check Deep Research Status
@@ -122,8 +116,6 @@ paths:
       - stripeSPT: []
       tags:
       - Research
-    servers:
-    - url: https://api.fodda.ai
   /v1/research/chat:
     post:
       summary: Research chat turn
@@ -160,8 +152,6 @@ paths:
       - stripeSPT: []
       tags:
       - Research
-    servers:
-    - url: https://api.fodda.ai
   /v1/research/stream:
     get:
       summary: Streaming research search
@@ -190,8 +180,6 @@ paths:
       - stripeSPT: []
       tags:
       - Research
-    servers:
-    - url: https://api.fodda.ai
   /v1/research/schedules:
     post:
       summary: Create scheduled Briefing
@@ -254,8 +242,6 @@ paths:
       security: []
       tags:
       - Research
-    servers:
-    - url: https://api.fodda.ai
   /v1/research/schedules/{schedule_id}:
     delete:
       summary: Cancel scheduled briefing
@@ -307,8 +293,6 @@ paths:
       security: []
       tags:
       - Research
-    servers:
-    - url: https://api.fodda.ai
   /v1/research/schedules/{schedule_id}/runs:
     get:
       summary: Get scheduled briefing runs
@@ -335,8 +319,6 @@ paths:
       security: []
       tags:
       - Research
-    servers:
-    - url: https://api.fodda.ai
 components:
   schemas:
     ApiResponse:
@@ -387,6 +369,3 @@ components:
       type: http
       scheme: bearer
       description: 'Stripe Shared Payment Token (MPP). Pass an SPT obtained from Stripe Link via Authorization: Bearer spt_xxx.'
-x-refined-from:
-- fodda-ai-openapi.json
-- fodda-ai-openapi.yml
