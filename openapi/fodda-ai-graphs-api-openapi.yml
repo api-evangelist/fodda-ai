@@ -536,6 +536,19 @@ paths:
     - url: https://api.fodda.ai
 components:
   schemas:
+    Graph:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        curator:
+          type: string
+        domain:
+          type: string
     ApiResponse:
       type: object
       properties:
@@ -576,19 +589,6 @@ components:
               properties:
                 total_billable_units:
                   type: integer
-    Graph:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        curator:
-          type: string
-        domain:
-          type: string
     ApiResponse_2:
       type: object
       properties:
