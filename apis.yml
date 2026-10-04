@@ -120,6 +120,8 @@ apis:
   humanURL: https://www.fodda.ai/api
   baseURL: https://api.fodda.ai
   tags:
+  - Account
+  tags_raw:
   - Accounts
   properties:
   - type: OpenAPI
@@ -696,6 +698,9 @@ maintainers:
   - FN: APIs.json
     email: info@apis.io
 common:
+  - type: CapabilityMap
+    url: capabilities/fodda-ai-capability-edges.yml
+    name: Fodda (PSFK) Business Capability Map
   - type: Website
     url: https://fodda.ai/
   - type: DeveloperPortal
