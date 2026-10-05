@@ -1,0 +1,36 @@
+slug: fodda-ai
+provider: Fodda (PSFK)
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 2
+edges:
+- tag: Research
+  spec_file: fodda-ai-research-api-openapi.yml
+  capability_id: BC-400.30
+  capability_id_l1: BC-400
+  capability_name: Market Intelligence Management
+  confidence: 0.8
+  evidence: POST /v1/research/deep-dive  launch_autonomous_research_deep_dive; POST /v1/research/schedules  create_scheduled_briefing
+  reason: Operations launch autonomous market research deep dives and schedule recurring research briefings
+    over expert-curated consumer-sector knowledge graphs — this is market research / competitive and customer
+    insight delivery (Market Intelligence Management). Not internal R&D of products.
+- tag: Supplemental
+  spec_file: fodda-ai-supplemental-api-openapi.yml
+  capability_id: BC-400.30
+  capability_id_l1: BC-400
+  capability_name: Market Intelligence Management
+  confidence: 0.8
+  evidence: GET /v1/supplemental/earnings/snapshot  earnings_call_snapshot_intelligence; GET /v1/supplemental/census/retail-snapshot;
+    GET /v1/supplemental/fred/economic-snapshot
+  reason: Operations serve earnings-call intelligence, retail/demographic census snapshots and economic
+    indicators — external market, economic and competitor intelligence feeds. Maps to Market Intelligence
+    Management rather than any internal finance capability.
