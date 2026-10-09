@@ -786,3 +786,36 @@ terms:
   cancellation: You may cancel at any time; cancellation takes effect at the end of the current billing period.
   refunds: Refunds are provided at Fodda's discretion.
   source: 'https://www.fodda.ai/terms (Last updated: April 26, 2026)'
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - metered
+  - negotiated
+  - subscription
+  units: []
+  plans:
+  - name: Base
+    access: other
+    model: metered
+    model_how: derived
+    units: []
+    periods: []
+  - name: Monthly Plan
+    access: other
+    model: metered
+    model_how: derived
+    units: []
+    periods: []
+  - name: Pay As They Go
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
+  - name: Enterprise
+    access: other
+    model: negotiated
+    model_how: derived
+    units: []
+    periods: []

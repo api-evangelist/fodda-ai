@@ -1,0 +1,36 @@
+# Front Door AI Index — fodda-ai — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: fodda-ai
+  lexicon_version: '1.0'
+  probed_at: '2026-09-25'
+  host: fodda.ai
+  final_host: www.fodda.ai
+  ownership: own
+  owner: fodda-ai
+  shares_host_with: null
+  inherited_from: null
+  alias_of: null
+  verdict: scored
+  score: 23
+  band: 6
+  band_label: dominant
+  host_score: 23
+  density: 40.42
+  words: 569
+  tiers:
+    agentic: 5
+    core: 13
+    model: 5
+  ambiguous: 10
+  top_terms:
+    AI: 13
+    intelligence: 7
+    Claude: 3
+    agent: 3
+    Gemini: 2
+    copilot: 2
+    AI agent: 1
+    MCP: 1
+    prompts: 1
