@@ -1,0 +1,41 @@
+edges:
+- partner_name: MCP Registry
+  partner: mcp
+  partner_match: register
+  type: register
+  channel: standard-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://registry.modelcontextprotocol.io/v0/servers?search=ai.fodda
+  contract_reference:
+    register: registry.modelcontextprotocol.io
+    spec_file: null
+    role: mcp-server-listing
+    registered_name: ai.fodda/brand-intelligence
+    register_id: ai.fodda/brand-intelligence
+    detected_by: sweep-agent-tools.py
+    detected: '2026-10-14'
+  mcp_registry:
+    servers:
+    - ai.fodda/brand-intelligence
+    - ai.fodda/deep-research
+    - ai.fodda/earnings-intelligence
+    - ai.fodda/expert-consult
+    - ai.fodda/mcp-server
+    - ai.fodda/topic-research
+    hosted_remote: 6
+    local_package: 0
+    transports:
+      streamable-http: 6
+    auth_declared: 5
+    catalog_declared: true
+    namespace_domains:
+    - fodda.ai
+  matched_by:
+  - namespace-domain
+  detected_by: sweep-agent-tools.py
+  first_seen: '2026-10-14'
+generated: '2026-10-14'
+method: searched
+checked:
+- https://registry.modelcontextprotocol.io/v0/servers
